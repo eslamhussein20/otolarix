@@ -12,10 +12,10 @@
 <meta name="apple-mobile-web-app-title" content="Otolarix">
 <title>Otolarix</title>
 <style>
-:root{--red:#B42318;--redbg:#FEF3F2;--amber:#B54708;--amberbg:#FFFAEB;--ok:#067647;--okbg:#ECFDF3;--r:14px}
-[data-theme=teal]{--pri:#0B7C89;--pri2:#0B3C49;--soft:#E6F4F5;--bg:#F3F7F8;--card:#fff;--text:#0F2733;--muted:#5B6B78;--line:#DCE6EA}
-[data-theme=ocean]{--pri:#2563EB;--pri2:#1E3A8A;--soft:#E8EFFE;--bg:#F4F6FB;--card:#fff;--text:#13213D;--muted:#5A6684;--line:#DDE3F0}
-[data-theme=dark]{--pri:#2DD4BF;--pri2:#0F172A;--soft:#13303A;--bg:#0B1220;--card:#121B2D;--text:#E5EDF5;--muted:#93A3B8;--line:#24324A;--redbg:#3A1515;--amberbg:#3A2A10;--okbg:#0F2F22;--red:#FCA5A5;--amber:#FCD34D;--ok:#6EE7B7}
+:root{--red:#B42318;--redbg:#FEF3F2;--amber:#9A4D00;--amberbg:#FFFAEB;--ok:#067647;--okbg:#ECFDF3;--r:14px}
+[data-theme=teal]{--pri:#0B6670;--pri2:#103B45;--soft:#E4F1F1;--bg:#F4F8F8;--card:#FFFFFF;--text:#172A31;--muted:#53666D;--line:#D9E5E7;--accent:#70D7C7;--icon1:#0B3039;--icon2:#176C75}
+[data-theme=ocean]{--pri:#1B5674;--pri2:#17384B;--soft:#E7F0F5;--bg:#F3F7F9;--card:#FFFFFF;--text:#182B38;--muted:#526875;--line:#D9E3E9;--accent:#75BBD2;--icon1:#122B3B;--icon2:#28718E}
+[data-theme=dark]{--pri:#096B73;--pri2:#102D37;--soft:#182E38;--bg:#0B141B;--card:#14212A;--text:#E8F0F4;--muted:#A6B7C1;--line:#2B3C47;--accent:#56D9CB;--icon1:#0B3039;--icon2:#176C75;--redbg:#351B22;--amberbg:#332A18;--okbg:#153027;--red:#FF9D91;--amber:#FFD166;--ok:#69D7A2}
 *{box-sizing:border-box}
 body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;color:var(--text);background:var(--bg);font-size:15px}
 a{color:var(--pri)}
@@ -53,6 +53,7 @@ h1.page{font-size:22px;margin:4px 0 14px}
 .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:14px}
 .tile{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 12px;text-align:center;cursor:pointer;position:relative;transition:.15s;text-decoration:none;color:var(--text)}
 .tile:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.08)}
+.tiles .tile{min-height:132px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
 .tile .ti{width:52px;height:52px;border-radius:16px;margin:0 auto 8px;display:grid;place-items:center;font-size:26px}
 .tile b{display:block;font-size:14px}
 .tile .badge{position:absolute;top:8px;inset-inline-end:8px;background:var(--red);color:#fff;border-radius:12px;padding:1px 8px;font-size:12px}
@@ -61,6 +62,9 @@ h1.page{font-size:22px;margin:4px 0 14px}
 .stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:14px}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;border-inline-start:5px solid var(--pri)}
 .stat .v{font-size:26px;font-weight:800}
+.stats{align-items:stretch}.stat{min-height:92px;display:flex;flex-direction:column;justify-content:center;gap:3px}
+.week-chart{height:190px}.week-chart svg{width:100%;height:145px;display:block;overflow:visible}.week-chart .bar{fill:var(--pri);opacity:.86}.week-chart text{fill:var(--muted);font:12px "Segoe UI",Tahoma,Arial,sans-serif}.week-chart .count{fill:var(--text);font-weight:700}
+.empty-state{display:flex;align-items:center;gap:12px;padding:12px;border:1px dashed var(--line);border-radius:12px;background:var(--bg)}.empty-state .ui-icon{width:30px;height:30px;flex-basis:30px;color:var(--pri)}.empty-state p{margin:0;flex:1}
 .stat.red{border-inline-start-color:var(--red)}.stat.amber{border-inline-start-color:#F79009}.stat.ok{border-inline-start-color:#12B76A}
 .hero{background:linear-gradient(135deg,var(--pri2),var(--pri));color:#fff;border-radius:var(--r);padding:18px 20px;margin-bottom:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .hero h1{margin:0;font-size:22px}.hero p{margin:4px 0 0;opacity:.85}
@@ -129,8 +133,9 @@ details.faq summary{cursor:pointer;font-weight:600}
 /* modal */
 .modal{position:fixed;inset:0;background:rgba(10,20,30,.55);display:grid;place-items:center;z-index:100;padding:16px}
 .modal .box{background:var(--card);border-radius:18px;max-width:520px;width:100%;padding:22px;max-height:90vh;overflow:auto}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--pri2);color:#fff;padding:10px 18px;border-radius:10px;opacity:0;transition:.3s;z-index:200;pointer-events:none;max-width:90vw;text-align:center}
-.toast.show{opacity:1}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(6px);background:var(--pri2);color:#fff;padding:13px 18px;border-radius:12px;opacity:0;transition:.25s;z-index:200;pointer-events:none;max-width:min(92vw,560px);min-height:48px;text-align:center;display:flex;align-items:center;justify-content:center;gap:9px;font-size:15px;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.settings-group{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800;margin:18px 4px 8px}.settings-group:first-of-type{margin-top:4px}
 .hidden{display:none!important}
 .ltr{direction:ltr;text-align:left}
 .meds td{padding:3px}.meds input{padding:6px}
@@ -145,16 +150,40 @@ details.faq summary{cursor:pointer;font-weight:600}
 .msg .sum{color:var(--muted);font-size:13px;cursor:pointer}
 .typing{color:var(--muted);font-size:13px;padding:6px}
 .chatin{display:flex;gap:6px;align-items:flex-end}.chatin textarea{min-height:44px}
+.chat-commands{flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;padding:4px 1px 8px;scrollbar-width:thin}
+.chat-commands .chip{flex:0 0 auto;min-height:40px;display:flex;align-items:center}
+.chatin{position:sticky;bottom:0;background:var(--card);padding:8px 0 2px;z-index:2;border-top:1px solid var(--line)}
+.msg-time{display:block;color:var(--muted);font-size:11px;margin-top:5px;opacity:.88}
+.typing:after{content:'•••';display:inline-block;overflow:hidden;vertical-align:bottom;width:0;animation:typingDots 1.2s steps(4,end) infinite}
+@keyframes typingDots{to{width:2.2em}}
+.msg pre{padding-top:38px}.msg pre button{min-height:32px}
 .kstep{display:flex;gap:10px;align-items:flex-start;margin:8px 0}.kstep b.n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--pri);color:#fff;display:grid;place-items:center;font-size:13px}
 /* prescription sheet */
 .rx{background:#fff;color:#111;max-width:800px;margin:auto;border-radius:12px;padding:28px;border:1px solid var(--line)}
 .rx .rh{display:flex;justify-content:space-between;gap:10px;border-bottom:3px solid var(--pri);padding-bottom:10px;margin-bottom:12px}
 .rx h3{color:var(--pri);margin:16px 0 6px;font-size:15px}
 .rx table{width:100%;border-collapse:collapse}
+.rx table.rx-meds th{background:var(--soft);color:var(--pri2);font-weight:700}.rx table.rx-meds tr:nth-child(even) td{background:#F8FAFB}
+.rx .rx-brand{font-size:18px;letter-spacing:.01em}.rx .rx-mark{background:var(--soft);border-radius:12px;padding:6px}
 .rx td,.rx th{border:1px solid #ddd;padding:6px 8px;text-align:start;font-size:14px}
 .rx th{background:#f4f7f8}
 .rx .sig{margin-top:30px;display:flex;justify-content:space-between}
 .rx .instr{white-space:pre-wrap;line-height:1.8}
+.modal .box.wizard{max-width:620px;padding:22px;max-height:calc(100dvh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow:auto}
+.wizard-head{text-align:center}.wizard-head .applogo{width:58px!important;height:58px!important}
+.wizard-progress{display:flex;justify-content:center;gap:9px;margin:12px 0 16px}
+.wizard-progress span{width:10px;height:10px;border-radius:50%;background:var(--line)}.wizard-progress span.on{background:var(--pri);box-shadow:0 0 0 4px var(--soft)}
+.wizard-actions{display:flex;gap:10px;margin-top:16px}.wizard-actions .btn{min-height:48px;justify-content:center;flex:1}
+.wizard .kstep{margin:5px 0;gap:8px}.wizard .kstep .btn{min-height:40px}
+.wizard #aiSetup .alert{margin:4px 0;padding:9px}.wizard #aiSetup .row{gap:6px}.wizard #aiSetup .row .btn{min-height:40px;padding:6px 10px}
+.wizard #gKey{min-height:44px}
+/* compact clinical sections and mobile visit actions */
+.case-section{padding:0;overflow:hidden}.case-section>summary{list-style:none;display:flex;align-items:center;gap:8px;cursor:pointer;padding:14px 16px;min-height:52px;font-weight:700}
+.case-section>summary::-webkit-details-marker{display:none}.case-section>summary h2{margin:0;flex:1}.case-section>summary:after{content:'＋';color:var(--muted);font-size:18px}.case-section[open]>summary:after{content:'−'}
+.case-section[open]>.section-body{padding:0 16px 16px}.section-summary{display:none;color:var(--muted);font-size:12px;font-weight:400;margin-inline-start:auto;max-width:42%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.case-section:not([open]) .section-summary{display:inline-block}
+.visit-actions{display:none}
+.case-section:focus-within{scroll-margin-top:80px}
 @media(max-width:1000px){.cols{grid-template-columns:minmax(0,1fr)}.side{position:static;max-height:none}}
 @media(max-width:760px){
  body{font-size:16px;padding-bottom:calc(74px + env(safe-area-inset-bottom))}
@@ -175,9 +204,30 @@ details.faq summary{cursor:pointer;font-weight:600}
  .bnav a.on{color:var(--pri);font-weight:700}
  .bnav a.new span{background:var(--pri);color:#fff;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;margin-top:-22px;box-shadow:0 4px 12px rgba(0,0,0,.2)}
  .rx{padding:16px}
- .toast{bottom:calc(92px + env(safe-area-inset-bottom))}
+ .toast{bottom:calc(158px + env(safe-area-inset-bottom));max-width:calc(100vw - 24px)}
+ .section-summary{max-width:48%}
+ .visit-actions{display:flex;position:fixed;inset-inline:8px;bottom:calc(90px + env(safe-area-inset-bottom));z-index:35;align-items:center;gap:7px;padding:7px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+ .visit-actions .btn{min-height:44px;justify-content:center;padding:8px 11px}.visit-actions .alert-count{min-height:44px;border:0;border-radius:10px;background:var(--soft);color:var(--text);padding:6px 10px;font:inherit;font-weight:700}.visit-actions .alert-count.hot{background:var(--redbg);color:var(--red)}
+ body{padding-bottom:calc(156px + env(safe-area-inset-bottom))}
 }
+/* consistent inline outline icons for interface controls */
+.ui-icon{display:inline-flex;width:24px;height:24px;flex:0 0 24px;vertical-align:middle;align-items:center;justify-content:center}
+.ui-icon svg{width:100%;height:100%;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.ti .ui-icon{width:28px;height:28px}.ic .ui-icon{width:20px;height:20px}.btn .ui-icon{width:20px;height:20px;flex-basis:20px}.step .e .ui-icon{width:24px;height:24px}
+/* v2.5: dark readability, medicines, last visit, prescription page 2, activation */
+[data-theme=dark] a,[data-theme=dark] .msg h4,[data-theme=dark] .bnav a.on,[data-theme=dark] .btn.sec,[data-theme=dark] .card h2 .ic,[data-theme=dark] .wizard-step-title{color:var(--accent)}
+[data-theme=dark] .btn.sec{border-color:var(--accent)}
+.medtag{display:inline-block;margin-top:4px;font-size:11px;font-weight:700;border-radius:8px;padding:3px 8px;background:var(--amberbg);color:var(--amber);border:1px solid #FEC84B;cursor:pointer;white-space:nowrap}
+tr.med-ai td{background:var(--amberbg)}
+.alts .alt{border:1px solid var(--line);border-radius:12px;padding:10px;margin:8px 0}
+.lastv{border-inline-start:5px solid var(--accent,var(--pri))}
+.cmp td,.cmp th{padding:4px 8px;border-bottom:1px solid var(--line);text-align:start;font-size:13px}
+.rx-page2{margin-top:16px}.rx-page2 .instr{font-size:17px;line-height:2}
+.gate{max-width:460px;margin:6vh auto}
+@page{size:A4;margin:12mm}
 @media print{
+ .rx-page2{break-before:page;page-break-before:always;margin-top:0}
+ .visit-actions{display:none!important}
  body{background:#fff;padding:0}
  .top,.bnav,.noprint,.toast{display:none!important}
  main{padding:0;max-width:none}
@@ -201,7 +251,8 @@ details.faq summary{cursor:pointer;font-weight:600}
 'use strict';
 const DEFAULT_PROMPT = "ROLE\n\nYou are an ENT (otolaryngology, head and neck) clinical decision-support assistant working at the level of an experienced ENT consultant, helping a resident doctor in Egypt (emergency, clinic, pre-op, post-op). Give consultant-level reasoning, practical bedside guidance, safety-first decisions, and evidence-based advice. Do not claim to be a real physician or to have personal clinical experience.\n\nLANGUAGE (follow strictly)\n\n•\tReply in simple Egyptian Arabic, as a senior talks to a resident in the ward. Keep in English: medical terms, diagnoses, anatomy, drug names, doses, units, investigations (CT, MRI, CBC, audiogram), and ward words (airway, vitals, NPO, admit, discharge, follow-up, red flag, consult, OR, ICU, IV, SBAR). Everything else in Arabic.\n\n•\tExample: \"الـ airway لازم يتأمن الأول. افحص الـ oropharynx قبل أي تحليل للمريض.\"\n\n•\tUnderstand Arabic or English input, including dictated voice notes.\n\nPRIORITY ORDER (highest first)\n\n1.\tImmediate patient safety, stabilization, time-critical escalation. 2. Recognition of life-threatening ENT and non-ENT emergencies. 3. Evidence-based decisions and local emergency protocols. 4. Patient-specific findings, contraindications, available resources. 5. Scope boundaries and referral. 6. Format, language, question limits, style.\n\n•\tNever let a format rule, availability question, specialty boundary, or request for information delay airway management, hemorrhage control, emergency activation, or urgent referral. Never wait for tests, equipment, a full history, or answers before an essential action.\n\n•\tIf a non-ENT life-threatening condition is suspected, tell the resident to activate the emergency pathway now; do not manage it beyond stabilization.\n\n•\tIf instructions conflict, say so, choose the safer evidence-based action, and say what needs senior review. Never silently follow a lower-priority rule that could harm the patient.\n\n•\tIf information is missing, separate confirmed findings from assumptions, give safe immediate actions, and state the limits. Never fabricate findings, doses, guidelines, citations, results, or resource availability.\n\nSCOPE\n\n•\tHelp diagnose and manage ear, nose, throat, larynx, and head and neck conditions: history, ENT examination, ENT investigations, treatment.\n\n•\tENT symptoms can have serious non-ENT causes: do not ignore them, but do not diagnose or work up another specialty's disease. You may name a suspected non-ENT cause as a reason for referral (\"مشتبه فيه، ومحتاج تقييم عاجل\").\n\n•\tFinish the ENT history and examination first. If findings are normal or do not explain the symptoms, say so, state what was examined and what remains unassessed, and recommend the right specialty. Do not call an ENT assessment negative after a limited examination.\n\n•\tDo not recommend routine brain MRI, cardiac, endocrine, or other specialty tests for a stable patient, unless needed in a time-critical emergency or required by a local pathway. The colleague orders their own tests.\n\n•\tFor possible stroke, central vertigo, acute coronary syndrome, severe sudden headache with neurological signs, or other time-critical emergencies, tell the resident to call the emergency team now; do not wait for the ENT workup.\n\n•\tBrief non-ENT red-flag screening questions are allowed when they decide urgency. Orbital and intracranial complications of ENT infection stay in the ENT role. If unsure about scope, say so and advise the senior.\n\nCLINICAL-FIRST\n\n•\tBase the assessment on history, bedside examination, vitals, and evolution. Order a test only if it clarifies a meaningful uncertainty, assesses severity, excludes a dangerous condition, guides treatment, or decides disposition. For each test: one line on why and what it changes, labeled: مطلوب دلوقتي، أو مطلوب لو حصل كذا، أو مش لازم.\n\n•\tNever withhold a necessary test only because it is costly or unavailable: give its indication, urgency, and the referral or transfer route. A normal bedside exam does not exclude a dangerous condition when the exam has limited sensitivity.\n\n•\tJustified tests: suspected deep neck infection (imaging must not delay the airway); orbital or intracranial complications; foreign body not visible clinically; head and neck trauma with suspected fracture; penetrating ear injury with deeper signs; suspected head and neck malignancy, sinonasal tumor, or persistent neck mass; sudden or asymmetric sensorineural hearing loss (audiogram, MRI internal auditory canals); pre-op tests required by anesthesia or protocol; significant bleeding needing cross-match.\n\n•\tAn unstable patient is never made to wait for a test: secure the airway, control bleeding, stabilize, call the senior or emergency team first.\n\nRESOURCE AVAILABILITY\n\n•\tENT equipment is often missing in the ER (audiometer, tympanometer, flexible or rigid endoscopes, even a headlight or speculum). Never assume any device, drug, or consumable is available, and never build a plan that waits for a result that may never come.\n\n•\tAsk about availability only when the answer changes the next step, and never about unrelated equipment. When the case is stable, ask as question 1 of \"Now tell me\", as one grouped question with \"متاح\" or \"مش متاح\" per item. In emergencies, give safety instructions first and ask afterward.\n\n•\tEpistaxis: ask about packing and hemostatic materials (sponge pack, ribbon gauze, absorbable hemostatic, balloon, topical vasoconstrictor, tranexamic acid, cautery). Ear canal injury: ask about otoscope or microscope, suction, ear drops, wick or gauze.\n\n•\tAsk once per resource. Do not stall the reply: give safe actions and a bedside interim plan first, then two short branches \"لو متاح\" and \"لو مش متاح\". After the answer, follow only the matching branch.\n\n•\tIf unavailable, use bedside alternatives without implying equal accuracy. Hearing: Rinne, Weber, whisper test, otoscopy; for suspected sudden sensorineural loss, discuss treatment with the senior urgently and arrange audiometry at the earliest suitable facility. Larynx and voice: voice quality, stridor, drooling, neck findings; mirror laryngoscopy only if tolerated and never in a compromised airway; arrange early visualization or transfer. Nose: headlight or torch with speculum, suction, topical agents; never delay hemorrhage control for an endoscope. Fish bone or hypopharyngeal foreign body: oropharynx exam with light and tongue depressor, no blind instrumentation, early referral for endoscopy.\n\n•\tIf a missing resource makes local care unsafe, say so and tell the resident to call the senior now. Say where the test can be done and how urgent it is. Do not suggest next-day outpatient care when emergency evaluation is needed.\n\nHIGH-RISK ENT\n\n•\tButton battery (suspected contact, ingestion, aspiration): top emergency; urgent removal without delaying for imaging when suspicion is high.\n\n•\tDeep neck infection (Ludwig's, parapharyngeal, retropharyngeal): airway first (stridor, drooling, trismus); no forced oral exam if airway compromise is impending.\n\n•\tEpistaxis: advise against simultaneous bilateral septal cautery (septal perforation).\n\nEPISTAXIS AND SUSPECTED NASAL MASS\n\n•\tHemostasis, airway, and circulation come first; never delay control of severe bleeding because of a possible mass. Assess stability, severity, laterality, recurrence, trauma, anticoagulants, likely site.\n\n•\tConsider a mass without overstating it. Red flags: unilateral recurrent bleeding, unilateral obstruction, visible mass or friable tissue, adolescent male with profuse unilateral bleeding (juvenile angiofibroma), older age with risk factors, smoking or occupational exposure, facial pain or numbness, proptosis, neck node, prior head and neck cancer, bleeding out of proportion. A vascular tumor can occur outside the classic age, sex, or site.\n\n•\tIf a mass is possible and bleeding is controllable: avoid unnecessary traumatic instrumentation, blind forceful packing (including a large sponge pack pushed blindly), and blind cautery of a vascular lesion. This is clinical reasoning, not an established protocol; the final choice is a bedside decision with the senior. It must never prevent effective hemostasis in severe or ongoing bleeding.\n\n•\tSteps: stabilize airway and circulation, IV access, cross-match if significant; gentle suction under light; consider topical vasoconstrictor and tranexamic acid (verify dose); find the bleeding point under vision; if packing is needed, use the least traumatic effective method (for example a small gentle pack under vision, reassess before packing more); no biopsy in the ER; contrast CT or MRI when a vascular tumor is suspected, CT angiography or angiographic assessment for severe or persistent bleeding; if bleeding is severe, use whatever effective pack, balloon, or posterior packing is available, mention its risks, call the senior now, and discuss interventional radiology or surgery; document the concern, decisions, risks, and the discussion with the patient or family.\n\n•\tIf a mass is unlikely: sustained pressure, topical agents, cautery of an identified point, anterior packing, then posterior packing or balloon when needed. State which step fits.\n\n•\tIf a pack is placed: removal plan, who, where, and return precautions. If a mass was suspected and bleeding stops, arrange ENT follow-up with endoscopy and imaging; do not close it as simple epistaxis.\n\nEAR CANAL LACERATION FROM AN OBJECT (pencil, key, cotton bud; any age or immune status)\n\n•\tEvidence: no high-quality trial or guideline exists for minor lacerations. Stenosis is reported mainly after severe trauma. In a small pediatric polytrauma series all patients got antibiotic drops and still developed stenosis. Prevention is not standardized. Textbooks advise antibiotic and steroid drops, with a wick or gauze when the canal is too swollen. State this honestly and label the choices below as clinical reasoning.\n\n•\tAlways check: object and depth, time since injury, bleeding or clear fluid, hearing loss, vertigo, facial weakness, whether the tympanic membrane is seen, retained fragment, tetanus status, age, diabetes or immune compromise, and non-accidental injury in a child. If the membrane, ossicles, facial nerve, temporal bone, or CSF may be involved, it is more than a simple laceration: call the senior now and consider CT temporal bone.\n\n•\tSuperficial, clean, membrane intact: gentle aural toilet, keep dry, no packing, drops optional, review in a few days. Deep or circumferential, exposed cartilage or bone, marked edema: consider antibiotic and steroid drops with a wick or lubricated gauze to keep the lumen open, review in 2 to 3 days. Perforation or membrane not seen: avoid aminoglycoside drops, prefer fluoroquinolone-based drops, no irrigation. Diabetic, immunocompromised, or elderly: lower threshold for fluoroquinolone drops (cover Pseudomonas), earlier follow-up; severe pain, granulation, cranial nerve palsy, or fever suggest necrotizing otitis externa and need the senior; systemic antibiotics only for cellulitis or perichondritis, with the senior. Child: may need sedation; involve the senior early.\n\n•\tUpdate tetanus if due. Give a clear recommendation (wick, drops, or nothing) with the reason, the review date, wick removal plan, and return precautions. At follow-up check for early narrowing. Late complications: stenosis, conductive loss, cholesteatoma.\n\nMEDICATION SAFETY\n\n•\tNever state a dose from memory when uncertain; if it cannot be verified, say so and ask for confirmation from the formulary, a current reference, or the senior. Children: get the weight in kg first. Check age, allergies, pregnancy, current drugs, renal or hepatic impairment, and contraindications.\n\n•\tSeparate adult and pediatric doses; state route, frequency, duration, maximum when verified; metric units; distinguish concentration from dose. Never invent concentrations, maximums, or dilutions. Consider interactions (anticoagulants, antiplatelets).\n\n•\tPrefer drugs common in Egypt without substituting an unsuitable one. No automatic antibiotics: state the indication or say they are unnecessary. Be careful with systemic steroids, vasoconstrictors, and ototoxic drops. In unstable cases never delay resuscitation to check references. If the resident proposes an unsafe drug or dose, say so and give the safer step. Mark off-label or limited-evidence use.\n\nDISPOSITION\n\nEnd each assessment with one of: discharge (only if stable, dangers addressed, return precautions given), observation (what to monitor and what triggers escalation), admission (indication and team), urgent transfer or senior escalation (urgency and reason).\n\nIMAGES, VIDEO, PDF, AUDIO\n\n•\tImaging (CT, MRI, X-ray, endoscopy, otoscopy, audiogram, photos): state type and quality, describe findings as short bullets, give an impression, and say it is \"not a formal radiology report\"; say what a radiologist or better study should confirm. If unclear, cropped, or without side, ask for a better one. A non-ENT finding is mentioned as incidental with a referral, not interpreted in depth. Clinical photos and endoscopy images count as bedside findings.\n\n•\tVideo: describe what you see and the limits; if unreadable, ask for 3 to 5 still frames plus a short description. PDF: summarize key findings and flag abnormal values. Dictation: confirm ambiguous laterality, drug names, or numbers. Do not read or repeat names or IDs in media; remind the resident to crop them.\n\nRIGHT-TO-LEFT CONSISTENCY (follow strictly)\n\n•\tEvery line starts with an Arabic word, never an English word, digit, or symbol-only token. If the natural first word is English, put an Arabic word before it (\"افحص\" before \"otoscopy\", \"ابعت\" before \"CBC\", \"أعطي\" before a drug name). Start every line with the invisible mark U+200F.\n\n•\tBody lines end with an Arabic word or an emoji, never an English word, digit, unit, or bracket. Headings and code blocks are the only exceptions.\n\n•\tUse Arabic punctuation (\"،\" \"؛\" \"؟\"). Never put punctuation, digits, brackets, or slashes next to an English term at a line edge.\n\n•\tOne sentence per line; a sentence mixing Arabic and English never shares its line. At most two English terms in a row. Doses and units go mid-line. One drug per bullet, starting with an Arabic word (\"أعطي\", \"استخدم\").\n\n•\tFully English text (senior report, SBAR, referral) goes in a code block; Arabic comments go outside it.\n\nHEADINGS AND SPACING\n\n•\tEvery heading is \"## \" plus a BOLD title: Arabic title, space, dash, space, English term, then the symbol at the end. Example: ## خطر عاجل - URGENT 🚨. Use exactly the headings in the template.\n\n•\tTwo blank lines between sections: after a section's last line, an empty line, a line containing only U+2800 (⠀), an empty line, then the next heading. One blank line between bullet groups. Never write a paragraph; one idea per bullet, about 12 words.\n\nFORMAT\n\n•\tMarkdown. Symbols: 🚨 urgent, 🩺 impression, ✅ do now, ❓❓ questions with 🙋‍♂️, 🔍 differential, 🧪 tests, 🔄 referral, 💊 treatment, 🏥 disposition, 📚 source, 🎯 confidence, 📞 senior report. Bold only critical items and headings. Numbered steps only for ordered actions. Tables only to compare options.\n\n•\tIn emergencies put URGENT and Do now first, then questions, then the rest, each short. Template (drop sections not needed; ⠀ is the spacer line):\n\nخطر عاجل - URGENT 🚨\n\n•\tسطر عن الخطر\n\n•\tأول إجراء\n\n•\tكلم السنيور حالًا\n\n⠀\n\nالانطباع - IMPRESSION 🩺\n\n•\tسطر واحد\n\n⠀\n\nاعمل دلوقتي - DO NOW ✅\n\n1.\tأهم خطوة\n\n2.\tالخطوة اللي بعدها\n\n⠀\n\nقولي دلوقتي - NOW TELL ME ❓❓🙋‍♂️\n\nأنا مستني إجابتك على الأسئلة دي:\n\n1.\tالسؤال الأهم، أو الأجهزة المتاحة لو لازم\n\n2.\tالسؤال التاني\n\n📩 رد برقم السؤال وإجابته، مثلًا: \"1: أيوه، 2: لأ\"\n\n📩 لو معلومة مش متاحة قول \"مش متاح\"\n\n⠀\n\nThen the same pattern (heading, short bullets, spacer line) for these sections, in order: ## التشخيص التفريقي - Differential 🔍 (most likely, then most dangerous); ## الفحوصات - Tests 🧪 (needed now with why, only if, not needed, bedside alternative if unavailable); ## التحويل - Referral 🔄 (what was examined and what remains, which specialty, urgency); ## الخطة - Plan 💊 (treatment, follow-up, return precautions); ## التصرف - Disposition 🏥; ## المرجع - Source 📚 (guideline family, or \"clinical reasoning\"); ## درجة الثقة - Confidence 🎯 (high, moderate, or low, with the reason); ## بلاغ للسنيور - Senior report 📞 (one line: copy it, and phone the senior first in emergencies; then the code block).\n\nSENIOR REPORT\n\nEnd every case reply, except trivial questions, with a short English report in a code block for the resident to send to a more senior doctor: at most 6 lines, only facts given so far, missing items as \"not available\", no invented findings or vitals, no name or ID, most urgent problem first, never wait for results. Don't uses labels or prefixes before any line. Full line space between and separate lines\n\n\nURGENT: <only if a red flag exists, one line>\n\n<age, sex, setting, main problem, time course>\n\n <relevant history, comorbidities, anticoagulants, allergies>\n\n<vitals, airway status, key exam findings, working impression>\n\n<what has been done, and what I need: advice, come to see, transfer>\n\n\nQUESTIONS\n\n•\tMaximum 4 questions, most critical first, only if the answer changes management, bedside-answerable first, ENT first. Equipment availability is question 1 when the plan depends on it (not in emergencies).\n\n•\tPut them right after \"Do now\". If a critical answer is missing, still give safe actions and say the plan will be refined. Do not repeat answered questions. Skip the section if none.\n\nSAFETY SCAN (always first)\n\nAirway compromise (stridor, drooling, trismus, muffled voice, distress); active or recurrent bleeding; expanding neck swelling or hematoma; deep neck infection; epiglottitis; foreign body (airway, button battery, magnets, sharp esophageal object); orbital cellulitis or vision change; intracranial signs after sinusitis or otitis; CSF leak; facial palsy; sudden hearing loss; vertigo with neurological signs; trauma (septal hematoma, temporal bone, laryngeal, facial fractures); penetrating ear canal injury; post-operative complications. Children, diabetics, immunocompromised and anticoagulated patients lower the threshold. If a red flag is possible, start with URGENT and tell the resident to call the senior now, before any test.\n\nEVIDENCE\n\nPriority: 1. Egyptian Ministry of Health and Egyptian ENT society guidance, when they exist. 2. AAO-HNSF and other American guidance. 3. NICE, ENT UK, and other British guidance. Name the guideline family in Source. Never invent a guideline, year, citation, or statistic. If unsure an Egyptian guideline exists, say so in Arabic, say you follow American or British guidance, and advise local verification. Say clearly when advice is clinical reasoning or low-quality evidence (case reports, textbooks).\n\nCOMMANDS (the resident types one word)\n\n•\tescalate: regenerate the senior report with the latest information, in a code block, fully in English.\n\n•\trefer: short English referral message to the other specialty, in a code block: reason, ENT history and findings, what was excluded and what remains unassessed, urgency, the question. Do not include that specialty's tests.\n\n•\tplan: management plan as bullets: immediate actions, findings to monitor, tests only if justified and available (with the bedside alternative), treatment, referral, disposition, follow-up, what would change the plan, assumptions. Include a senior's opinion if given.\n\n•\tsummary: 5-line handover, one sentence per line. new: treat the next message as a new case and forget the previous patient.\n\nPRIVACY AND HONESTY\n\nNever ask for or repeat patient name, file number, phone, or ID. If you disagree with the resident's plan, say so respectfully and explain why. State uncertainty honestly; do not guess missing facts. You are decision support only, not a replacement for the senior, the clinical examination, or local protocols. End every substantial answer, after the senior report, with this line in Arabic only: _للدعم في القرار فقط،";
 const GOOGLE_CLIENT_ID = "";
-const APP_VERSION = '2.3.1';
+const ACTIVATION_URL = "";
+const APP_VERSION = '2.5.0';
 
 /* =================== state & storage =================== */
 const $ = id => document.getElementById(id);
@@ -212,7 +263,7 @@ function loadDB(){
   d = d || {};
   d.patients = d.patients || {};
   d.visits = d.visits || [];
-  d.settings = Object.assign({lang:'ar', theme:'dark', doctor:'', clinic:'', clinicInfo:'', ai:'gemini', onboarded:false}, d.settings||{});
+  d.settings = Object.assign({lang:'ar', theme:'dark', doctor:'', clinic:'', clinicInfo:'', ai:'gemini', aiLang:'auto', onboarded:false}, d.settings||{});
   if(!['dark','teal','ocean'].includes(d.settings.theme)) d.settings.theme='dark';
   // migrate v1 cases
   try{ const old = JSON.parse(localStorage.getItem('otolarix.cases')||'[]');
@@ -225,7 +276,7 @@ function persist(){ localStorage.setItem(DBKEY, JSON.stringify(DB)); clearTimeou
 const S = () => DB.settings;
 const EN = () => S().lang==='en';
 const L = (ar,en) => EN()? en : ar;
-function toast(t){ const e=$('toast'); e.textContent=t; e.classList.add('show'); clearTimeout(e._t); e._t=setTimeout(()=>e.classList.remove('show'),2600) }
+function toast(t){ const e=$('toast'),mark=document.createElement('span'),text=document.createElement('span'); mark.innerHTML=icon('spark'); text.textContent=t; e.replaceChildren(mark,text); e.classList.add('show'); clearTimeout(e._t); e._t=setTimeout(()=>e.classList.remove('show'),2600) }
 async function copy(t){ try{ await navigator.clipboard.writeText(t) }catch{ const a=document.createElement('textarea'); a.value=t; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove() } }
 const esc = s => String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const uid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
@@ -426,11 +477,13 @@ function caseText(v){
   const rs=Object.entries(v.res||{});
   out.push(rs.length? `Resources: ${rs.map(([k,x])=>k+' '+x).join('; ')}. Other equipment: not specified.` : 'Resources: not specified (ask only if it changes the next step).');
   if(v.inv) out.push(`Investigations/results: ${v.inv}`);
+  const pv=prevVisitOf(v);
+  if(pv){ const prx=pv.rx||{}; out.push(`PREVIOUS VISIT (${(pv.created||'').slice(0,10)}): complaint ${pv.cc||'—'}; diagnosis ${prx.diagnosis||'—'}; treatment ${(prx.meds||[]).map(m=>[m.name,m.dose,m.freq,m.dur].filter(Boolean).join(' ')).join('; ')||'—'}; planned follow-up ${prx.followUp||'—'}.${v.prevVisit?' This visit is a FOLLOW-UP of that visit: assess response to treatment.':''}`) }
   const ms=missing(v,true); if(ms.length) out.push(`Missing / not available: ${ms.join(', ')}.`);
   return out.join('\n');
 }
 function aiMessage(v){
-  const lang = EN()? LANG_EN : '';
+  const lang = aiEN()? LANG_EN : '';
   return `${DEFAULT_PROMPT}${APP_RULES}\n\n════════ NEW CASE ════════\nFollow the instructions above for this de-identified case.${lang}\n\n${caseText(v)}`;
 }
 const AI_URL = {claude:'https://claude.ai/new', chatgpt:'https://chatgpt.com/'};
@@ -484,7 +537,7 @@ const Gemini = {
     let last;
     for(const model of models){
       const body={contents, generationConfig:{temperature:json?0.1:0.3}};
-      if(system) body.systemInstruction={parts:[{text:DEFAULT_PROMPT+APP_RULES+(EN()?LANG_EN:'')}]};
+      if(system) body.systemInstruction={parts:[{text:DEFAULT_PROMPT+APP_RULES+(aiEN()?LANG_EN:'')}]};
       if(json) body.generationConfig.responseMimeType='application/json';
       const r=await fetch(`${this.base}/${model}:generateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},body:JSON.stringify(body)});
       if(r.ok){
@@ -506,7 +559,7 @@ function md(t){
   const inl=x=>x.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/`([^`]+)`/g,'<code>$1</code>');
   for(const raw of lines){
     const l=raw.replace(/‏/g,'');
-    if(/^\s*```/.test(l)){ if(inCode){ out+=`<pre><button class="btn sm sec" onclick="copy(this.parentNode.innerText.replace(/^(Copy|نسخ)\\n?/,''));toast('✔')">${L('نسخ','Copy')}</button>${code.join('\n')}</pre>`; code=[]; inCode=false } else { close(); inCode=true } continue }
+    if(/^\s*```/.test(l)){ if(inCode){ out+=`<pre><button class="btn sm sec" onclick="copy(this.parentNode.innerText.replace(/^(Copy report|نسخ التقرير)\\n?/,''));toast('✔')">${L('نسخ التقرير','Copy report')}</button>${code.join('\n')}</pre>`; code=[]; inCode=false } else { close(); inCode=true } continue }
     if(inCode){ code.push(l); continue }
     let m;
     if((m=l.match(/^\s*#{1,4}\s+(.*)/))){ close(); out+=`<h4>${inl(m[1])}</h4>`; continue }
@@ -529,6 +582,15 @@ const NAV = [
   ['more','☰',()=>L('المزيد','More')],
 ];
 function go(r){ location.hash = r }
+const ICONS={home:'<path d="m3 10 9-7 9 7"/><path d="M5 9v12h14V9M9 21v-7h6v7"/>',patients:'<path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M20 8v6m3-3h-6"/>',add:'<path d="M12 5v14M5 12h14"/>',calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/>',more:'<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',book:'<path d="M4 4h12a4 4 0 0 1 4 4v12H8a4 4 0 0 1-4-4z"/><path d="M8 20V8a4 4 0 0 1 4-4"/>',settings:'<circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.6a8 8 0 0 1-1.5.9l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.5-.9l-1.7.6-1.4-2.4 1.4-1.1a7 7 0 0 1 0-1.8l-1.4-1.1 1.4-2.4 1.7.6a8 8 0 0 1 1.5-.9l.3-1.8h2.8l.3 1.8a8 8 0 0 1 1.5.9l1.7-.6 1.4 2.4-1.4 1.1a7 7 0 0 1 0 1.7Z"/>',globe:'<circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20"/>',medical:'<path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3"/><path d="M16 3h5v5M21 3l-9 9"/><path d="M7 8h4M7 12h3M7 16h4"/>',spark:'<path d="m12 3 1.9 5.8L20 11l-6.1 2.2L12 19l-2-5.8L4 11l6-2.2z"/><path d="m19 15 1 2 2 1-2 1-1 2-1-2-2-1 2-1z"/>',ear:'<path d="M5 10a7 7 0 0 1 14 0c0 4-3 5-4 7-1 2-1 4-4 4-2 0-3-1-3-3"/><path d="M9 10a3 3 0 0 1 6 0c0 2-2 2-2 4"/>',nose:'<path d="M12 3c-1 5-3 9-5 12-1 2 1 3 4 3h3c2 0 3-1 2-3l-4-8"/><path d="M10 21h4"/>',clipboard:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2h6v2M8 10h8M8 14h8M8 18h5"/>',alert:'<path d="m10.3 3.9-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3.1l-8-14a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4m0 4h.01"/>',check:'<path d="m5 12 4 4L19 6"/>',chat:'<path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 8.7 3.9a8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/>',clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',printer:'<path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/>',copy:'<rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>',save:'<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/>',trash:'<path d="M3 6h18M8 6V4h8v2m3 0-1 15H6L5 6m4 4v7m6-7v7"/>',download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',person:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',drop:'<path d="M12 3v18M5 10l7-7 7 7"/>',edit:'<path d="m16 4 4 4M4 20l4-.8L20 7a2.8 2.8 0 0 0-4-4L4 15z"/>',share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m9 11 6-5m-6 8 6 4"/>',heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/>',shield:'<path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/>',refresh:'<path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.6 9A7 7 0 0 1 18 6l2 2M4 16l2 2a7 7 0 0 0 12.4-3"/>',close:'<path d="m18 6-12 12M6 6l12 12"/>'};
+function icon(name){return `<span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24">${ICONS[name]||ICONS.spark}</svg></span>`}
+const EMOJI_ICONS={'🏠':'home','👥':'patients','➕':'add','📅':'calendar','☰':'more','📖':'book','⚙️':'settings','🌐':'globe','🩺':'medical','🤖':'spark','🚨':'alert','📋':'clipboard','🕘':'clock','🗣️':'chat','❤️':'heart','🔦':'medical','🧰':'settings','🧪':'medical','🎧':'ear','💊':'medical','✔':'check','✅':'check','💾':'save','🗑':'trash','⬇':'download','⬆':'upload','🔎':'search','👤':'person','✏️':'edit','🖨':'printer','📤':'share','🔒':'shield','🔄':'refresh','✕':'close','📲':'download','🎨':'spark','❓':'chat','✨':'spark','📚':'book','📁':'clipboard','📈':'clipboard','⏰':'clock'};
+function iconizeUI(){
+  const keys=Object.keys(EMOJI_ICONS).sort((a,b)=>b.length-a.length);
+  const convert=(el,full=false)=>{const t=el.firstChild;if(!t||t.nodeType!==3)return;const s=t.textContent.trimStart(),key=keys.find(k=>s.startsWith(k));if(!key)return;const prefix=t.textContent.slice(0,t.textContent.indexOf(s)),rest=s.slice(key.length);const wrap=document.createElement('span');wrap.innerHTML=icon(EMOJI_ICONS[key]);if(full){el.replaceChildren(wrap)}else{el.replaceChild(wrap,t);if(rest)el.insertBefore(document.createTextNode(rest),wrap.nextSibling);if(prefix)el.insertBefore(document.createTextNode(prefix),wrap)}};
+  document.querySelectorAll('.tnav .ni,.bnav a span,.tile .ti,.card h2 .ic,.step .e,h1.page').forEach(el=>convert(el,el.matches('.tnav .ni,.bnav a span,.tile .ti,.card h2 .ic,.step .e')));
+  document.querySelectorAll('button.btn').forEach(el=>convert(el,false));
+}
 window.addEventListener('hashchange', render);
 let curVisit=null;
 function route(){ const h=location.hash.slice(1)||'home'; const [name,arg]=h.split('/'); return {name,arg:decodeURIComponent(arg||'')} }
@@ -538,11 +600,14 @@ function shell(active){
   $('tnav').innerHTML = items.map(([k,i,t])=>`<a href="#${k}" class="${active===k?'on':''}" title="${esc(t())}"><span class="ni">${i}</span><span class="nt">${t()}</span></a>`).join('')
     + `<button class="navtog" onclick="toggleNav()" title="${nc?L('توسيع القائمة','Expand menu'):L('طي القائمة','Collapse menu')}"><span class="ni">${nc?'»':'«'}</span><span class="nt">${L('طي القائمة','Collapse')}</span></button>`;
   $('bnav').innerHTML = NAV.map(([k,i,t])=>`<a href="#${k}" class="${k==='new'?'new ':''}${active===k||(k==='more'&&['settings','guide','more'].includes(active))?'on':''}"><span>${i}</span>${t()}</a>`).join('');
+  iconizeUI();
 }
 function render(){
   if(editTimer){ clearTimeout(editTimer); editTimer=null; if($('form')&&curVisit&&!isLocked()) saveVisit() } // flush pending auto-save before leaving
   applyLook();
   const {name,arg}=route();
+  if(name!=='visit') document.querySelectorAll('.visit-actions').forEach(e=>e.remove());
+  if(ACTIVATION_URL && !S().activation){ closeModal(); vGate(); shell('home'); return }
   // drop abandoned empty drafts (no complaint, no patient)
   const before=DB.visits.length;
   DB.visits=DB.visits.filter(v=>v.deleted||v.cc||v.patient||v.signed||(name==='visit'&&v.id===arg));
@@ -568,6 +633,10 @@ function vHome(){
   const avg=durs.length? Math.round(durs.reduce((a,b)=>a+b,0)/durs.length) : '—';
   const hr=new Date().getHours(), greet = hr<12? L('صباح الخير','Good morning') : L('مساء الخير','Good evening');
   const recent=[...vs].sort((a,b)=>(b.updated||0)-(a.updated||0)).slice(0,6);
+  const midnight=new Date(); midnight.setHours(0,0,0,0);
+  const days=Array.from({length:7},(_,i)=>{const d=new Date(midnight);d.setDate(d.getDate()-6+i);const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;return {key,label:d.toLocaleDateString(EN()?'en':'ar-EG',{weekday:'short'}),count:vs.filter(v=>(v.created||'').slice(0,10)===key).length}});
+  const maxDay=Math.max(1,...days.map(d=>d.count));
+  const chart=`<svg viewBox="0 0 700 150" role="img" aria-label="${L('الحالات خلال آخر 7 أيام','Cases over the last 7 days')}">${days.map((d,i)=>{const x=28+i*96,h=Math.max(4,82*d.count/maxDay),y=104-h;return `<g><rect class="bar" x="${x}" y="${y}" width="42" height="${h}" rx="8"></rect><text class="count" x="${x+21}" y="${y-6}" text-anchor="middle">${d.count}</text><text x="${x+21}" y="130" text-anchor="middle">${esc(d.label)}</text></g>`}).join('')}</svg>`;
   $('app').innerHTML = `
   <div class="hero">
     <div><h1>${greet}${S().doctor? '، '+esc(S().doctor):''} 👋</h1><p>${fmtDate(new Date())} · ${todayN} ${L('حالة اليوم','cases today')}</p></div>
@@ -590,11 +659,13 @@ function vHome(){
     <div class="stat ok"><div class="muted">${L('متوسط الوقت حتى الاعتماد','Avg time to sign')}</div><div class="v">${avg}<small style="font-size:13px"> ${L('دقيقة','min')}</small></div></div>
     <div class="stat"><div class="muted">${L('إجمالي المرضى','Total patients')}</div><div class="v">${patients().length}</div></div>
   </div>
+  <div class="card week-chart"><h2><span class="ic">📈</span>${L('الحالات خلال آخر 7 أيام','Cases in the last 7 days')}</h2>${chart}</div>
+  ${patients().length? '' : `<div class="card"><h2><span class="ic">👤</span>${L('ابدأ بسجل مريض','Start with a patient record')}</h2><div class="empty-state">${icon('patients')}<p class="muted">${L('أضف المريض مرة واحدة لربط زياراته ومتابعاته.','Add a patient once to keep visits and follow-ups together.')}</p><button class="btn" onclick="newPatientModal()">${L('إضافة مريض','Add patient')}</button></div></div>`}
   <div class="cols" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
     <div class="card"><h2><span class="ic">🕘</span>${L('آخر الحالات','Recent cases')}</h2>
-      <div class="list">${recent.length? recent.map(visitItem).join('') : `<p class="muted">${L('لا توجد حالات بعد. ابدأ بحالة جديدة.','No cases yet. Start a new case.')}</p>`}</div></div>
+      <div class="list">${recent.length? recent.map(visitItem).join('') : `<div class="empty-state">${icon('clipboard')}<p class="muted">${L('لا توجد حالات بعد. ابدأ بحالة جديدة.','No cases yet. Start a new case.')}</p><a class="btn" href="#new">${L('حالة جديدة','New case')}</a></div>`}</div></div>
     <div class="card"><h2><span class="ic">📅</span>${L('المتابعات القادمة','Upcoming follow-ups')}</h2>
-      <div class="list">${fu.slice(0,6).map(fuItem).join('') || `<p class="muted">${L('لا توجد متابعات.','No follow-ups.')}</p>`}</div></div>
+      <div class="list">${fu.slice(0,6).map(fuItem).join('') || `<div class="empty-state">${icon('calendar')}<p class="muted">${L('لا توجد متابعات مجدولة بعد.','No follow-ups are scheduled yet.')}</p><a class="btn sec" href="#new">${L('إنشاء حالة','Create a case')}</a></div>`}</div></div>
   </div>
   <p class="muted" style="text-align:center">Otolarix v${APP_VERSION} · ${L('للدعم في القرار فقط، وليس بديلًا عن الحكم السريري','Decision support only, not a substitute for clinical judgement')}</p>`;
 }
@@ -603,7 +674,7 @@ function visitItem(v){
   const urg=rules(v).u.length;
   return `<div class="item" onclick="go('visit/${v.id}')"><div class="av">${esc((pName(v.patient)||'?').trim().charAt(0))}</div>
   <div class="grow"><div class="ell"><b>${esc(pName(v.patient))}</b> · ${esc(v.cc||'—')}</div><div class="muted">${fmtDate(v.created,true)}</div></div>
-  ${urg?'<span class="tag urgent">URGENT</span>':''} ${v.signed?`<span class="tag signed">${L('معتمدة','Signed')}</span>`:`<span class="tag draft">${L('مسودة','Draft')}</span>`}</div>`;
+  ${v.prevVisit?`<span class="tag">${L('متابعة','Follow-up')}</span>`:''} ${urg?'<span class="tag urgent">URGENT</span>':''} ${v.signed?`<span class="tag signed">${L('معتمدة','Signed')}</span>`:`<span class="tag draft">${L('مسودة','Draft')}</span>`}</div>`;
 }
 function fuItem({v,date}){
   const t=today(), cls=date<t?'urgent':date===t?'draft':'';
@@ -633,25 +704,37 @@ function modal(html){ $('modal').innerHTML=`<div class="modal" onclick="if(event
 function closeModal(){ $('modal').innerHTML='' }
 
 /* =================== onboarding (first run) =================== */
+let onboardingStep=1;
+let onboardingDraft={doctor:'',clinic:''};
 function onboarding(){
   if($('modal').innerHTML) return;
-  modal(`<div style="text-align:center"><div class="applogo" style="width:84px;height:84px;margin:0 auto">${appLogo()}</div><h2 style="margin:6px 0">${L('أهلًا بك في Otolarix','Welcome to Otolarix')}</h2>
-  <p class="muted">${L('إعداد سريع لمرة واحدة فقط. لا يحتاج أي خبرة تقنية.','A one-time quick setup. No technical knowledge needed.')}</p></div>
-  <label>${L('اللغة','Language')}</label><div class="row" style="margin-bottom:10px"><button class="btn ${EN()?'sec':''}" onclick="S().lang='ar';applyLook();closeModal();onboarding()">العربية</button><button class="btn ${EN()?'':'sec'}" onclick="S().lang='en';applyLook();closeModal();onboarding()">English</button></div>
-  <label>${L('اسمك (يظهر على الروشتة)','Your name (shown on prescriptions)')}</label><input id="obDoc" value="${esc(S().doctor)}" placeholder="${L('د. ...','Dr ...')}">
-  <label style="margin-top:8px">${L('اسم العيادة أو المستشفى','Clinic or hospital name')}</label><input id="obClinic" value="${esc(S().clinic)}">
-  <label style="margin-top:8px">${L('الذكاء الاصطناعي (مجاني)','AI assistant (free)')}</label><div id="aiSetup">${aiSetupHTML()}</div>
-  <label style="margin-top:10px">${L('اختر لونك المفضل','Pick your colour theme')}</label>${swatches()}
-  <div class="alert amber" style="margin-top:12px">🔒 ${L('بيانات المرضى تبقى على جهازك (وعلى Google Drive لو سجلت الدخول). اسم المريض لا يُرسل للذكاء الاصطناعي أبدًا.','Patient data stays on your device (and your Google Drive if you sign in). The patient name is never sent to the AI.')}</div>
-  <button class="btn" style="width:100%;justify-content:center;margin-top:8px" onclick="finishOnboarding()">${L('ابدأ ✔','Start ✔')}</button>`);
+  onboardingStep=1; onboardingDraft={doctor:S().doctor||'',clinic:S().clinic||''}; renderOnboardingStep();
 }
-function aiSetupHTML(){
+function renderOnboardingStep(){
+  const step=onboardingStep;
+  let content='';
+  if(step===1) content=`<label>${L('اللغة','Language')}</label><div class="row language-picks"><button class="btn ${EN()?'sec':''}" onclick="S().lang='ar';persist();applyLook();renderOnboardingStep()">العربية</button><button class="btn ${EN()?'':'sec'}" onclick="S().lang='en';persist();applyLook();renderOnboardingStep()">English</button></div>
+   <label>${L('اسمك (يظهر على الروشتة)','Your name (shown on prescriptions)')}</label><input id="obDoc" value="${esc(onboardingDraft.doctor)}" placeholder="${L('د. ...','Dr ...')}">
+   <label style="margin-top:10px">${L('اسم العيادة أو المستشفى','Clinic or hospital name')}</label><input id="obClinic" value="${esc(onboardingDraft.clinic)}">`;
+  if(step===2) content=`<label>${L('الذكاء الاصطناعي','AI assistant')}</label><div id="aiSetup">${aiSetupHTML()}</div>`;
+  if(step===3) content=`<label>${L('اختر لونك المفضل','Choose your preferred theme')}</label>${swatches()}
+   <div class="alert amber" style="margin-top:14px">🔒 ${L('بيانات المرضى تبقى على جهازك (وعلى Google Drive لو سجلت الدخول). اسم المريض لا يُرسل للذكاء الاصطناعي أبدًا.','Patient data stays on your device (and your Google Drive if you sign in). The patient name is never sent to the AI.')}</div>`;
+  modal(`<div class="wizard"><div class="wizard-head"><div class="applogo">${appLogo()}</div><h2 style="margin:6px 0">${L('أهلًا بك في Otolarix','Welcome to Otolarix')}</h2><p class="muted">${L('إعداد سريع لمرة واحدة فقط.','A one-time quick setup.')}</p></div>
+   <div class="wizard-progress" aria-label="${L('خطوة','Step')} ${step} ${L('من 3','of 3')}"><span class="${step>=1?'on':''}"></span><span class="${step>=2?'on':''}"></span><span class="${step>=3?'on':''}"></span></div>
+   <div class="wizard-step-title">${L('الخطوة','Step')} ${step} / 3 · ${step===1?L('اللغة والعيادة','Language & clinic'):step===2?L('إعداد الذكاء الاصطناعي','AI setup'):L('المظهر','Appearance')}</div>${content}
+   <div class="wizard-actions">${step>1?`<button class="btn ghost" onclick="onboardingBack()">${L('رجوع','Back')}</button>`:''}${step<3?`<button class="btn" onclick="onboardingNext()">${L('التالي','Next')} →</button>`:`<button class="btn" onclick="finishOnboarding()">${L('ابدأ ✔','Start ✔')}</button>`}</div></div>`);
+}
+function onboardingSaveFields(){ if($('obDoc')) onboardingDraft.doctor=$('obDoc').value.trim(); if($('obClinic')) onboardingDraft.clinic=$('obClinic').value.trim() }
+function onboardingNext(){ onboardingSaveFields(); onboardingStep=Math.min(3,onboardingStep+1); renderOnboardingStep() }
+function onboardingBack(){ onboardingSaveFields(); onboardingStep=Math.max(1,onboardingStep-1); renderOnboardingStep() }
+function aiSetupHTML(){ return aiSetupCore()+aiLangHTML() }
+function aiSetupCore(){
   const ok=Gemini.ready();
   return `<div class="row" style="margin-bottom:8px">
     <button class="btn ${S().ai==='gemini'?'':'ghost'}" onclick="S().ai='gemini';persist();refreshAI()">✨ Gemini ${L('(داخل التطبيق، موصى به)','(in-app, recommended)')}</button>
     <button class="btn ${S().ai==='claude'?'claude':'ghost'}" onclick="S().ai='claude';persist();refreshAI()">Claude</button>
     <button class="btn ${S().ai==='chatgpt'?'dark':'ghost'}" onclick="S().ai='chatgpt';persist();refreshAI()">ChatGPT</button></div>
-  ${S().ai!=='gemini'? `<p class="muted">${L('مع Claude أو ChatGPT: التطبيق ينسخ الحالة ويفتح الموقع، وأنت تلصق وترسل. لا يحتاج أي إعداد.','With Claude or ChatGPT: the app copies the case and opens the site; you paste and send. No setup needed.')}</p>` :
+  ${S().ai!=='gemini'? `<p class="muted">${L('مع Claude أو ChatGPT (مجاني): التطبيق ينسخ الحالة ويفتح الموقع، تلصق وترسل، ثم تلصق الرد في التطبيق فيُعرض ويُحفظ ويملأ الروشتة. لا يحتاج أي إعداد.','With Claude or ChatGPT (free): the app copies the case and opens the site; you paste and send, then paste the reply back into the app, where it is shown, saved and used to fill the prescription. No setup needed.')}</p>` :
    ok? `<div class="alert ok">✔ ${L('Gemini مفعّل','Gemini is on')} · <span class="ltr">${esc((S().geminiModel||'').replace('models/',''))}</span> <button class="btn sm ghost" onclick="S().geminiKey='';S().geminiModel='';persist();refreshAI()">${L('إزالة المفتاح','Remove key')}</button></div>` :
    `<div class="alert info">
      <b>${L('تفعيل مجاني لمرة واحدة (دقيقة واحدة):','One-time free setup (1 minute):')}</b>
@@ -669,8 +752,8 @@ async function saveGeminiKey(){
   catch(e){ toast(Gemini.human(e)) }
 }
 function aiSetupModal(){ modal(`<h2 id="aiOnly">🤖 ${L('إعداد الذكاء الاصطناعي','AI setup')}</h2><div id="aiSetup">${aiSetupHTML()}</div><button class="btn ghost" onclick="closeModal();render()">${L('إغلاق','Close')}</button>`) }
-function finishOnboarding(){ S().doctor=$('obDoc').value.trim(); S().clinic=$('obClinic').value.trim(); S().onboarded=true; persist(); closeModal(); render() }
-const THEMES=[['dark','#0F172A'],['teal','#0B7C89'],['ocean','#2563EB']];
+function finishOnboarding(){ onboardingSaveFields(); S().doctor=onboardingDraft.doctor; S().clinic=onboardingDraft.clinic; S().onboarded=true; persist(); closeModal(); render() }
+const THEMES=[['dark','#102D37'],['teal','#0B6670'],['ocean','#1B5674']];
 function swatches(){ return `<div class="sw">${THEMES.map(([k,c])=>`<button title="${k}" class="${S().theme===k?'on':''}" style="background:${c}" onclick="setTheme('${k}')"></button>`).join('')}</div>` }
 function setTheme(k){ S().theme=k; persist(); applyLook(); document.querySelectorAll('.applogo').forEach(e=>e.innerHTML=appLogo()); document.querySelectorAll('.sw button').forEach(b=>b.classList.toggle('on',b.title===k)) }
 
@@ -723,12 +806,12 @@ function vPatient(code){
       <div style="margin:6px 0"><b>${L('الشكوى','Complaint')}:</b> ${esc(v.cc||'—')}${v.rx&&v.rx.diagnosis?`<br><b>${L('التشخيص','Diagnosis')}:</b> ${esc(v.rx.diagnosis)}`:''}${v.rx&&v.rx.meds&&v.rx.meds.length?`<br><b>${L('العلاج','Treatment')}:</b> ${esc(v.rx.meds.map(m=>m.name).filter(Boolean).join('، '))}`:''}</div>
       <div class="row"><button class="btn sm sec" onclick="go('visit/${v.id}')">${L('فتح','Open')}</button>${v.signed?`<button class="btn sm sec" onclick="go('rx/${v.id}')">🧾 ${L('الروشتة','Prescription')}</button>`:''}</div></div></div>`});
     if(v.rx&&v.rx.followUp) events.push({d:v.rx.followUp+'T09:00', html:`<div class="ev fu"><div class="card" style="margin:0"><b>📅 ${L('متابعة','Follow-up')} · ${fmtDate(v.rx.followUp)}</b> ${v.fuDone?`<span class="tag signed">${L('تمت','Done')}</span>`:v.rx.followUp<today()?`<span class="tag urgent">${L('متأخرة','Overdue')}</span>`:''}
-      <div class="muted">${esc(v.rx.diagnosis||v.cc||'')}</div></div></div>`});
+      <div class="muted">${esc(v.rx.diagnosis||v.cc||'')}</div>${v.fuDone?'':`<button class="btn sm" style="margin-top:6px" onclick="startVisit('${code}','${v.id}')">▶ ${L('ابدأ زيارة المتابعة','Start follow-up visit')}</button>`}</div></div>`});
   });
   events.sort((a,b)=>b.d.localeCompare(a.d));
   $('app').innerHTML = `<div class="hero"><div class="av" style="width:56px;height:56px;font-size:24px;background:rgba(255,255,255,.2);color:#fff">${esc(p.name.charAt(0))}</div>
    <div><h1>${esc(p.name)}</h1><p>${p.code}${p.birthYear?' · '+(new Date().getFullYear()-p.birthYear)+L(' سنة',' years'):''}${p.sex?' · '+p.sex:''}${p.phone?' · '+esc(p.phone):''}</p></div>
-   <button class="btn" onclick="startVisit('${code}')">🩺 ${L('زيارة جديدة','New visit')}</button></div>
+   <button class="btn" onclick="startVisit('${code}')">🩺 ${L('زيارة جديدة','New visit')}</button>${vs[0]?`<button class="btn" onclick="startVisit('${code}','${vs[0].id}')">🔄 ${L('متابعة آخر زيارة','Follow up last visit')}</button>`:''}</div>
   <div class="card"><h2><span class="ic">🕰️</span>${L('التاريخ المرضي (الخط الزمني)','History timeline')}</h2>
   ${events.length?`<div class="tl">${events.map(e=>e.html).join('')}</div>`:`<p class="muted">${L('لا توجد زيارات بعد.','No visits yet.')}</p>`}</div>
   <div class="row noprint"><button class="btn red sm" onclick="delPatient('${code}')">🗑 ${L('حذف المريض','Delete patient')}</button></div>`;
@@ -748,7 +831,7 @@ function vAgenda(){
   <div class="cols" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr))">
   <div>${grp.map(([title,items,c])=>`<div class="card"><h2><span class="ic">${c==='red'?'⏰':c==='amber'?'📌':'🗓️'}</span>${title} <span class="tag">${items.length}</span></h2>
     <div class="list">${items.map(x=>`<div class="item"><div class="grow" onclick="go('patient/${x.v.patient}')"><b>${esc(pName(x.v.patient))}</b> · ${esc(x.v.rx.diagnosis||x.v.cc||'')}<div class="muted">${fmtDate(x.date)}${(DB.patients[x.v.patient]||{}).phone?' · 📞 '+esc(DB.patients[x.v.patient].phone):''}</div></div>
-    <button class="btn sm sec" onclick="fuDone('${x.v.id}')">✔ ${L('تمت','Done')}</button></div>`).join('')||`<p class="muted">—</p>`}</div></div>`).join('')}</div>
+    <button class="btn sm" onclick="startVisit('${x.v.patient}','${x.v.id}')">▶ ${L('ابدأ المتابعة','Start follow-up')}</button><button class="btn sm sec" onclick="fuDone('${x.v.id}')">✔ ${L('تمت','Done')}</button></div>`).join('')||`<p class="muted">—</p>`}</div></div>`).join('')}</div>
   <div class="card"><h2><span class="ic">⏱️</span>${L('حالات اليوم بالترتيب','Today\'s cases')}</h2>
    <div class="list">${todays.map(v=>{const m=v.signed&&v.started?Math.round((new Date(v.signed)-new Date(v.started))/6e4):null;
      return `<div class="item" onclick="go('visit/${v.id}')"><div class="av">${new Date(v.created).toLocaleTimeString(EN()?'en-GB':'ar-EG',{hour:'2-digit',minute:'2-digit'})}</div><div class="grow"><b>${esc(pName(v.patient))}</b> · ${esc(v.cc||'—')}</div>${m!=null?`<span class="tag signed">${m} ${L('د','min')}</span>`:`<span class="tag draft">${L('جارية','In progress')}</span>`}</div>`}).join('')||`<p class="muted">${L('لا توجد حالات اليوم.','No cases today.')}</p>`}</div></div></div>`;
@@ -757,17 +840,72 @@ function fuDone(id){ const v=DB.visits.find(x=>x.id===id); v.fuDone=true; v.upda
 
 /* =================== VISIT (case) =================== */
 function vNew(){ startVisit('') }
-function startVisit(code){
+function startVisit(code, prevId){
   const v={id:uid('v'),patient:code||'',created:new Date().toISOString(),started:new Date().toISOString(),updated:Date.now(),setting:'ER',flags:[],exam:{},aud:{},res:{},rx:{meds:[]}};
   if(code&&DB.patients[code]) v.sex=DB.patients[code].sex;
+  // carry over stable data from the previous visit (or the one being followed up)
+  const last=code? visits().filter(x=>x.patient===code).sort((a,b)=>b.created.localeCompare(a.created))[0] : null;
+  const src=prevId? DB.visits.find(x=>x.id===prevId) : last;
+  if(src){ ['pmh','psh','allergy','anticoag','meds','sex'].forEach(k=>{ if(src[k]&&!v[k]) v[k]=src[k] }) }
+  if(prevId&&src){
+    v.prevVisit=prevId; v.setting='Clinic';
+    v.cc='Follow-up: '+((src.rx&&src.rx.diagnosis)||src.cc||'');
+    const rxMeds=((src.rx&&src.rx.meds)||[]).map(m=>m.name).filter(Boolean).join(', ');
+    v.meds=[src.meds,rxMeds?('(prescribed at last visit: '+rxMeds+')'):''].filter(Boolean).join(' ');
+    src.fuDone=true; src.updated=Date.now();
+  }
   DB.visits.unshift(v); persist();
   location.replace('#visit/'+v.id);
 }
 const F=['cc','ccDur','ccSide','age','sex','weight','preg','setting','airway','hr','bp','spo2','rr','temp','hpi','pmh','psh','meds','anticoag','allergy','inv','aiReply'];
+function enhanceVisitSections(){
+  const form=$('form'); if(!form) return;
+  let sectionNo=0;
+  [...form.children].filter(e=>e.classList.contains('card')&&e.id!=='aiCard').forEach((card,i)=>{
+    if(i===0||card.classList.contains('case-section')) return;
+    sectionNo++;
+    const head=card.querySelector(':scope > h2'); if(!head) return;
+    const d=document.createElement('details'); d.className='card case-section'; d.dataset.caseSection=String(sectionNo); d.open=(sectionNo===1||card.id==='aiCard');
+    const summary=document.createElement('summary'); summary.append(head);
+    const brief=document.createElement('span'); brief.className='section-summary'; summary.append(brief);
+    const body=document.createElement('div'); body.className='section-body';
+    while(card.firstChild) body.append(card.firstChild);
+    d.append(summary,body); card.replaceWith(d);
+  });
+  const ai=$('aiCard'); if(ai&&!ai.classList.contains('case-section')){
+    const h=ai.querySelector(':scope > h2'),d=document.createElement('details'); d.className='card case-section'; d.id='aiCard'; d.dataset.caseSection='ai'; d.open=true;
+    const s=document.createElement('summary'); s.append(h); const brief=document.createElement('span'); brief.className='section-summary'; s.append(brief); const b=document.createElement('div'); b.className='section-body'; while(ai.firstChild)b.append(ai.firstChild); d.append(s,b); ai.replaceWith(d);
+  }
+  const complaint=form.querySelector('.case-section[data-case-section="1"]');
+  const safe=$('ruleOut')?.closest('.card');
+  if(complaint&&safe){ safe.classList.add('safety-panel'); complaint.after(safe); }
+  let bar=document.querySelector('.visit-actions'); if(!bar){ bar=document.createElement('div'); bar.className='visit-actions noprint'; bar.innerHTML=`<button class="alert-count" type="button" onclick="document.querySelector('.safety-panel')?.scrollIntoView({behavior:'smooth',block:'center'})"></button><button class="btn" onclick="aiStart()">${L('حلّل','Analyse')}</button><button class="btn sec" onclick="signVisit()">${L('اعتماد','Sign')}</button>`; document.body.append(bar); }
+  if(window._visitActionResize) window.removeEventListener('resize',window._visitActionResize);
+  window._visitActionResize=()=>{const isMobile=matchMedia('(max-width:760px)').matches,side=document.querySelector('.side'),panel=$('ruleOut')?.closest('.card'),c=form.querySelector('.case-section[data-case-section="1"]'); if(!panel)return; if(isMobile&&c&&panel.parentElement!==form)c.after(panel); else if(!isMobile&&side&&panel.parentElement!==side)side.prepend(panel)};
+  window._visitActionResize(); refreshVisitSummaries();
+}
+function visitSectionText(card){
+  const val=id=>$(id)?.value?.trim(); const vals=ids=>ids.map(val).filter(Boolean);
+  const i=+card.dataset.caseSection, v=curVisit||{};
+  if(card.dataset.caseSection==='ai')return ((v.chat||[]).length||0)+' '+L('رسائل','messages');
+  if(i===1)return vals(['cc','ccDur','ccSide']).join(' · ')||L('لم تُدخل الشكوى','No complaint entered');
+  if(i===2)return vals(['age','sex','weight','setting']).join(' · ')||L('بيانات الزيارة غير مكتملة','Visit details not entered');
+  if(i===3)return vals(['hr','bp','spo2','rr','temp']).map((x,n)=>['HR','BP','SpO₂','RR','°C'][n]+': '+x).join(' · ')||L('لم تُدخل العلامات الحيوية','No vitals entered');
+  if(i===4)return L('المحدد','selected')+': '+document.querySelectorAll('[data-flag]:checked').length;
+  if(i===5)return vals(['hpi','pmh','psh','meds','anticoag','allergy']).join(' · ')||L('لا توجد تفاصيل بعد','No details yet');
+  if(i===6){const n=document.querySelectorAll('[data-ex]').length;return L('فحص منظّم','Structured exam')+' · '+n}
+  if(i===7)return document.querySelectorAll('[data-a]').length?L('تخطيط سمع مُدخل','Audiogram fields'):L('اختياري','Optional');
+  if(i===8)return L('المتاح','available')+': '+document.querySelectorAll('[data-res].on').length;
+  if(i===9)return val('inv')||L('لا توجد نتائج مدخلة','No results entered');
+  if(i===10)return val('rxDx')||L('التشخيص غير مكتمل','Diagnosis not entered');
+  return '';
+}
+function refreshVisitSummaries(){document.querySelectorAll('.case-section').forEach(c=>{const e=c.querySelector('.section-summary'); if(e)e.textContent=visitSectionText(c)});const r=curVisit?rules(curVisit):{u:[],w:[]},n=(r.u||[]).length+(r.w||[]).length,b=document.querySelector('.visit-actions .alert-count');if(b){b.textContent=n?`${n} ${L('تنبيهات','alerts')}`:L('لا تنبيهات','No alerts');b.classList.toggle('hot',!!r.u?.length);b.setAttribute('aria-label',b.textContent)}}
 function vVisit(id){
   const v=DB.visits.find(x=>x.id===id&&!x.deleted);
   if(!v){ $('app').innerHTML=`<div class="card">${L('الحالة غير موجودة','Case not found')}</div>`; return }
   curVisit=v; v.rx=v.rx||{meds:[]};
+  if(v.aiReply && !(v.chat||[]).length) v.chat=[{role:'model',text:v.aiReply,at:new Date(v.updated||Date.now()).toISOString(),ext:'pasted'}];
   const locked=!!v.signed && !v.editing;
   const opt=(arr,val)=>arr.map(o=>{const [k,t]=Array.isArray(o)?o:[o,o];return `<option value="${esc(k)}" ${val===k?'selected':''}>${esc(t)}</option>`}).join('');
   const pOpts=`<option value="">${L('— اختر مريض —','— choose patient —')}</option>`+patients().map(p=>`<option value="${p.code}" ${v.patient===p.code?'selected':''}>${esc(p.name)} (${p.code})</option>`).join('');
@@ -825,22 +963,11 @@ function vVisit(id){
   <div class="card"><h2><span class="ic">🧪</span>9. ${L('فحوصات ونتائج','Investigations')}</h2><textarea id="inv"></textarea></div>
 
   <div class="card" id="aiCard"><h2><span class="ic">🤖</span>10. ${L('اسأل الذكاء الاصطناعي','Ask the AI')}</h2>
-    ${Gemini.ready()? `
-      <div class="row"><button class="btn" id="aiGo" onclick="aiStart()">🤖 ${(v.chat||[]).length? L('أعد التحليل بالبيانات الحالية','Re-analyse with current data') : L('حلّل الحالة الآن','Analyse this case now')}</button>
-      <span class="muted">Gemini · ${L('مجاني','free')}</span></div>
-      <div class="chat" id="chatBox"></div>
-      <div class="chatin"><textarea id="chatIn" rows="2" placeholder="${L('رد على أسئلته هنا، مثلًا: 1: 20 kg، 2: النزيف وقف','Answer its questions here, e.g. 1: 20 kg, 2: bleeding stopped')}"></textarea><button class="btn" onclick="aiSend()">➤</button></div>
-      <div class="chips">${[['escalate',L('بلاغ للسنيور','Senior report')],['refer',L('تحويل','Referral')],['plan',L('الخطة','Plan')],['summary',L('ملخص','Summary')]].map(([c,t])=>`<span class="chip" onclick="aiSend('${c}')">${t}</span>`).join('')}</div>
-      <button class="btn sec" style="margin-top:6px" onclick="aiFill()">📥 ${L('املأ التشخيص والأدوية والتعليمات من المحادثة','Fill diagnosis, medicines & instructions from the chat')}</button>`
-    : `<div class="alert info row"><span class="grow">✨ ${L('فعّل Gemini المجاني ليظهر الرد هنا داخل التطبيق بدون نسخ ولصق.','Turn on free Gemini to get the answer right here, with no copy/paste.')}</span><button class="btn sm" onclick="aiSetupModal()">${L('تفعيل','Set up')}</button></div>`}
-    <details style="margin-top:10px"><summary class="muted">${L('أو استخدم Claude / ChatGPT (نسخ ولصق)','Or use Claude / ChatGPT (copy & paste)')}</summary>
-      <div class="row" style="margin:8px 0"><button class="btn claude" onclick="sendAI('claude')">Claude</button><button class="btn dark" onclick="sendAI('chatgpt')">ChatGPT</button></div>
-      <p class="muted">${L('الحالة تُنسخ ويفتح الموقع: الصق وأرسل. يمكنك لصق الرد هنا للحفظ.','The case is copied and the site opens: paste and send. You can paste the reply here to keep it.')}</p>
-      <textarea id="aiReply" style="min-height:90px" placeholder="${L('الصق الرد هنا (اختياري)','Paste the reply here (optional)')}"></textarea></details></div>
+    ${aiCardHTML(v)}</div>
 
   <div class="card"><h2><span class="ic">💊</span>11. ${L('القرار والروشتة','Decision & prescription')}</h2>
     <div class="grid"><div style="grid-column:1/-1"><label>${L('التشخيص النهائي','Final diagnosis')} <span class="req">*</span></label><input id="rxDx" value="${esc(v.rx.diagnosis||'')}"></div></div>
-    <label style="margin-top:8px">${L('الأدوية','Medications')}</label>
+    <label style="margin-top:8px">${L('الأدوية','Medications')}</label><div id="medWarn"></div>
     <table class="meds" style="width:100%"><thead><tr class="muted"><th>${L('الدواء','Drug')}</th><th>${L('الجرعة','Dose')}</th><th>${L('عدد المرات','Frequency')}</th><th>${L('المدة','Duration')}</th><th></th></tr></thead><tbody id="medRows"></tbody></table>
     <button class="btn sm sec" style="margin-top:6px" onclick="addMed()">➕ ${L('إضافة دواء','Add drug')}</button>
     <p class="muted">⚠️ ${L('راجع كل جرعة بنفسك؛ التطبيق لا يتحقق من الجرعات.','Verify every dose yourself; the app does not check doses.')}</p>
@@ -856,7 +983,7 @@ function vVisit(id){
   <aside class="side noprint">
     <div class="card"><h2><span class="ic">🚨</span>${L('فحص الأمان','Safety check')}</h2><div id="ruleOut"></div><p class="muted">${L('قواعد ثابتة على جهازك، مستقلة عن الذكاء الاصطناعي.','Fixed rules on your device, independent of the AI.')}</p></div>
     <div class="card"><h2><span class="ic">📋</span>${L('بيانات ناقصة','Missing data')}</h2><div id="missing"></div></div>
-    <div class="card"><button class="btn" style="width:100%;justify-content:center" onclick="document.getElementById('aiCard').scrollIntoView({behavior:'smooth'});${Gemini.ready()?'aiStart()':'aiSetupModal()'}">🤖 ${L('اسأل الذكاء الاصطناعي','Ask the AI')}</button></div>
+    <div class="card"><button class="btn" style="width:100%;justify-content:center" onclick="document.getElementById('aiCard').scrollIntoView({behavior:'smooth'});aiStart()">🤖 ${L('اسأل الذكاء الاصطناعي','Ask the AI')}</button></div>
     <div class="card"><div class="row">
       <button class="btn" onclick="signVisit()">✔ ${L('اعتماد وإصدار الروشتة','Sign & issue prescription')}</button>
       <button class="btn sec" onclick="saveVisit(true)">💾 ${L('حفظ','Save')}</button>
@@ -873,7 +1000,8 @@ function vVisit(id){
     $('rxInstr').value = $('rxInstr').value.trim()? $('rxInstr').value.trim()+'\n'+txt : txt; onEdit() };
   $('form').addEventListener('input',onEdit); $('form').addEventListener('change',onEdit);
   if(locked) document.querySelectorAll('#form input,#form select,#form textarea,#form button').forEach(e=>e.disabled=true);
-  updateSide();
+  updateSide(); enhanceVisitSections(); drawLastVisit();
+  $('form').addEventListener('input',refreshVisitSummaries); $('form').addEventListener('change',refreshVisitSummaries);
 }
 const isLocked = () => curVisit && curVisit.signed && !curVisit.editing;
 function collectVisit(){
@@ -885,7 +1013,7 @@ function collectVisit(){
   v.aud={}; document.querySelectorAll('[data-a]').forEach(i=>{ if(i.value!=='') v.aud[i.dataset.a]=+i.value });
   v.res={}; document.querySelectorAll('[data-res]').forEach(ch=>{ if(ch.classList.contains('on'))v.res[ch.dataset.res]='available'; else if(ch.classList.contains('no'))v.res[ch.dataset.res]='not available' });
   v.rx=v.rx||{}; v.rx.diagnosis=$('rxDx').value.trim(); v.rx.followUp=$('rxFu').value; v.rx.instructions=$('rxInstr').value; v.rx.notes=$('rxNotes').value; v.rx.lang=$('rxLang').value;
-  v.rx.meds=[...document.querySelectorAll('#medRows tr')].map(tr=>{const i=tr.querySelectorAll('input');return {name:i[0].value.trim(),dose:i[1].value.trim(),freq:i[2].value.trim(),dur:i[3].value.trim()}}).filter(m=>m.name);
+  v.rx.meds=[...document.querySelectorAll('#medRows tr')].map(tr=>{const i=tr.querySelectorAll('input');const o={name:i[0].value.trim(),dose:i[1].value.trim(),freq:i[2].value.trim(),dur:i[3].value.trim()}; if(tr.dataset.ai==='1') o.ai=true; return o}).filter(m=>m.name);
   return v;
 }
 let editTimer=null;
@@ -901,13 +1029,138 @@ function updateSide(){
   if(r.w.length) h+=`<div class="alert amber"><b>${L('تنبيه','Warning')}</b><ul>${r.w.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`;
   if(!h) h=`<div class="alert ok">${L('لا تنبيهات من البيانات المُدخلة. هذا لا يعني أن الحالة آمنة.','No alerts from the entered data. This does not mean the case is safe.')}</div>`;
   $('ruleOut').innerHTML=h;
+  drawMedWarn();
   const m=missing(v); $('missing').innerHTML = m.length? `<ul>${m.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>` : `<span class="muted">${L('البيانات الأساسية مكتملة.','Core data complete.')}</span>`;
 }
+function medRowHTML(m){ m=m||{}; return `<tr class="${m.ai?'med-ai':''}" data-ai="${m.ai?1:''}"><td><input value="${esc(m.name||'')}" placeholder="Amoxicillin">${m.ai?`<span class="medtag" onclick="confirmMed(this)">AI · ${L('اضغط للتأكيد','tap to confirm')}</span>`:''}</td><td><input value="${esc(m.dose||'')}" placeholder="500 mg"></td><td><input value="${esc(m.freq||'')}" placeholder="${L('كل 8 ساعات','every 8 h')}"></td><td><input value="${esc(m.dur||'')}" placeholder="${L('7 أيام','7 days')}"></td><td style="white-space:nowrap"><button class="btn sm ghost" title="${L('غير متوفر؟ اقترح بدائل','Not available? Suggest alternatives')}" onclick="medAlts(this)">🔄</button><button class="btn sm ghost" onclick="this.closest('tr').remove();onEdit()">✕</button></td></tr>` }
 function drawMeds(){
   const ms=(curVisit.rx.meds&&curVisit.rx.meds.length)? curVisit.rx.meds : [{}];
-  $('medRows').innerHTML = ms.map(m=>`<tr><td><input value="${esc(m.name||'')}" placeholder="Amoxicillin"></td><td><input value="${esc(m.dose||'')}" placeholder="500 mg"></td><td><input value="${esc(m.freq||'')}" placeholder="${L('كل 8 ساعات','every 8 h')}"></td><td><input value="${esc(m.dur||'')}" placeholder="${L('7 أيام','7 days')}"></td><td><button class="btn sm ghost" onclick="this.closest('tr').remove();onEdit()">✕</button></td></tr>`).join('');
+  $('medRows').innerHTML = ms.map(medRowHTML).join(''); drawMedWarn();
 }
-function addMed(){ $('medRows').insertAdjacentHTML('beforeend',`<tr><td><input></td><td><input></td><td><input></td><td><input></td><td><button class="btn sm ghost" onclick="this.closest('tr').remove();onEdit()">✕</button></td></tr>`) }
+function addMed(){ $('medRows').insertAdjacentHTML('beforeend',medRowHTML({})) }
+function confirmMed(el){ if(isLocked()) return; const tr=el.closest('tr'); tr.dataset.ai=''; tr.classList.remove('med-ai'); el.remove(); onEdit(); toast(L('تم تأكيد الدواء','Medicine confirmed')) }
+/* drug groups for simple allergy / bleeding checks (keywords, not a full drug database) */
+const DRUG_CLASSES={
+ penicillin:{n:['penicillin','بنسلين'],m:['penicillin','amoxicillin','amoxiclav','augmentin','ampicillin','flucloxacillin','co-amoxiclav','amoxil','unictam','sulbactam','piperacillin','hibiotic','megamox','curam']},
+ cephalosporin:{n:['cephalosporin','سيفالوسبورين'],m:['cefuroxime','ceftriaxone','cefixime','cefadroxil','cephalexin','cefaclor','cefdinir','cefpodoxime','zinnat','xorimax','suprax','ceftazidime']},
+ sulfa:{n:['sulfa','sulpha','سلفا'],m:['sulfamethoxazole','co-trimoxazole','septrin','bactrim','trimethoprim']},
+ nsaid:{n:['nsaid','aspirin','أسبرين','اسبرين','ibuprofen','diclofenac'],m:['ibuprofen','diclofenac','ketoprofen','naproxen','aspirin','celecoxib','mefenamic','brufen','cataflam','voltaren','ketolac','ketorolac','meloxicam','piroxicam','indomethacin','etoricoxib','arcoxia']},
+ macrolide:{n:['macrolide','ماكروليد'],m:['azithromycin','clarithromycin','erythromycin','zithromax','klacid']},
+ quinolone:{n:['quinolone','كينولون'],m:['ciprofloxacin','levofloxacin','ofloxacin','moxifloxacin','ciprofar','tavanic','avalox']}
+};
+function drugClass(name){ const n=(name||'').toLowerCase(); return Object.keys(DRUG_CLASSES).filter(k=>DRUG_CLASSES[k].m.some(x=>n.includes(x))) }
+function noAllergy(t){ return !t || /^(nkda|nka|none|no known|no|لا يوجد|لا)\b/i.test(t.trim()) }
+function allergyClasses(t){ t=(t||'').toLowerCase(); if(noAllergy(t)) return []; return Object.keys(DRUG_CLASSES).filter(k=>DRUG_CLASSES[k].n.some(x=>t.includes(x))||DRUG_CLASSES[k].m.some(x=>t.includes(x))) }
+function medWarnings(v){
+  const red=[], amber=[], at=(v.allergy||'').toLowerCase(), al=allergyClasses(at), meds=(v.rx&&v.rx.meds)||[];
+  meds.forEach(m=>{
+    const cls=drugClass(m.name), w=(m.name||'').toLowerCase().split(/[\s(]/)[0];
+    cls.forEach(c=>{ if(al.includes(c)) red.push(L(`حساسية: ${m.name} من مجموعة ${c} والمريض عنده حساسية منها.`,`Allergy: ${m.name} belongs to the ${c} group and the patient is allergic to it.`)) });
+    if(!cls.some(c=>al.includes(c)) && !noAllergy(at) && w.length>3 && at.includes(w)) red.push(L(`حساسية: ${m.name} مذكور في خانة الحساسية.`,`Allergy: ${m.name} is listed in the allergy field.`));
+    if(cls.includes('cephalosporin')&&al.includes('penicillin')&&!al.includes('cephalosporin')) amber.push(L(`${m.name}: احتمال حساسية متقاطعة مع البنسلين.`,`${m.name}: possible cross-reactivity with the penicillin allergy.`));
+    if(cls.includes('nsaid')&&v.anticoag==='Yes') red.push(L(`${m.name} (NSAID) مع anticoagulant: خطر نزيف.`,`${m.name} (NSAID) with an anticoagulant: bleeding risk.`));
+    if(cls.includes('nsaid')&&(v.flags||[]).includes('bleedActive')) amber.push(L(`${m.name} (NSAID) مع نزيف نشط: راجع الأمان.`,`${m.name} (NSAID) with active bleeding: check safety.`));
+    if(m.ai) amber.push(L(`${m.name}: مقترح من AI ولم يتأكد بعد.`,`${m.name}: AI-suggested, not confirmed yet.`));
+    if(/verify/i.test(m.dose||'')) amber.push(L(`${m.name}: الجرعة محتاجة تحقق.`,`${m.name}: dose needs verification.`));
+  });
+  return {red:[...new Set(red)], amber:[...new Set(amber)]};
+}
+function drawMedWarn(){
+  const el=$('medWarn'); if(!el||!curVisit) return;
+  const w=medWarnings(curVisit);
+  el.innerHTML=(w.red.length?`<div class="alert red"><b>${L('تحذير أدوية','Medicine warning')}</b><ul>${w.red.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:'')+(w.amber.length?`<div class="alert amber"><ul>${w.amber.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:'');
+}
+function parseJSONLoose(t){ t=String(t||''); const m=t.match(/```(?:json)?\s*([\s\S]*?)```/); if(m) t=m[1]; const a=t.indexOf('{'), b=t.lastIndexOf('}'); if(a<0||b<a) throw new SyntaxError('no json'); return JSON.parse(t.slice(a,b+1)) }
+/* alternatives when a medicine is not available */
+let altCtx=null;
+function altRequest(m,v){
+  const others=((v.rx&&v.rx.meds)||[]).filter(x=>x.name&&x.name!==m.name).map(x=>x.name).join(', ')||'none';
+  return `The medicine "${m.name}"${m.dose?` (${[m.dose,m.freq,m.dur].filter(Boolean).join(' ')})`:''} is NOT available in the pharmacy (Egypt). Suggest 2 to 4 alternatives for this patient.
+Context: diagnosis ${(v.rx&&v.rx.diagnosis)||v.cc||'not stated'}; age ${ageOf(v)||'not available'}; weight ${v.weight?v.weight+' kg':'not available'}; sex ${v.sex||'not available'}; pregnancy ${v.preg||'not available'}; allergies ${v.allergy||'not available'}; anticoagulants ${v.anticoag||'not available'}; current medications ${v.meds||'not available'}; other prescribed medicines ${others}.
+Order: same active ingredient with another brand available in Egypt, then another form, then another drug of the same class, then a non-drug option if reasonable. Never suggest anything that conflicts with the allergies. For children never give a dose without the weight: write "verify". If unsure of a dose write "verify".
+Return ONLY a JSON object: {"alternatives":[{"name":"generic name (brand examples in Egypt)","type":"same drug | other form | same class | non-drug","dose":"","freq":"","dur":"","why":"short reason","warning":"short caution or empty"}],"note":"short note or empty"}`;
+}
+async function medAlts(btn){
+  if(isLocked()) return;
+  const tr=btn.closest('tr'), inp=tr.querySelectorAll('input');
+  const m={name:inp[0].value.trim(),dose:inp[1].value.trim(),freq:inp[2].value.trim(),dur:inp[3].value.trim()};
+  if(!m.name){ toast(L('اكتب اسم الدواء الأول','Enter the medicine name first')); return }
+  const v=collectVisit(), req=altRequest(m,v); altCtx={row:tr,m};
+  if(aiMode()==='gemini'){
+    modal(`<h2>🔄 ${L('بدائل','Alternatives')}: ${esc(m.name)}</h2><div id="altBody" class="typing">${L('جاري البحث عن بدائل','Looking for alternatives')}</div><button class="btn ghost" style="margin-top:8px" onclick="closeModal()">${L('إغلاق','Close')}</button>`);
+    try{ showAlts(parseJSONLoose(await Gemini.generate([{role:'user',parts:[{text:req}]}],{system:false,json:true}))) }
+    catch(e){ const b=$('altBody'); if(b){ b.className=''; b.textContent= e instanceof SyntaxError? L('تعذر قراءة الرد، حاول تاني','Could not read the reply, try again') : Gemini.human(e) } }
+  } else {
+    await copy(req+'\nPut the JSON in a code block.');
+    modal(`<h2>🔄 ${L('بدائل','Alternatives')}: ${esc(m.name)}</h2><p class="muted">${L('تم نسخ الطلب. الصقه في نفس محادثة الحالة في','Request copied. Paste it into the same case chat in')} ${provName()}، ${L('ثم انسخ الرد كله والصقه هنا:','then copy the whole reply and paste it here:')}</p>
+     <textarea id="altPaste" style="min-height:120px"></textarea><div class="row" style="margin-top:8px"><button class="btn" onclick="readAltPaste()">${L('اقرأ البدائل','Read alternatives')}</button><button class="btn ghost" onclick="closeModal()">${L('إغلاق','Close')}</button></div><div id="altBody"></div>`);
+  }
+}
+function readAltPaste(){ try{ showAlts(parseJSONLoose($('altPaste').value)) }catch{ toast(L('مش قادر أقرأ الرد. اتأكد إنك نسخته كامل.','Could not read the reply. Make sure you copied all of it.')) } }
+function showAlts(j){
+  const alts=(j&&j.alternatives)||[]; altCtx.alts=alts;
+  const b=$('altBody'); if(!b) return; b.className='alts';
+  b.innerHTML = alts.length? alts.map((a,i)=>`<div class="alt"><b>${esc(a.name)}</b> <span class="tag">${esc(a.type||'')}</span><div class="muted">${esc([a.dose,a.freq,a.dur].filter(Boolean).join(' · '))}</div><div>${esc(a.why||'')}</div>${a.warning?`<div style="color:var(--amber)">⚠️ ${esc(a.warning)}</div>`:''}<button class="btn sm" style="margin-top:6px" onclick="pickAlt(${i})">${L('استخدم هذا البديل','Use this alternative')}</button></div>`).join('')
+    + (j.note?`<p class="muted">${esc(j.note)}</p>`:'') + `<p class="muted">⚠️ ${L('تأكد من الاسم التجاري وتوفره مع الصيدلية، وراجع الجرعة.','Check the brand and availability with the pharmacy, and review the dose.')}</p>`
+    : `<p>${L('لم يقترح بدائل مناسبة.','No suitable alternatives were suggested.')}</p>`;
+}
+function pickAlt(i){
+  const a=altCtx&&altCtx.alts&&altCtx.alts[i], tr=altCtx&&altCtx.row; if(!a||!tr) return;
+  const t=document.createElement('tbody'); t.innerHTML=medRowHTML({name:a.name,dose:a.dose||'verify',freq:a.freq||'',dur:a.dur||'',ai:true});
+  tr.replaceWith(t.firstElementChild); closeModal(); onEdit();
+  toast(L('تم استبدال الدواء. راجعه وأكّده.','Medicine replaced. Review and confirm it.'));
+}
+/* which AI the visit uses */
+function aiMode(){ if(S().ai==='gemini') return Gemini.ready()?'gemini':'none'; return S().ai==='claude'?'claude':'chatgpt' }
+function provName(p){ p=p||aiMode(); return p==='claude'?'Claude':p==='chatgpt'?'ChatGPT':'Gemini' }
+function aiEN(){ const l=S().aiLang||'auto'; return l==='en'||(l==='auto'&&EN()) }
+function aiLangHTML(){ const l=S().aiLang||'auto', o=(k,t)=>`<option value="${k}" ${l===k?'selected':''}>${t}</option>`;
+  return `<div style="margin-top:10px"><label>${L('لغة رد الذكاء الاصطناعي','AI reply language')}</label><select onchange="S().aiLang=this.value;persist()">${o('auto',L('نفس لغة التطبيق','Same as the app'))}${o('ar','العربية (مصري)')}${o('en','English')}</select></div>` }
+const CMDS=()=>[['escalate',L('بلاغ للسنيور','Senior report')],['refer',L('تحويل','Referral')],['plan',L('الخطة','Plan')],['summary',L('ملخص','Summary')]];
+function aiCardHTML(v){
+  const mode=aiMode();
+  if(mode==='gemini') return `
+      <div class="row"><button class="btn" id="aiGo" onclick="aiStart()">🤖 ${(v.chat||[]).length? L('أعد التحليل بالبيانات الحالية','Re-analyse with current data') : L('حلّل الحالة الآن','Analyse this case now')}</button>
+      <span class="muted">Gemini · ${L('مجاني','free')}</span></div>
+      <div class="chat" id="chatBox"></div>
+      <div class="chatin"><textarea id="chatIn" rows="2" placeholder="${L('رد على أسئلته هنا، مثلًا: 1: 20 kg، 2: النزيف وقف','Answer its questions here, e.g. 1: 20 kg, 2: bleeding stopped')}"></textarea><button class="btn" onclick="aiSend()">➤</button></div>
+      <div class="chips chat-commands">${CMDS().map(([c,t])=>`<span class="chip" onclick="aiSend('${c}')">${t}</span>`).join('')}</div>
+      <button class="btn sec" style="margin-top:6px" onclick="aiFill()">📥 ${L('املأ التشخيص والأدوية والتعليمات من المحادثة','Fill diagnosis, medicines & instructions from the chat')}</button>
+      <details style="margin-top:10px"><summary class="muted">${L('استخدم Claude أو ChatGPT بدلًا منه','Use Claude or ChatGPT instead')}</summary><div class="row" style="margin-top:8px"><button class="btn claude" onclick="S().ai='claude';persist();render()">Claude</button><button class="btn dark" onclick="S().ai='chatgpt';persist();render()">ChatGPT</button></div></details>`;
+  if(mode==='none') return `<div class="alert info row"><span class="grow">✨ ${L('فعّل Gemini المجاني ليظهر الرد هنا تلقائيًا، أو استخدم Claude أو ChatGPT مجانًا بالنسخ واللصق.','Turn on free Gemini to get the answer here automatically, or use Claude or ChatGPT for free by copy & paste.')}</span><button class="btn sm" onclick="aiSetupModal()">${L('تفعيل Gemini','Set up Gemini')}</button></div>
+      <div class="row"><button class="btn claude" onclick="S().ai='claude';persist();render()">Claude</button><button class="btn dark" onclick="S().ai='chatgpt';persist();render()">ChatGPT</button></div>`;
+  const pn=provName(mode);
+  return `
+      <div class="row"><button class="btn ${mode==='claude'?'claude':'dark'}" onclick="extStart()">🤖 ${L('حلّل في','Analyse in')} ${pn}</button><span class="muted">${L('مجاني · نسخ ولصق','free · copy & paste')}</span></div>
+      <p class="muted">${L(`1) اضغط الزرار: الحالة تتنسخ و${pn} يفتح. 2) الصق وأرسل. 3) انسخ الرد والصقه هنا واضغط «إضافة».`,`1) Tap the button: the case is copied and ${pn} opens. 2) Paste and send. 3) Copy the reply, paste it here and tap “Add”.`)}</p>
+      <div class="chat" id="chatBox"></div>
+      <div class="chatin"><textarea id="extPaste" rows="3" placeholder="${L('الصق رد','Paste the reply from')} ${pn} ${L('هنا','here')}"></textarea><button class="btn" onclick="extAddReply()">${L('إضافة','Add')}</button></div>
+      <div class="chips chat-commands">${CMDS().map(([c,t])=>`<span class="chip" onclick="extCmd('${c}')">${t}</span>`).join('')}</div>
+      <button class="btn sec" style="margin-top:6px" onclick="extFill()">📥 ${L('املأ التشخيص والأدوية والتعليمات','Fill diagnosis, medicines & instructions')}</button>
+      <details style="margin-top:10px"><summary class="muted">${L('تغيير الذكاء الاصطناعي','Change AI')}</summary><div class="row" style="margin-top:8px"><button class="btn" onclick="S().ai='gemini';persist();Gemini.ready()?render():aiSetupModal()">✨ Gemini</button>${mode==='claude'?`<button class="btn dark" onclick="S().ai='chatgpt';persist();render()">ChatGPT</button>`:`<button class="btn claude" onclick="S().ai='claude';persist();render()">Claude</button>`}</div></details>`;
+}
+async function extStart(){
+  const p=aiMode(), v=collectVisit(); if(!v.cc){ toast(L('اكتب الشكوى الأساسية أولًا','Enter the chief complaint first')); $('cc').focus(); return }
+  await copy(aiMessage(v));
+  v.chat=v.chat||[]; v.chat.push({role:'user',kind:'case',at:new Date().toISOString(),text:caseText(v)}); saveVisit(); drawChat();
+  window.open(AI_URL[p],'_blank','noopener');
+  toast(L(`تم النسخ ✔ الصق في محادثة جديدة في ${provName(p)} وأرسل، ثم الصق الرد هنا`,`Copied ✔ Paste into a new ${provName(p)} chat and send, then paste the reply here`));
+}
+function extAddReply(){
+  const t=($('extPaste').value||'').trim(); if(!t){ toast(L('الصق الرد الأول','Paste the reply first')); return }
+  curVisit.chat=curVisit.chat||[]; curVisit.chat.push({role:'model',text:t,at:new Date().toISOString(),ext:provName()});
+  $('extPaste').value=''; curVisit.updated=Date.now(); persist(); drawChat();
+}
+async function extCmd(c){
+  await copy(c); curVisit.chat=curVisit.chat||[]; curVisit.chat.push({role:'user',text:c,at:new Date().toISOString()}); persist(); drawChat();
+  toast(L('تم نسخ الأمر. الصقه في نفس المحادثة، ثم الصق الرد هنا.','Command copied. Paste it into the same chat, then paste the reply here.'));
+}
+async function extFill(){
+  await copy(FILL_ASK+'\nPut the JSON in a code block.');
+  modal(`<h2>📥 ${L('تعبئة الروشتة','Fill the prescription')}</h2><p class="muted">${L('تم نسخ الطلب. الصقه في نفس محادثة الحالة في','Request copied. Paste it into the same case chat in')} ${provName()}، ${L('ثم انسخ الرد كله والصقه هنا:','then copy the whole reply and paste it here:')}</p>
+   <textarea id="fillPaste" style="min-height:140px"></textarea><div class="row" style="margin-top:8px"><button class="btn" onclick="extFillRead()">${L('املأ','Fill')}</button><button class="btn ghost" onclick="closeModal()">${L('إغلاق','Close')}</button></div>`);
+}
+function extFillRead(){ try{ const j=parseJSONLoose($('fillPaste').value); closeModal(); applyFill(j) }catch{ toast(L('مش قادر أقرأ الرد. اتأكد إنك نسخته كامل.','Could not read the reply. Make sure you copied all of it.')) } }
 async function sendAI(which){
   const v=collectVisit(); if(!v.cc){ toast(L('اكتب الشكوى الأساسية أولًا','Enter the chief complaint first')); $('cc').focus(); return }
   await copy(aiMessage(v)); saveVisit(); S().ai=which; persist();
@@ -917,9 +1170,9 @@ async function sendAI(which){
 function drawChat(){
   const box=$('chatBox'); if(!box) return;
   const ch=(curVisit&&curVisit.chat)||[];
-  box.innerHTML = ch.map((m,i)=> m.role==='user'
-    ? `<div class="msg user">${m.kind==='case'? `<div class="sum">📤 ${L('تم إرسال الحالة','Case sent')} · ${fmtDate(m.at,true)}</div>` : esc(m.text)}</div>`
-    : `<div class="msg model" dir="auto">${md(m.text)}</div>`).join('') + (aiBusy?`<div class="typing">⏳ ${L('الذكاء الاصطناعي يكتب…','The AI is writing…')}</div>`:'');
+  box.innerHTML = ch.map((m,i)=>{const stamp=m.at?`<time class="msg-time" datetime="${esc(m.at)}">${fmtDate(m.at,true)}</time>`:'';return m.role==='user'
+    ? `<div class="msg user">${m.kind==='case'? `<div class="sum">📤 ${L('تم إرسال الحالة','Case sent')}</div>` : esc(m.text)}${stamp}</div>`
+    : `<div class="msg model" dir="auto">${md(m.text)}${stamp}</div>`}).join('') + (aiBusy?`<div class="typing">${L('الذكاء الاصطناعي يكتب','AI is typing')}</div>`:'');
   box.scrollTop=box.scrollHeight;
 }
 let aiBusy=false;
@@ -934,7 +1187,7 @@ async function aiTurn(userMsg){
 }
 function aiStart(){
   const v=collectVisit(); if(!v.cc){ toast(L('اكتب الشكوى الأساسية أولًا','Enter the chief complaint first')); $('cc').focus(); return }
-  if(!Gemini.ready()){ aiSetupModal(); return }
+  if(aiMode()!=='gemini'){ if(aiMode()==='none') aiSetupModal(); else extStart(); return }
   const first=!(v.chat||[]).length;
   aiTurn({role:'user',kind:'case',at:new Date().toISOString(),text:(first?'NEW CASE (de-identified). Follow your instructions.\n\n':'UPDATED CASE DATA (re-assess with this):\n\n')+caseText(v)});
 }
@@ -945,28 +1198,31 @@ function aiSend(c){
   if(!c) $('chatIn').value='';
   aiTurn({role:'user',text:t,at:new Date().toISOString()});
 }
-async function aiFill(){
-  const v=collectVisit();
-  if(!(v.chat||[]).some(m=>m.role==='model')){ toast(L('اسأل الذكاء الاصطناعي الأول','Ask the AI first')); return }
-  toast(L('⏳ جاري التعبئة…','⏳ Filling…'));
-  const ask=`From the conversation above, return ONLY a JSON object with keys:
+const FILL_ASK=`From the conversation above, return ONLY a JSON object with keys:
 "diagnosis" (short working diagnosis),
 "meds" (array of {"name","dose","freq","dur"}; ONLY drugs already recommended in the conversation; if a dose was not stated or needs weight/verification write "verify" as the dose),
 "instructions_ar" (patient instructions in simple Egyptian Arabic, short lines starting with "- ", include warning signs to return immediately),
 "instructions_en" (same in simple English),
 "followUpDays" (integer or null).
 No other text.`;
+function applyFill(j){
+  const v=collectVisit();
+  if(j.diagnosis && (!$('rxDx').value.trim() || confirm(L('استبدال التشخيص الحالي بالمقترح؟','Replace the current diagnosis with the suggestion?')))) $('rxDx').value=j.diagnosis;
+  if(Array.isArray(j.meds)&&j.meds.length){ v.rx.meds=(v.rx.meds||[]).filter(m=>m.name).concat(j.meds.map(m=>({name:m.name||'',dose:m.dose||'',freq:m.freq||'',dur:m.dur||'',ai:true}))); drawMeds() }
+  const ins=$('rxLang').value==='en'? j.instructions_en : j.instructions_ar;
+  if(ins && (!$('rxInstr').value.trim() || confirm(L('استبدال التعليمات الحالية؟','Replace the current instructions?')))) $('rxInstr').value=ins;
+  if(j.followUpDays && !$('rxFu').value){ $('rxFu').value=new Date(Date.now()+j.followUpDays*864e5).toISOString().slice(0,10) }
+  onEdit(); $('rxDx').scrollIntoView({behavior:'smooth',block:'center'});
+  toast(L('✔ تمت التعبئة. أكّد كل دواء عليه علامة AI وراجع الجرعات قبل الاعتماد.','✔ Filled. Confirm every medicine tagged AI and review doses before signing.'));
+}
+async function aiFill(){
+  const v=collectVisit();
+  if(!(v.chat||[]).some(m=>m.role==='model')){ toast(L('اسأل الذكاء الاصطناعي الأول','Ask the AI first')); return }
+  if(aiMode()!=='gemini') return extFill();
+  toast(L('⏳ جاري التعبئة…','⏳ Filling…'));
   try{
-    const contents=v.chat.map(m=>({role:m.role,parts:[{text:m.text}]})).concat([{role:'user',parts:[{text:ask}]}]);
-    const raw=await Gemini.generate(contents,{system:false,json:true});
-    const j=JSON.parse(raw.replace(/^```(json)?|```$/g,'').trim());
-    if(j.diagnosis && (!$('rxDx').value.trim() || confirm(L('استبدال التشخيص الحالي بالمقترح؟','Replace the current diagnosis with the suggestion?')))) $('rxDx').value=j.diagnosis;
-    if(Array.isArray(j.meds)&&j.meds.length){ v.rx.meds=(v.rx.meds||[]).filter(m=>m.name).concat(j.meds.map(m=>({name:m.name||'',dose:m.dose||'',freq:m.freq||'',dur:m.dur||''}))); drawMeds() }
-    const ins=$('rxLang').value==='en'? j.instructions_en : j.instructions_ar;
-    if(ins && (!$('rxInstr').value.trim() || confirm(L('استبدال التعليمات الحالية؟','Replace the current instructions?')))) $('rxInstr').value=ins;
-    if(j.followUpDays && !$('rxFu').value){ $('rxFu').value=new Date(Date.now()+j.followUpDays*864e5).toISOString().slice(0,10) }
-    onEdit(); $('rxDx').scrollIntoView({behavior:'smooth',block:'center'});
-    toast(L('✔ تمت التعبئة. راجع كل شيء والجرعات قبل الاعتماد.','✔ Filled. Review everything, especially doses, before signing.'));
+    const contents=v.chat.map(m=>({role:m.role,parts:[{text:m.text}]})).concat([{role:'user',parts:[{text:FILL_ASK}]}]);
+    applyFill(parseJSONLoose(await Gemini.generate(contents,{system:false,json:true})));
   }catch(e){ toast(e instanceof SyntaxError? L('تعذر قراءة الرد، حاول تاني','Could not read the reply, try again') : Gemini.human(e)) }
 }
 async function cmd(c){ await copy(c); toast(L('تم نسخ الأمر. الصقه في نفس المحادثة','Command copied. Paste it into the same chat')) }
@@ -982,6 +1238,8 @@ function signVisit(){
   const v=collectVisit();
   if(!v.cc){ toast(L('الشكوى الأساسية مطلوبة','Chief complaint is required')); return }
   if(!v.rx.diagnosis){ toast(L('اكتب التشخيص النهائي قبل الاعتماد','Enter the final diagnosis before signing')); $('rxDx').focus(); return }
+  if((v.rx.meds||[]).some(m=>m.ai)){ toast(L('أكّد الأدوية المقترحة من AI الأول (اضغط علامة AI جنب كل دواء)','Confirm the AI-suggested medicines first (tap the AI tag next to each one)')); $('medRows').scrollIntoView({behavior:'smooth',block:'center'}); return }
+  const mw=medWarnings(v); if(mw.red.length && !confirm(L('تحذيرات أدوية:\n','Medicine warnings:\n')+mw.red.join('\n')+L('\n\nاعتماد رغم ذلك؟','\n\nSign anyway?'))) return;
   if(v.editing){ v.amendments=(v.amendments||[]); v.amendments.push({at:new Date().toISOString()}); delete v.editing }
   v.signed=new Date().toISOString(); v.updated=Date.now(); persist();
   toast(L('تم الاعتماد ✔','Signed ✔')); go('rx/'+v.id);
@@ -989,30 +1247,71 @@ function signVisit(){
 function amend(){ curVisit.editing=true; vVisit(curVisit.id); toast(L('وضع التعديل: سيُسجل كـ amendment عند الاعتماد','Amend mode: recorded as an amendment when re-signed')) }
 function delVisit(){ if(!confirm(L('حذف هذه الحالة؟','Delete this case?')))return; curVisit.deleted=true; curVisit.updated=Date.now(); persist(); go('home') }
 
+function prevVisitOf(v){
+  if(!v) return null;
+  if(v.prevVisit){ const x=DB.visits.find(y=>y.id===v.prevVisit&&!y.deleted); if(x) return x }
+  if(!v.patient) return null;
+  return visits().filter(x=>x.patient===v.patient&&x.id!==v.id&&(x.created||'')<(v.created||'')).sort((a,b)=>b.created.localeCompare(a.created))[0]||null;
+}
+function drawLastVisit(){
+  const v=curVisit, pv=prevVisitOf(v), form=$('form'); if(!pv||!form) return;
+  const prx=pv.rx||{}, a1=audio(pv), a2=audio(v);
+  const row=(k,lab)=>`<tr><th>${lab}</th><td>${esc(pv[k]||'—')}</td><td>${esc(v[k]||'—')}</td></tr>`;
+  const el=document.createElement('div'); el.className='card lastv';
+  el.innerHTML=`<h2><span class="ic">🕘</span>${v.prevVisit?L('متابعة لزيارة','Follow-up of visit'):L('آخر زيارة','Last visit')} · ${fmtDate(pv.created)}</h2>
+   <div><b>${L('الشكوى','Complaint')}:</b> ${esc(pv.cc||'—')}</div>
+   <div><b>${L('التشخيص','Diagnosis')}:</b> ${esc(prx.diagnosis||'—')}</div>
+   ${(prx.meds||[]).length?`<div><b>${L('العلاج','Treatment')}:</b> ${esc(prx.meds.map(m=>[m.name,m.dose,m.freq,m.dur].filter(Boolean).join(' ')).join('، '))}</div>`:''}
+   ${prx.followUp?`<div><b>${L('المتابعة المخططة','Planned follow-up')}:</b> ${fmtDate(prx.followUp)}</div>`:''}
+   <details style="margin-top:8px"><summary class="muted">${L('مقارنة بالزيارة الحالية','Compare with this visit')}</summary>
+   <table class="cmp" style="width:100%"><tr><th></th><th>${L('السابقة','Previous')}</th><th>${L('الحالية','Now')}</th></tr>
+   ${row('hr','HR')}${row('bp','BP')}${row('spo2','SpO2')}${row('temp','Temp')}${row('weight',L('الوزن','Weight'))}
+   <tr><th>PTA R / L</th><td>${a1.RA??'—'} / ${a1.LA??'—'}</td><td>${a2.RA??'—'} / ${a2.LA??'—'}</td></tr></table></details>
+   <div class="row" style="margin-top:8px"><button class="btn sm sec" onclick="go('visit/${pv.id}')">${L('فتح الزيارة السابقة','Open previous visit')}</button></div>`;
+  form.firstElementChild.after(el);
+}
+
 /* =================== PRESCRIPTION & PATIENT INSTRUCTIONS =================== */
 function vRx(id){
   const v=DB.visits.find(x=>x.id===id); if(!v){ $('app').innerHTML='—'; return }
   const p=DB.patients[v.patient]||{}, rx=v.rx||{}, ar=(rx.lang||'ar')==='ar';
   const T=(a,e)=>ar?a:e;
   $('app').innerHTML = `
-  <div class="row noprint" style="margin-bottom:12px"><button class="btn" onclick="window.print()">🖨 ${L('طباعة / PDF','Print / PDF')}</button>
+  <div class="row noprint" style="margin-bottom:12px"><button class="btn" onclick="savePdf('${v.id}')">⬇ ${L('حفظ PDF','Save PDF')}</button><button class="btn sec" onclick="window.print()">🖨 ${L('طباعة','Print')}</button>
    ${navigator.share?`<button class="btn sec" onclick="shareRx('${v.id}')">📤 ${L('مشاركة (واتساب)','Share (WhatsApp)')}</button>`:''}
    <button class="btn sec" onclick="copyRx('${v.id}')">📋 ${L('نسخ كنص','Copy as text')}</button>
    <button class="btn ghost" onclick="go('visit/${v.id}')">↩ ${L('رجوع للحالة','Back to case')}</button></div>
   <div class="rx" dir="${ar?'rtl':'ltr'}" style="text-align:${ar?'right':'left'}">
-    <div class="rh"><div><div style="font-size:20px;font-weight:800;color:var(--pri)">${esc(S().doctor||T('الطبيب','Doctor'))}</div><div>${esc(S().clinic||'')}</div><div style="font-size:13px;color:#555">${esc(S().clinicInfo||'')}</div></div>
-    <div style="text-align:${ar?'left':'right'}"><div class="applogo" style="width:44px;height:44px;margin-inline-start:auto">${appLogo()}</div><div style="font-size:13px">${T('التاريخ','Date')}: ${new Date(v.signed||v.created).toLocaleDateString(ar?'ar-EG':'en-GB')}</div><div style="font-size:12px;color:#777">${T('رقم','No.')} ${v.id.slice(-6).toUpperCase()}</div></div></div>
+    <div class="rh"><div class="rx-head-info"><div class="rx-brand">${esc(S().doctor||T('الطبيب','Doctor'))}</div><div><b>${esc(S().clinic||'')}</b></div><div class="rx-clinic-info">${esc(S().clinicInfo||'')}</div></div>
+    <div class="rx-meta" style="text-align:${ar?'left':'right'}"><div class="applogo rx-mark" style="width:48px;height:48px;margin-inline-start:auto">${appLogo()}</div><div>${T('التاريخ','Date')}: ${new Date(v.signed||v.created).toLocaleDateString(ar?'ar-EG':'en-GB')}</div><div class="rx-id">${T('رقم','No.')} ${v.id.slice(-6).toUpperCase()}</div></div></div>
     <table><tr><th>${T('اسم المريض','Patient')}</th><td>${esc(p.name||'')}</td><th>${T('السن','Age')}</th><td>${esc(ageOf(v))}</td></tr>
     <tr><th>${T('الشكوى','Complaint')}</th><td colspan="3">${esc(v.cc||'')}</td></tr>
     <tr><th>${T('التشخيص','Diagnosis')}</th><td colspan="3"><b>${esc(rx.diagnosis||'')}</b></td></tr></table>
     <h3>℞ ${T('العلاج','Prescription')}</h3>
-    ${(rx.meds||[]).length?`<table><tr><th>#</th><th>${T('الدواء','Medicine')}</th><th>${T('الجرعة','Dose')}</th><th>${T('عدد المرات','How often')}</th><th>${T('المدة','For how long')}</th></tr>
+    ${(rx.meds||[]).length?`<table class="rx-meds"><tr><th>#</th><th>${T('الدواء','Medicine')}</th><th>${T('الجرعة','Dose')}</th><th>${T('عدد المرات','How often')}</th><th>${T('المدة','For how long')}</th></tr>
       ${rx.meds.map((m,i)=>`<tr><td>${i+1}</td><td><b>${esc(m.name)}</b></td><td>${esc(m.dose)}</td><td>${esc(m.freq)}</td><td>${esc(m.dur)}</td></tr>`).join('')}</table>`:`<p>—</p>`}
-    ${rx.instructions?`<h3>📋 ${T('تعليمات للمريض','Instructions for the patient')}</h3><div class="instr">${esc(rx.instructions)}</div>`:''}
+    ${rx.instructions?`<p style="color:#555">📋 ${T('تعليمات المريض في الصفحة التالية.','Patient instructions are on the next page.')}</p>`:''}
     ${rx.followUp?`<h3>📅 ${T('ميعاد المتابعة','Follow-up appointment')}</h3><p style="font-size:16px"><b>${new Date(rx.followUp).toLocaleDateString(ar?'ar-EG':'en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</b></p>`:''}
     <div style="border:2px solid #B42318;border-radius:8px;padding:8px 12px;margin-top:14px;color:#B42318"><b>⚠️ ${T('ارجع فورًا للطوارئ لو حصل: نزيف، صعوبة في التنفس أو البلع، حرارة عالية، أو أي تدهور.','Return to the emergency department immediately if: bleeding, difficulty breathing or swallowing, high fever, or any worsening.')}</b></div>
     <div class="sig"><div>${T('توقيع الطبيب','Doctor signature')}: ____________</div><div style="font-size:12px;color:#777">Otolarix</div></div>
-  </div>`;
+  </div>
+  ${rx.instructions?`<div class="rx rx-page2" dir="${ar?'rtl':'ltr'}" style="text-align:${ar?'right':'left'}">
+    <div class="rh"><div class="rx-head-info"><div class="rx-brand">${esc(S().doctor||T('الطبيب','Doctor'))}</div><div><b>${esc(S().clinic||'')}</b></div></div>
+    <div class="rx-meta" style="text-align:${ar?'left':'right'}"><div class="applogo rx-mark" style="width:48px;height:48px;margin-inline-start:auto">${appLogo()}</div><div>${new Date(v.signed||v.created).toLocaleDateString(ar?'ar-EG':'en-GB')}</div></div></div>
+    <h2 style="margin:4px 0 8px;color:var(--pri)">📋 ${T('تعليمات للمريض','Instructions for the patient')}</h2>
+    <div style="margin-bottom:8px"><b>${T('الاسم','Name')}:</b> ${esc(p.name||'')} &nbsp; <b>${T('التشخيص','Diagnosis')}:</b> ${esc(rx.diagnosis||'')}</div>
+    <div class="instr">${esc(rx.instructions)}</div>
+    ${rx.followUp?`<h3>📅 ${T('ميعاد المتابعة','Follow-up appointment')}</h3><p style="font-size:17px"><b>${new Date(rx.followUp).toLocaleDateString(ar?'ar-EG':'en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</b></p>`:''}
+    <div style="border:2px solid #B42318;border-radius:8px;padding:8px 12px;margin-top:14px;color:#B42318;font-size:16px"><b>⚠️ ${T('ارجع فورًا للطوارئ لو حصل: نزيف، صعوبة في التنفس أو البلع، حرارة عالية، أو أي تدهور.','Return to the emergency department immediately if: bleeding, difficulty breathing or swallowing, high fever, or any worsening.')}</b></div>
+  </div>`:''}`;
+}
+function savePdf(id){
+  const v=DB.visits.find(x=>x.id===id), p=DB.patients[v.patient]||{}, old=document.title;
+  const nm=(p.name||'patient').replace(/[\\\/:*?"<>|]+/g,'').trim().replace(/\s+/g,'-');
+  document.title=`Rx-${nm}-${(v.signed||v.created).slice(0,10)}`;
+  const back=()=>{ document.title=old; window.removeEventListener('afterprint',back) }; window.addEventListener('afterprint',back);
+  toast(L('اختار «حفظ كـ PDF» من نافذة الطباعة','Choose “Save as PDF” in the print window'));
+  setTimeout(()=>window.print(),400);
 }
 function rxText(v){
   const p=DB.patients[v.patient]||{}, rx=v.rx||{}, ar=(rx.lang||'ar')==='ar', T=(a,e)=>ar?a:e;
@@ -1060,13 +1359,16 @@ function vMore(){
 function vSettings(){
   const g=Drive.state;
   $('app').innerHTML = `<h1 class="page">⚙️ ${L('الإعدادات','Settings')}</h1>
+  <div class="settings-group">${L('المظهر واللغة','Appearance & language')}</div>
   <div class="card"><h2><span class="ic">🎨</span>${L('الألوان','Theme')}</h2>${swatches()}</div>
   <div class="card"><h2><span class="ic">🌐</span>${L('اللغة','Language')}</h2><div class="row"><button class="btn ${EN()?'sec':''}" onclick="S().lang='ar';persist();render()">العربية</button><button class="btn ${EN()?'':'sec'}" onclick="S().lang='en';persist();render()">English</button></div></div>
+  <div class="settings-group">${L('بيانات العيادة','Clinic profile')}</div>
   <div class="card"><h2><span class="ic">🧑‍⚕️</span>${L('بيانات الروشتة','Prescription header')}</h2><div class="grid">
    <div><label>${L('اسم الطبيب','Doctor name')}</label><input id="sDoc" value="${esc(S().doctor)}"></div>
    <div><label>${L('العيادة أو المستشفى','Clinic / hospital')}</label><input id="sClinic" value="${esc(S().clinic)}"></div>
    <div style="grid-column:1/-1"><label>${L('العنوان والتليفون','Address & phone')}</label><input id="sInfo" value="${esc(S().clinicInfo)}"></div></div>
    <button class="btn" style="margin-top:10px" onclick="S().doctor=$('sDoc').value.trim();S().clinic=$('sClinic').value.trim();S().clinicInfo=$('sInfo').value.trim();persist();toast(L('تم الحفظ','Saved'))">${L('حفظ','Save')}</button></div>
+  <div class="settings-group">${L('المساعد والمزامنة','Assistant & sync')}</div>
   <div class="card"><h2><span class="ic">🤖</span>${L('الذكاء الاصطناعي','AI assistant')}</h2><div id="aiSetup">${aiSetupHTML()}</div></div>
   <div class="card"><h2><span class="ic">☁️</span>Google Drive</h2>
    ${!GOOGLE_CLIENT_ID?`<p class="muted">${L('المزامنة مع Google Drive غير مفعّلة بعد في هذه النسخة.','Google Drive sync is not enabled in this build yet.')}</p>`:
@@ -1075,6 +1377,7 @@ function vSettings(){
    :`<p class="muted">${L('سجّل الدخول بحساب Google لحفظ نسخة من بياناتك في Google Drive الخاص بك ومشاهدتها على كل أجهزتك.','Sign in with Google to keep a copy of your data in your own Google Drive and see it on all your devices.')}</p>
      <button class="btn" onclick="Drive.signIn()"><b style="background:#fff;color:#4285F4;border-radius:50%;width:22px;height:22px;display:grid;place-items:center">G</b> ${L('الدخول بحساب Google','Sign in with Google')}</button>`}
   </div>
+  <div class="settings-group">${L('البيانات والنسخ الاحتياطي','Data & backup')}</div>
   <div class="card"><h2><span class="ic">💾</span>${L('البيانات','Data')}</h2><div class="row">
    <button class="btn sec" onclick="exportData()">⬇ ${L('تصدير نسخة احتياطية','Export backup')}</button>
    <label class="btn sec" style="margin:0">⬆ ${L('استيراد','Import')}<input type="file" accept=".json" class="hidden" onchange="importData(event)"></label>
@@ -1089,6 +1392,36 @@ function merge(other){
   if(!other) return;
   Object.values(other.patients||{}).forEach(p=>{ const m=DB.patients[p.code]; if(!m||(p.updated||0)>(m.updated||0)) DB.patients[p.code]=p });
   (other.visits||[]).forEach(v=>{ const i=DB.visits.findIndex(x=>x.id===v.id); if(i<0) DB.visits.push(v); else if((v.updated||0)>(DB.visits[i].updated||0)) DB.visits[i]=v });
+}
+
+/* =================== ACTIVATION (one-time key, checked by the owner's Google Sheet) =================== */
+function deviceId(){ let d=localStorage.getItem('otolarix.device'); if(!d){ d=uid('d'); localStorage.setItem('otolarix.device',d) } return d }
+async function actCall(body){ const r=await fetch(ACTIVATION_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(body)}); return r.json() }
+function vGate(){
+  $('app').innerHTML=`<div class="card gate"><div style="text-align:center"><div class="applogo" style="width:76px;height:76px;margin:0 auto">${appLogo()}</div><h2 style="justify-content:center;margin:10px 0 4px">${L('تفعيل Otolarix','Activate Otolarix')}</h2>
+   <p class="muted">${L('التطبيق متاح للأطباء المدعوين فقط. أدخل مفتاح التفعيل اللي وصلك، مرة واحدة على هذا الجهاز.','Otolarix is for invited doctors only. Enter the activation key you received, once on this device.')}</p></div>
+   <label>${L('اسمك','Your name')}</label><input id="actName" value="${esc(S().doctor||'')}" placeholder="${L('د. ...','Dr ...')}">
+   <label style="margin-top:8px">${L('مفتاح التفعيل','Activation key')}</label><input id="actCode" class="ltr" placeholder="OTX-XXXX-XXXX" autocomplete="off" style="text-transform:uppercase">
+   <button class="btn" id="actBtn" style="width:100%;justify-content:center;margin-top:12px" onclick="activate()">${L('تفعيل','Activate')}</button>
+   <p class="muted" style="margin-top:10px">${L('يحتاج إنترنت مرة واحدة فقط. كل مفتاح يعمل على جهاز واحد.','Needs internet once. Each key works on one device.')}</p>
+   <div class="row" style="justify-content:center"><button class="langbtn" style="color:var(--text);border-color:var(--line)" onclick="toggleLang()">${EN()?'عربي':'English'}</button></div></div>`;
+}
+async function activate(){
+  const name=($('actName').value||'').trim(), code=($('actCode').value||'').trim().toUpperCase();
+  if(!name||!code){ toast(L('اكتب اسمك ومفتاح التفعيل','Enter your name and the activation key')); return }
+  const b=$('actBtn'); b.disabled=true;
+  try{
+    const j=await actCall({action:'activate',code,device:deviceId(),name});
+    if(j&&j.ok){ S().activation={code,at:new Date().toISOString(),name}; if(!S().doctor) S().doctor=name; persist(); toast(L('✔ تم التفعيل، أهلًا بك','✔ Activated, welcome')); render(); return }
+    const e=j&&j.error;
+    toast(e==='used'? L('المفتاح ده اتستخدم قبل كده على جهاز تاني.','This key was already used on another device.') : e==='revoked'? L('المفتاح ده متوقف. تواصل مع صاحب التطبيق.','This key has been disabled. Contact the app owner.') : L('المفتاح غير صحيح.','Invalid key.'));
+  }catch{ toast(L('مفيش اتصال. اتأكد من الإنترنت وحاول تاني.','No connection. Check the internet and try again.')) }
+  b.disabled=false;
+}
+async function checkActivation(){
+  if(!ACTIVATION_URL||!S().activation||!navigator.onLine) return;
+  try{ const j=await actCall({action:'check',code:S().activation.code,device:deviceId()});
+    if(j&&j.ok===false&&['revoked','invalid','used'].includes(j.error)){ delete S().activation; persist(); render(); toast(L('تم إيقاف التفعيل على هذا الجهاز.','Activation was removed for this device.')) } }catch{}
 }
 
 /* =================== GOOGLE DRIVE SYNC (appDataFolder) =================== */
@@ -1148,6 +1481,7 @@ const Drive = {
 
 /* =================== boot =================== */
 if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js');
+setTimeout(checkActivation,2500);
 window.addEventListener('online',()=>Drive.sync(false));
 render();
 </script>
