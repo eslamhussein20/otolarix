@@ -367,7 +367,7 @@ function rules(c){
   if(f.has('stridor')||/^(Stridor|Respiratory distress)$/.test(c.airway)) u.push('Airway compromise: أمّن الـ airway، كلم السنيور والتخدير حالًا، ولا تؤخر بسبب أشعة.');
   if(f.has('drool')||/drool|muffled/i.test(c.airway)) u.push('Drooling أو muffled voice: اشتباه epiglottitis أو deep neck infection. لا تفحص الحلق بالقوة.');
   if(+c.spo2 && +c.spo2<92) u.push(`SpO2 ${c.spo2}%: أكسجين وتقييم الـ airway فورًا.`);
-  if(f.has('bleedActive')||/post-tonsillectomy bleed|bleed/i.test(cc) && /tonsil/i.test(cc+c.psh)) u.push('Post-tonsillectomy bleeding: IV access، cross-match، NPO، وكلم السنيور حالًا.');
+  if((f.has('bleedActive')||/bleed/i.test(cc)) && /tonsil/i.test(cc+' '+c.psh)) u.push('Post-tonsillectomy bleeding: IV access، cross-match، NPO، وكلم السنيور حالًا.');
   else if(f.has('bleedActive')) u.push('نزيف نشط: hemostasis، IV access، وقيّم الـ circulation.');
   if(f.has('battery')) u.push('Button battery / magnet / sharp FB: طوارئ قصوى، إزالة عاجلة.');
   if(f.has('neckSwell')||f.has('deepNeck')) u.push('Neck swelling / deep neck infection: الـ airway أولًا، وكلم السنيور.');
