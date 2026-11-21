@@ -125,6 +125,18 @@ details.faq summary{cursor:pointer;font-weight:600}
 .hidden{display:none!important}
 .ltr{direction:ltr;text-align:left}
 .meds td{padding:3px}.meds input{padding:6px}
+.chat{max-height:520px;overflow:auto;display:flex;flex-direction:column;gap:10px;margin:10px 0}
+.msg{padding:10px 12px;border-radius:14px;line-height:1.7;font-size:14px;unicode-bidi:plaintext}
+.msg.user{background:var(--soft);align-self:flex-end;max-width:88%}
+.msg.model{border:1px solid var(--line);background:var(--card)}
+.msg h4{margin:10px 0 4px;color:var(--pri);font-size:15px}
+.msg ul,.msg ol{margin:4px 0;padding-inline-start:20px}
+.msg pre{direction:ltr;text-align:left;background:#0f1f30;color:#e6f0f3;padding:34px 10px 10px;border-radius:9px;white-space:pre-wrap;font-size:12.5px;position:relative;margin:6px 0}
+.msg pre button{position:absolute;top:6px;right:6px;font-size:11px;padding:3px 8px}
+.msg .sum{color:var(--muted);font-size:13px;cursor:pointer}
+.typing{color:var(--muted);font-size:13px;padding:6px}
+.chatin{display:flex;gap:6px;align-items:flex-end}.chatin textarea{min-height:44px}
+.kstep{display:flex;gap:10px;align-items:flex-start;margin:8px 0}.kstep b.n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--pri);color:#fff;display:grid;place-items:center;font-size:13px}
 /* prescription sheet */
 .rx{background:#fff;color:#111;max-width:800px;margin:auto;border-radius:12px;padding:28px;border:1px solid var(--line)}
 .rx .rh{display:flex;justify-content:space-between;gap:10px;border-bottom:3px solid var(--pri);padding-bottom:10px;margin-bottom:12px}
@@ -180,7 +192,7 @@ details.faq summary{cursor:pointer;font-weight:600}
 'use strict';
 const DEFAULT_PROMPT = "ROLE\n\nYou are an ENT (otolaryngology, head and neck) clinical decision-support assistant working at the level of an experienced ENT consultant, helping a resident doctor in Egypt (emergency, clinic, pre-op, post-op). Give consultant-level reasoning, practical bedside guidance, safety-first decisions, and evidence-based advice. Do not claim to be a real physician or to have personal clinical experience.\n\nLANGUAGE (follow strictly)\n\n•\tReply in simple Egyptian Arabic, as a senior talks to a resident in the ward. Keep in English: medical terms, diagnoses, anatomy, drug names, doses, units, investigations (CT, MRI, CBC, audiogram), and ward words (airway, vitals, NPO, admit, discharge, follow-up, red flag, consult, OR, ICU, IV, SBAR). Everything else in Arabic.\n\n•\tExample: \"الـ airway لازم يتأمن الأول. افحص الـ oropharynx قبل أي تحليل للمريض.\"\n\n•\tUnderstand Arabic or English input, including dictated voice notes.\n\nPRIORITY ORDER (highest first)\n\n1.\tImmediate patient safety, stabilization, time-critical escalation. 2. Recognition of life-threatening ENT and non-ENT emergencies. 3. Evidence-based decisions and local emergency protocols. 4. Patient-specific findings, contraindications, available resources. 5. Scope boundaries and referral. 6. Format, language, question limits, style.\n\n•\tNever let a format rule, availability question, specialty boundary, or request for information delay airway management, hemorrhage control, emergency activation, or urgent referral. Never wait for tests, equipment, a full history, or answers before an essential action.\n\n•\tIf a non-ENT life-threatening condition is suspected, tell the resident to activate the emergency pathway now; do not manage it beyond stabilization.\n\n•\tIf instructions conflict, say so, choose the safer evidence-based action, and say what needs senior review. Never silently follow a lower-priority rule that could harm the patient.\n\n•\tIf information is missing, separate confirmed findings from assumptions, give safe immediate actions, and state the limits. Never fabricate findings, doses, guidelines, citations, results, or resource availability.\n\nSCOPE\n\n•\tHelp diagnose and manage ear, nose, throat, larynx, and head and neck conditions: history, ENT examination, ENT investigations, treatment.\n\n•\tENT symptoms can have serious non-ENT causes: do not ignore them, but do not diagnose or work up another specialty's disease. You may name a suspected non-ENT cause as a reason for referral (\"مشتبه فيه، ومحتاج تقييم عاجل\").\n\n•\tFinish the ENT history and examination first. If findings are normal or do not explain the symptoms, say so, state what was examined and what remains unassessed, and recommend the right specialty. Do not call an ENT assessment negative after a limited examination.\n\n•\tDo not recommend routine brain MRI, cardiac, endocrine, or other specialty tests for a stable patient, unless needed in a time-critical emergency or required by a local pathway. The colleague orders their own tests.\n\n•\tFor possible stroke, central vertigo, acute coronary syndrome, severe sudden headache with neurological signs, or other time-critical emergencies, tell the resident to call the emergency team now; do not wait for the ENT workup.\n\n•\tBrief non-ENT red-flag screening questions are allowed when they decide urgency. Orbital and intracranial complications of ENT infection stay in the ENT role. If unsure about scope, say so and advise the senior.\n\nCLINICAL-FIRST\n\n•\tBase the assessment on history, bedside examination, vitals, and evolution. Order a test only if it clarifies a meaningful uncertainty, assesses severity, excludes a dangerous condition, guides treatment, or decides disposition. For each test: one line on why and what it changes, labeled: مطلوب دلوقتي، أو مطلوب لو حصل كذا، أو مش لازم.\n\n•\tNever withhold a necessary test only because it is costly or unavailable: give its indication, urgency, and the referral or transfer route. A normal bedside exam does not exclude a dangerous condition when the exam has limited sensitivity.\n\n•\tJustified tests: suspected deep neck infection (imaging must not delay the airway); orbital or intracranial complications; foreign body not visible clinically; head and neck trauma with suspected fracture; penetrating ear injury with deeper signs; suspected head and neck malignancy, sinonasal tumor, or persistent neck mass; sudden or asymmetric sensorineural hearing loss (audiogram, MRI internal auditory canals); pre-op tests required by anesthesia or protocol; significant bleeding needing cross-match.\n\n•\tAn unstable patient is never made to wait for a test: secure the airway, control bleeding, stabilize, call the senior or emergency team first.\n\nRESOURCE AVAILABILITY\n\n•\tENT equipment is often missing in the ER (audiometer, tympanometer, flexible or rigid endoscopes, even a headlight or speculum). Never assume any device, drug, or consumable is available, and never build a plan that waits for a result that may never come.\n\n•\tAsk about availability only when the answer changes the next step, and never about unrelated equipment. When the case is stable, ask as question 1 of \"Now tell me\", as one grouped question with \"متاح\" or \"مش متاح\" per item. In emergencies, give safety instructions first and ask afterward.\n\n•\tEpistaxis: ask about packing and hemostatic materials (sponge pack, ribbon gauze, absorbable hemostatic, balloon, topical vasoconstrictor, tranexamic acid, cautery). Ear canal injury: ask about otoscope or microscope, suction, ear drops, wick or gauze.\n\n•\tAsk once per resource. Do not stall the reply: give safe actions and a bedside interim plan first, then two short branches \"لو متاح\" and \"لو مش متاح\". After the answer, follow only the matching branch.\n\n•\tIf unavailable, use bedside alternatives without implying equal accuracy. Hearing: Rinne, Weber, whisper test, otoscopy; for suspected sudden sensorineural loss, discuss treatment with the senior urgently and arrange audiometry at the earliest suitable facility. Larynx and voice: voice quality, stridor, drooling, neck findings; mirror laryngoscopy only if tolerated and never in a compromised airway; arrange early visualization or transfer. Nose: headlight or torch with speculum, suction, topical agents; never delay hemorrhage control for an endoscope. Fish bone or hypopharyngeal foreign body: oropharynx exam with light and tongue depressor, no blind instrumentation, early referral for endoscopy.\n\n•\tIf a missing resource makes local care unsafe, say so and tell the resident to call the senior now. Say where the test can be done and how urgent it is. Do not suggest next-day outpatient care when emergency evaluation is needed.\n\nHIGH-RISK ENT\n\n•\tButton battery (suspected contact, ingestion, aspiration): top emergency; urgent removal without delaying for imaging when suspicion is high.\n\n•\tDeep neck infection (Ludwig's, parapharyngeal, retropharyngeal): airway first (stridor, drooling, trismus); no forced oral exam if airway compromise is impending.\n\n•\tEpistaxis: advise against simultaneous bilateral septal cautery (septal perforation).\n\nEPISTAXIS AND SUSPECTED NASAL MASS\n\n•\tHemostasis, airway, and circulation come first; never delay control of severe bleeding because of a possible mass. Assess stability, severity, laterality, recurrence, trauma, anticoagulants, likely site.\n\n•\tConsider a mass without overstating it. Red flags: unilateral recurrent bleeding, unilateral obstruction, visible mass or friable tissue, adolescent male with profuse unilateral bleeding (juvenile angiofibroma), older age with risk factors, smoking or occupational exposure, facial pain or numbness, proptosis, neck node, prior head and neck cancer, bleeding out of proportion. A vascular tumor can occur outside the classic age, sex, or site.\n\n•\tIf a mass is possible and bleeding is controllable: avoid unnecessary traumatic instrumentation, blind forceful packing (including a large sponge pack pushed blindly), and blind cautery of a vascular lesion. This is clinical reasoning, not an established protocol; the final choice is a bedside decision with the senior. It must never prevent effective hemostasis in severe or ongoing bleeding.\n\n•\tSteps: stabilize airway and circulation, IV access, cross-match if significant; gentle suction under light; consider topical vasoconstrictor and tranexamic acid (verify dose); find the bleeding point under vision; if packing is needed, use the least traumatic effective method (for example a small gentle pack under vision, reassess before packing more); no biopsy in the ER; contrast CT or MRI when a vascular tumor is suspected, CT angiography or angiographic assessment for severe or persistent bleeding; if bleeding is severe, use whatever effective pack, balloon, or posterior packing is available, mention its risks, call the senior now, and discuss interventional radiology or surgery; document the concern, decisions, risks, and the discussion with the patient or family.\n\n•\tIf a mass is unlikely: sustained pressure, topical agents, cautery of an identified point, anterior packing, then posterior packing or balloon when needed. State which step fits.\n\n•\tIf a pack is placed: removal plan, who, where, and return precautions. If a mass was suspected and bleeding stops, arrange ENT follow-up with endoscopy and imaging; do not close it as simple epistaxis.\n\nEAR CANAL LACERATION FROM AN OBJECT (pencil, key, cotton bud; any age or immune status)\n\n•\tEvidence: no high-quality trial or guideline exists for minor lacerations. Stenosis is reported mainly after severe trauma. In a small pediatric polytrauma series all patients got antibiotic drops and still developed stenosis. Prevention is not standardized. Textbooks advise antibiotic and steroid drops, with a wick or gauze when the canal is too swollen. State this honestly and label the choices below as clinical reasoning.\n\n•\tAlways check: object and depth, time since injury, bleeding or clear fluid, hearing loss, vertigo, facial weakness, whether the tympanic membrane is seen, retained fragment, tetanus status, age, diabetes or immune compromise, and non-accidental injury in a child. If the membrane, ossicles, facial nerve, temporal bone, or CSF may be involved, it is more than a simple laceration: call the senior now and consider CT temporal bone.\n\n•\tSuperficial, clean, membrane intact: gentle aural toilet, keep dry, no packing, drops optional, review in a few days. Deep or circumferential, exposed cartilage or bone, marked edema: consider antibiotic and steroid drops with a wick or lubricated gauze to keep the lumen open, review in 2 to 3 days. Perforation or membrane not seen: avoid aminoglycoside drops, prefer fluoroquinolone-based drops, no irrigation. Diabetic, immunocompromised, or elderly: lower threshold for fluoroquinolone drops (cover Pseudomonas), earlier follow-up; severe pain, granulation, cranial nerve palsy, or fever suggest necrotizing otitis externa and need the senior; systemic antibiotics only for cellulitis or perichondritis, with the senior. Child: may need sedation; involve the senior early.\n\n•\tUpdate tetanus if due. Give a clear recommendation (wick, drops, or nothing) with the reason, the review date, wick removal plan, and return precautions. At follow-up check for early narrowing. Late complications: stenosis, conductive loss, cholesteatoma.\n\nMEDICATION SAFETY\n\n•\tNever state a dose from memory when uncertain; if it cannot be verified, say so and ask for confirmation from the formulary, a current reference, or the senior. Children: get the weight in kg first. Check age, allergies, pregnancy, current drugs, renal or hepatic impairment, and contraindications.\n\n•\tSeparate adult and pediatric doses; state route, frequency, duration, maximum when verified; metric units; distinguish concentration from dose. Never invent concentrations, maximums, or dilutions. Consider interactions (anticoagulants, antiplatelets).\n\n•\tPrefer drugs common in Egypt without substituting an unsuitable one. No automatic antibiotics: state the indication or say they are unnecessary. Be careful with systemic steroids, vasoconstrictors, and ototoxic drops. In unstable cases never delay resuscitation to check references. If the resident proposes an unsafe drug or dose, say so and give the safer step. Mark off-label or limited-evidence use.\n\nDISPOSITION\n\nEnd each assessment with one of: discharge (only if stable, dangers addressed, return precautions given), observation (what to monitor and what triggers escalation), admission (indication and team), urgent transfer or senior escalation (urgency and reason).\n\nIMAGES, VIDEO, PDF, AUDIO\n\n•\tImaging (CT, MRI, X-ray, endoscopy, otoscopy, audiogram, photos): state type and quality, describe findings as short bullets, give an impression, and say it is \"not a formal radiology report\"; say what a radiologist or better study should confirm. If unclear, cropped, or without side, ask for a better one. A non-ENT finding is mentioned as incidental with a referral, not interpreted in depth. Clinical photos and endoscopy images count as bedside findings.\n\n•\tVideo: describe what you see and the limits; if unreadable, ask for 3 to 5 still frames plus a short description. PDF: summarize key findings and flag abnormal values. Dictation: confirm ambiguous laterality, drug names, or numbers. Do not read or repeat names or IDs in media; remind the resident to crop them.\n\nRIGHT-TO-LEFT CONSISTENCY (follow strictly)\n\n•\tEvery line starts with an Arabic word, never an English word, digit, or symbol-only token. If the natural first word is English, put an Arabic word before it (\"افحص\" before \"otoscopy\", \"ابعت\" before \"CBC\", \"أعطي\" before a drug name). Start every line with the invisible mark U+200F.\n\n•\tBody lines end with an Arabic word or an emoji, never an English word, digit, unit, or bracket. Headings and code blocks are the only exceptions.\n\n•\tUse Arabic punctuation (\"،\" \"؛\" \"؟\"). Never put punctuation, digits, brackets, or slashes next to an English term at a line edge.\n\n•\tOne sentence per line; a sentence mixing Arabic and English never shares its line. At most two English terms in a row. Doses and units go mid-line. One drug per bullet, starting with an Arabic word (\"أعطي\", \"استخدم\").\n\n•\tFully English text (senior report, SBAR, referral) goes in a code block; Arabic comments go outside it.\n\nHEADINGS AND SPACING\n\n•\tEvery heading is \"## \" plus a BOLD title: Arabic title, space, dash, space, English term, then the symbol at the end. Example: ## خطر عاجل - URGENT 🚨. Use exactly the headings in the template.\n\n•\tTwo blank lines between sections: after a section's last line, an empty line, a line containing only U+2800 (⠀), an empty line, then the next heading. One blank line between bullet groups. Never write a paragraph; one idea per bullet, about 12 words.\n\nFORMAT\n\n•\tMarkdown. Symbols: 🚨 urgent, 🩺 impression, ✅ do now, ❓❓ questions with 🙋‍♂️, 🔍 differential, 🧪 tests, 🔄 referral, 💊 treatment, 🏥 disposition, 📚 source, 🎯 confidence, 📞 senior report. Bold only critical items and headings. Numbered steps only for ordered actions. Tables only to compare options.\n\n•\tIn emergencies put URGENT and Do now first, then questions, then the rest, each short. Template (drop sections not needed; ⠀ is the spacer line):\n\nخطر عاجل - URGENT 🚨\n\n•\tسطر عن الخطر\n\n•\tأول إجراء\n\n•\tكلم السنيور حالًا\n\n⠀\n\nالانطباع - IMPRESSION 🩺\n\n•\tسطر واحد\n\n⠀\n\nاعمل دلوقتي - DO NOW ✅\n\n1.\tأهم خطوة\n\n2.\tالخطوة اللي بعدها\n\n⠀\n\nقولي دلوقتي - NOW TELL ME ❓❓🙋‍♂️\n\nأنا مستني إجابتك على الأسئلة دي:\n\n1.\tالسؤال الأهم، أو الأجهزة المتاحة لو لازم\n\n2.\tالسؤال التاني\n\n📩 رد برقم السؤال وإجابته، مثلًا: \"1: أيوه، 2: لأ\"\n\n📩 لو معلومة مش متاحة قول \"مش متاح\"\n\n⠀\n\nThen the same pattern (heading, short bullets, spacer line) for these sections, in order: ## التشخيص التفريقي - Differential 🔍 (most likely, then most dangerous); ## الفحوصات - Tests 🧪 (needed now with why, only if, not needed, bedside alternative if unavailable); ## التحويل - Referral 🔄 (what was examined and what remains, which specialty, urgency); ## الخطة - Plan 💊 (treatment, follow-up, return precautions); ## التصرف - Disposition 🏥; ## المرجع - Source 📚 (guideline family, or \"clinical reasoning\"); ## درجة الثقة - Confidence 🎯 (high, moderate, or low, with the reason); ## بلاغ للسنيور - Senior report 📞 (one line: copy it, and phone the senior first in emergencies; then the code block).\n\nSENIOR REPORT\n\nEnd every case reply, except trivial questions, with a short English report in a code block for the resident to send to a more senior doctor: at most 6 lines, only facts given so far, missing items as \"not available\", no invented findings or vitals, no name or ID, most urgent problem first, never wait for results. Don't uses labels or prefixes before any line. Full line space between and separate lines\n\n\nURGENT: <only if a red flag exists, one line>\n\n<age, sex, setting, main problem, time course>\n\n <relevant history, comorbidities, anticoagulants, allergies>\n\n<vitals, airway status, key exam findings, working impression>\n\n<what has been done, and what I need: advice, come to see, transfer>\n\n\nQUESTIONS\n\n•\tMaximum 4 questions, most critical first, only if the answer changes management, bedside-answerable first, ENT first. Equipment availability is question 1 when the plan depends on it (not in emergencies).\n\n•\tPut them right after \"Do now\". If a critical answer is missing, still give safe actions and say the plan will be refined. Do not repeat answered questions. Skip the section if none.\n\nSAFETY SCAN (always first)\n\nAirway compromise (stridor, drooling, trismus, muffled voice, distress); active or recurrent bleeding; expanding neck swelling or hematoma; deep neck infection; epiglottitis; foreign body (airway, button battery, magnets, sharp esophageal object); orbital cellulitis or vision change; intracranial signs after sinusitis or otitis; CSF leak; facial palsy; sudden hearing loss; vertigo with neurological signs; trauma (septal hematoma, temporal bone, laryngeal, facial fractures); penetrating ear canal injury; post-operative complications. Children, diabetics, immunocompromised and anticoagulated patients lower the threshold. If a red flag is possible, start with URGENT and tell the resident to call the senior now, before any test.\n\nEVIDENCE\n\nPriority: 1. Egyptian Ministry of Health and Egyptian ENT society guidance, when they exist. 2. AAO-HNSF and other American guidance. 3. NICE, ENT UK, and other British guidance. Name the guideline family in Source. Never invent a guideline, year, citation, or statistic. If unsure an Egyptian guideline exists, say so in Arabic, say you follow American or British guidance, and advise local verification. Say clearly when advice is clinical reasoning or low-quality evidence (case reports, textbooks).\n\nCOMMANDS (the resident types one word)\n\n•\tescalate: regenerate the senior report with the latest information, in a code block, fully in English.\n\n•\trefer: short English referral message to the other specialty, in a code block: reason, ENT history and findings, what was excluded and what remains unassessed, urgency, the question. Do not include that specialty's tests.\n\n•\tplan: management plan as bullets: immediate actions, findings to monitor, tests only if justified and available (with the bedside alternative), treatment, referral, disposition, follow-up, what would change the plan, assumptions. Include a senior's opinion if given.\n\n•\tsummary: 5-line handover, one sentence per line. new: treat the next message as a new case and forget the previous patient.\n\nPRIVACY AND HONESTY\n\nNever ask for or repeat patient name, file number, phone, or ID. If you disagree with the resident's plan, say so respectfully and explain why. State uncertainty honestly; do not guess missing facts. You are decision support only, not a replacement for the senior, the clinical examination, or local protocols. End every substantial answer, after the senior report, with this line in Arabic only: _للدعم في القرار فقط،";
 const GOOGLE_CLIENT_ID = "";
-const APP_VERSION = '2.0.1';
+const APP_VERSION = '2.1.0';
 
 /* =================== state & storage =================== */
 const $ = id => document.getElementById(id);
@@ -191,7 +203,7 @@ function loadDB(){
   d = d || {};
   d.patients = d.patients || {};
   d.visits = d.visits || [];
-  d.settings = Object.assign({lang:'ar', theme:'teal', doctor:'', clinic:'', clinicInfo:'', ai:'claude', onboarded:false}, d.settings||{});
+  d.settings = Object.assign({lang:'ar', theme:'teal', doctor:'', clinic:'', clinicInfo:'', ai:'gemini', onboarded:false}, d.settings||{});
   // migrate v1 cases
   try{ const old = JSON.parse(localStorage.getItem('otolarix.cases')||'[]');
     old.forEach(c=>{ if(!d.visits.some(v=>v.id===c.id)) d.visits.push(Object.assign({updated:Date.now()}, c)) });
@@ -392,10 +404,87 @@ function caseText(v){
   return out.join('\n');
 }
 function aiMessage(v){
-  const lang = EN()? '\n\nREPLY LANGUAGE: The doctor uses English. Reply fully in clear English (same structure and headings, English only). This overrides the Egyptian Arabic language rule.' : '';
+  const lang = EN()? LANG_EN : '';
   return `${DEFAULT_PROMPT}\n\n════════ NEW CASE ════════\nFollow the instructions above for this de-identified case.${lang}\n\n${caseText(v)}`;
 }
 const AI_URL = {claude:'https://claude.ai/new', chatgpt:'https://chatgpt.com/'};
+const LANG_EN = '\n\nREPLY LANGUAGE: The doctor uses English. Reply fully in clear English (same structure and headings, English only). This overrides the Egyptian Arabic language rule.';
+
+/* ===== Gemini (free tier, each doctor uses their own key; calls go straight from the device to Google) ===== */
+const Gemini = {
+  base:'https://generativelanguage.googleapis.com/v1beta',
+  key(){ return S().geminiKey||'' },
+  ready(){ return !!this.key() },
+  async err(r){ let m=''; try{ const j=await r.json(); m=(j.error&&j.error.message)||'' }catch{} const e=new Error(m||('HTTP '+r.status)); e.status=r.status; return e },
+  async models(key){
+    const r=await fetch(this.base+'/models?pageSize=200',{headers:{'x-goog-api-key':key}});
+    if(!r.ok) throw await this.err(r);
+    const j=await r.json();
+    return (j.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent')).map(m=>m.name).filter(n=>/gemini/i.test(n));
+  },
+  pick(names){
+    const ok=names.filter(n=>/flash/i.test(n)&&!/(image|tts|audio|live|embed|vision|robotics|computer)/i.test(n));
+    const score=n=>{ const v=parseFloat((n.match(/gemini-(\d+(?:\.\d+)?)/i)||[])[1])||0; return v*10-(/lite/i.test(n)?4:0)-(/(preview|exp)/i.test(n)?1:0) };
+    const list=(ok.length?ok:names).slice().sort((a,b)=>score(b)-score(a));
+    return list;
+  },
+  async connect(key){
+    const names=await this.models(key);
+    const order=this.pick(names);
+    if(!order.length) throw Object.assign(new Error(L('لا يوجد موديل متاح لهذا المفتاح','No model available for this key')),{status:0});
+    S().geminiKey=key; S().geminiModels=order; S().geminiModel=order[0]; persist();
+    return order[0];
+  },
+  human(e){
+    if(e.nokey) return L('فعّل Gemini المجاني الأول من الإعدادات.','Set up free Gemini first in Settings.');
+    if(!navigator.onLine) return L('مفيش إنترنت.','No internet connection.');
+    if(e.status===400||e.status===401) return L('المفتاح غير صحيح. انسخه تاني من Google AI Studio.','Invalid key. Copy it again from Google AI Studio.');
+    if(e.status===403) return L('جوجل رفض الطلب (403). غالبًا الخطة المجانية غير متاحة لهذا المشروع. اعمل مفتاح جديد من AI Studio.','Google refused the request (403). The free tier may be unavailable for this project; create a new key in AI Studio.');
+    if(e.status===429) return L('وصلت للحد المجاني حاليًا. استنى شوية، أو استخدم Claude/ChatGPT.','Free limit reached for now. Wait a little, or use Claude/ChatGPT.');
+    return L('حصل خطأ: ','Error: ')+e.message;
+  },
+  async generate(contents, {system=true, json=false}={}){
+    const key=this.key(); if(!key) throw Object.assign(new Error('nokey'),{nokey:true});
+    if(!S().geminiModel) await this.connect(key);
+    const models=[S().geminiModel, ...(S().geminiModels||[]).filter(m=>m!==S().geminiModel)].slice(0,3);
+    let last;
+    for(const model of models){
+      const body={contents, generationConfig:{temperature:json?0.1:0.3}};
+      if(system) body.systemInstruction={parts:[{text:DEFAULT_PROMPT+(EN()?LANG_EN:'')}]};
+      if(json) body.generationConfig.responseMimeType='application/json';
+      const r=await fetch(`${this.base}/${model}:generateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},body:JSON.stringify(body)});
+      if(r.ok){
+        const j=await r.json(), c=j.candidates&&j.candidates[0];
+        const t=c&&c.content&&(c.content.parts||[]).map(p=>p.text||'').join('');
+        if(t){ if(model!==S().geminiModel){ S().geminiModel=model; persist() } return t }
+        last=Object.assign(new Error((c&&c.finishReason)||'empty reply'),{status:0});
+      } else {
+        last=await this.err(r);
+        if(![404,429,500,503].includes(last.status)) break;   // only fall back to another model for these
+      }
+    }
+    throw last;
+  }
+};
+function md(t){
+  const lines=esc(t).split('\n'); let out='', inCode=false, code=[], list=null;
+  const close=()=>{ if(list){ out+=`</${list}>`; list=null } };
+  const inl=x=>x.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/`([^`]+)`/g,'<code>$1</code>');
+  for(const raw of lines){
+    const l=raw.replace(/‏/g,'');
+    if(/^\s*```/.test(l)){ if(inCode){ out+=`<pre><button class="btn sm sec" onclick="copy(this.parentNode.innerText.replace(/^(Copy|نسخ)\\n?/,''));toast('✔')">${L('نسخ','Copy')}</button>${code.join('\n')}</pre>`; code=[]; inCode=false } else { close(); inCode=true } continue }
+    if(inCode){ code.push(l); continue }
+    let m;
+    if((m=l.match(/^\s*#{1,4}\s+(.*)/))){ close(); out+=`<h4>${inl(m[1])}</h4>`; continue }
+    if((m=l.match(/^\s*[-•*]\s+(.*)/))){ if(list!=='ul'){ close(); out+='<ul>'; list='ul' } out+=`<li>${inl(m[1])}</li>`; continue }
+    if((m=l.match(/^\s*\d+[.)]\s+(.*)/))){ if(list!=='ol'){ close(); out+='<ol>'; list='ol' } out+=`<li>${inl(m[1])}</li>`; continue }
+    close();
+    if(l.trim()==='' || l.trim()==='⠀') continue;
+    out+=`<div>${inl(l)}</div>`;
+  }
+  if(inCode) out+=`<pre>${code.join('\n')}</pre>`;
+  close(); return out;
+}
 
 /* =================== router & shell =================== */
 const NAV = [
@@ -455,7 +544,7 @@ function vHome(){
     <a class="tile" href="#agenda">${due?`<span class="badge">${due}</span>`:''}<div class="ti c3">📅</div><b>${L('المواعيد','Agenda')}</b></a>
     <a class="tile" href="#guide"><div class="ti c4">📖</div><b>${L('طريقة الاستخدام','How to use')}</b></a>
     <a class="tile" href="#settings"><div class="ti c5">🎨</div><b>${L('الإعدادات والألوان','Settings & themes')}</b></a>
-    <a class="tile" onclick="openAI()"><div class="ti c6">🤖</div><b>${S().ai==='chatgpt'?'ChatGPT':'Claude'}</b></a>
+    <a class="tile" onclick="openAI()"><div class="ti c6">🤖</div><b>${S().ai==='gemini'?(Gemini.ready()?'Gemini':L('فعّل الذكاء الاصطناعي','Set up AI')):S().ai==='chatgpt'?'ChatGPT':'Claude'}</b></a>
   </div>
   <div class="stats">
     <div class="stat"><div class="muted">${L('حالات اليوم','Cases today')}</div><div class="v">${todayN}</div></div>
@@ -485,7 +574,7 @@ function fuItem({v,date}){
   return `<div class="item" onclick="go('patient/${v.patient||''}')"><div class="av">📅</div><div class="grow"><div class="ell"><b>${esc(pName(v.patient))}</b> · ${esc(v.rx.diagnosis||v.cc||'')}</div><div class="muted">${fmtDate(date)}</div></div>
   <span class="tag ${cls}">${date<t?L('متأخر','Overdue'):date===t?L('اليوم','Today'):L('قادم','Upcoming')}</span></div>`;
 }
-function openAI(){ window.open(AI_URL[S().ai]||AI_URL.claude,'_blank','noopener') }
+function openAI(){ if(S().ai==='gemini'){ if(Gemini.ready()) go('new'); else aiSetupModal(); return } window.open(AI_URL[S().ai]||AI_URL.claude,'_blank','noopener') }
 
 /* =================== install (automatic) =================== */
 let deferredInstall=null;
@@ -515,12 +604,35 @@ function onboarding(){
   <label>${L('اللغة','Language')}</label><div class="row" style="margin-bottom:10px"><button class="btn ${EN()?'sec':''}" onclick="S().lang='ar';applyLook();closeModal();onboarding()">العربية</button><button class="btn ${EN()?'':'sec'}" onclick="S().lang='en';applyLook();closeModal();onboarding()">English</button></div>
   <label>${L('اسمك (يظهر على الروشتة)','Your name (shown on prescriptions)')}</label><input id="obDoc" value="${esc(S().doctor)}" placeholder="${L('د. ...','Dr ...')}">
   <label style="margin-top:8px">${L('اسم العيادة أو المستشفى','Clinic or hospital name')}</label><input id="obClinic" value="${esc(S().clinic)}">
-  <label style="margin-top:8px">${L('أي ذكاء اصطناعي تستخدم؟ (المجاني يكفي)','Which AI do you use? (free plan is enough)')}</label>
-  <div class="row"><button class="btn ${S().ai==='claude'?'claude':'ghost'}" onclick="S().ai='claude';closeModal();onboarding()">Claude</button><button class="btn ${S().ai==='chatgpt'?'dark':'ghost'}" onclick="S().ai='chatgpt';closeModal();onboarding()">ChatGPT</button></div>
+  <label style="margin-top:8px">${L('الذكاء الاصطناعي (مجاني)','AI assistant (free)')}</label><div id="aiSetup">${aiSetupHTML()}</div>
   <label style="margin-top:10px">${L('اختر لونك المفضل','Pick your colour theme')}</label>${swatches()}
   <div class="alert amber" style="margin-top:12px">🔒 ${L('بيانات المرضى تبقى على جهازك (وعلى Google Drive لو سجلت الدخول). اسم المريض لا يُرسل للذكاء الاصطناعي أبدًا.','Patient data stays on your device (and your Google Drive if you sign in). The patient name is never sent to the AI.')}</div>
   <button class="btn" style="width:100%;justify-content:center;margin-top:8px" onclick="finishOnboarding()">${L('ابدأ ✔','Start ✔')}</button>`);
 }
+function aiSetupHTML(){
+  const ok=Gemini.ready();
+  return `<div class="row" style="margin-bottom:8px">
+    <button class="btn ${S().ai==='gemini'?'':'ghost'}" onclick="S().ai='gemini';persist();refreshAI()">✨ Gemini ${L('(داخل التطبيق، موصى به)','(in-app, recommended)')}</button>
+    <button class="btn ${S().ai==='claude'?'claude':'ghost'}" onclick="S().ai='claude';persist();refreshAI()">Claude</button>
+    <button class="btn ${S().ai==='chatgpt'?'dark':'ghost'}" onclick="S().ai='chatgpt';persist();refreshAI()">ChatGPT</button></div>
+  ${S().ai!=='gemini'? `<p class="muted">${L('مع Claude أو ChatGPT: التطبيق ينسخ الحالة ويفتح الموقع، وأنت تلصق وترسل. لا يحتاج أي إعداد.','With Claude or ChatGPT: the app copies the case and opens the site; you paste and send. No setup needed.')}</p>` :
+   ok? `<div class="alert ok">✔ ${L('Gemini مفعّل','Gemini is on')} · <span class="ltr">${esc((S().geminiModel||'').replace('models/',''))}</span> <button class="btn sm ghost" onclick="S().geminiKey='';S().geminiModel='';persist();refreshAI()">${L('إزالة المفتاح','Remove key')}</button></div>` :
+   `<div class="alert info">
+     <b>${L('تفعيل مجاني لمرة واحدة (دقيقة واحدة):','One-time free setup (1 minute):')}</b>
+     <div class="kstep"><b class="n">1</b><div>${L('افتح Google AI Studio وسجّل دخول بحساب جوجل.','Open Google AI Studio and sign in with your Google account.')}<br><a class="btn sm" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">🔑 ${L('افتح صفحة المفتاح','Open the key page')}</a></div></div>
+     <div class="kstep"><b class="n">2</b><div>${L('اضغط','Tap')} <b>Create API key</b> ${L('ثم انسخ المفتاح.','then copy the key.')}</div></div>
+     <div class="kstep"><b class="n">3</b><div style="flex:1">${L('ارجع هنا والصقه:','Come back and paste it here:')}
+       <div class="row" style="margin-top:6px"><input id="gKey" class="ltr" placeholder="AIza..." style="flex:1" autocomplete="off"><button class="btn" onclick="saveGeminiKey()">${L('تحقق وحفظ','Check & save')}</button></div></div></div>
+     <p class="muted" style="margin:6px 0 0">🔒 ${L('المفتاح يُحفظ على جهازك وفي Google Drive الخاص بك فقط. الحالات تُرسل لجوجل بدون اسم أو تليفون. الخطة المجانية من جوجل قد تستخدم البيانات لتحسين خدماتها.','The key is stored only on your device and your own Google Drive. Cases go to Google without name or phone. The free Google tier may use data to improve its services.')}</p></div>`}`;
+}
+function refreshAI(){ const b=$('aiSetup'); if(b) b.innerHTML=aiSetupHTML(); if(route().name==='visit'&&!$('modal').innerHTML) render() }
+async function saveGeminiKey(){
+  const k=($('gKey').value||'').trim(); if(!k){ toast(L('الصق المفتاح الأول','Paste the key first')); return }
+  toast(L('⏳ جاري التحقق…','⏳ Checking…'));
+  try{ const m=await Gemini.connect(k); S().ai='gemini'; persist(); toast(L('✔ تم التفعيل: ','✔ Connected: ')+m.replace('models/','')); refreshAI(); const mb=$('modal'); if(mb.innerHTML && mb.querySelector('#aiOnly')){ closeModal(); render() } }
+  catch(e){ toast(Gemini.human(e)) }
+}
+function aiSetupModal(){ modal(`<h2 id="aiOnly">🤖 ${L('إعداد الذكاء الاصطناعي','AI setup')}</h2><div id="aiSetup">${aiSetupHTML()}</div><button class="btn ghost" onclick="closeModal();render()">${L('إغلاق','Close')}</button>`) }
 function finishOnboarding(){ S().doctor=$('obDoc').value.trim(); S().clinic=$('obClinic').value.trim(); S().onboarded=true; persist(); closeModal(); render() }
 const THEMES=[['teal','#0B7C89'],['ocean','#2563EB'],['violet','#7C3AED'],['forest','#15803D'],['rose','#DB2777'],['dark','#0F172A']];
 function swatches(){ return `<div class="sw">${THEMES.map(([k,c])=>`<button title="${k}" class="${S().theme===k?'on':''}" style="background:${c}" onclick="setTheme('${k}')"></button>`).join('')}</div>` }
@@ -676,8 +788,19 @@ function vVisit(id){
 
   <div class="card"><h2><span class="ic">🧪</span>9. ${L('فحوصات ونتائج','Investigations')}</h2><textarea id="inv"></textarea></div>
 
-  <div class="card" id="aiCard"><h2><span class="ic">🤖</span>10. ${L('رد الذكاء الاصطناعي','AI reply')}</h2>
-    <label>${L('الصق رد الذكاء الاصطناعي هنا (اختياري، للحفظ في السجل)','Paste the AI reply here (optional, kept in the record)')}</label><textarea id="aiReply" style="min-height:120px"></textarea></div>
+  <div class="card" id="aiCard"><h2><span class="ic">🤖</span>10. ${L('اسأل الذكاء الاصطناعي','Ask the AI')}</h2>
+    ${Gemini.ready()? `
+      <div class="row"><button class="btn" id="aiGo" onclick="aiStart()">🤖 ${(v.chat||[]).length? L('أعد التحليل بالبيانات الحالية','Re-analyse with current data') : L('حلّل الحالة الآن','Analyse this case now')}</button>
+      <span class="muted">Gemini · ${L('مجاني','free')}</span></div>
+      <div class="chat" id="chatBox"></div>
+      <div class="chatin"><textarea id="chatIn" rows="2" placeholder="${L('رد على أسئلته هنا، مثلًا: 1: 20 kg، 2: النزيف وقف','Answer its questions here, e.g. 1: 20 kg, 2: bleeding stopped')}"></textarea><button class="btn" onclick="aiSend()">➤</button></div>
+      <div class="chips">${[['escalate',L('بلاغ للسنيور','Senior report')],['refer',L('تحويل','Referral')],['plan',L('الخطة','Plan')],['summary',L('ملخص','Summary')]].map(([c,t])=>`<span class="chip" onclick="aiSend('${c}')">${t}</span>`).join('')}</div>
+      <button class="btn sec" style="margin-top:6px" onclick="aiFill()">📥 ${L('املأ التشخيص والأدوية والتعليمات من المحادثة','Fill diagnosis, medicines & instructions from the chat')}</button>`
+    : `<div class="alert info row"><span class="grow">✨ ${L('فعّل Gemini المجاني ليظهر الرد هنا داخل التطبيق بدون نسخ ولصق.','Turn on free Gemini to get the answer right here, with no copy/paste.')}</span><button class="btn sm" onclick="aiSetupModal()">${L('تفعيل','Set up')}</button></div>`}
+    <details style="margin-top:10px"><summary class="muted">${L('أو استخدم Claude / ChatGPT (نسخ ولصق)','Or use Claude / ChatGPT (copy & paste)')}</summary>
+      <div class="row" style="margin:8px 0"><button class="btn claude" onclick="sendAI('claude')">Claude</button><button class="btn dark" onclick="sendAI('chatgpt')">ChatGPT</button></div>
+      <p class="muted">${L('الحالة تُنسخ ويفتح الموقع: الصق وأرسل. يمكنك لصق الرد هنا للحفظ.','The case is copied and the site opens: paste and send. You can paste the reply here to keep it.')}</p>
+      <textarea id="aiReply" style="min-height:90px" placeholder="${L('الصق الرد هنا (اختياري)','Paste the reply here (optional)')}"></textarea></details></div>
 
   <div class="card"><h2><span class="ic">💊</span>11. ${L('القرار والروشتة','Decision & prescription')}</h2>
     <div class="grid"><div style="grid-column:1/-1"><label>${L('التشخيص النهائي','Final diagnosis')} <span class="req">*</span></label><input id="rxDx" value="${esc(v.rx.diagnosis||'')}"></div></div>
@@ -697,11 +820,7 @@ function vVisit(id){
   <aside class="side noprint">
     <div class="card"><h2><span class="ic">🚨</span>${L('فحص الأمان','Safety check')}</h2><div id="ruleOut"></div><p class="muted">${L('قواعد ثابتة على جهازك، مستقلة عن الذكاء الاصطناعي.','Fixed rules on your device, independent of the AI.')}</p></div>
     <div class="card"><h2><span class="ic">📋</span>${L('بيانات ناقصة','Missing data')}</h2><div id="missing"></div></div>
-    <div class="card"><h2><span class="ic">🤖</span>${L('اسأل الذكاء الاصطناعي','Ask the AI')}</h2>
-      <div class="row"><button class="btn claude" id="bClaude" onclick="sendAI('claude')">Claude</button><button class="btn dark" id="bGpt" onclick="sendAI('chatgpt')">ChatGPT</button></div>
-      <p class="muted">${L('يتم نسخ الحالة تلقائيًا ويفتح الموقع. في المحادثة الجديدة: اضغط مطولًا ثم لصق (أو Ctrl+V) ثم إرسال.','The case is copied and the site opens. In the new chat: long-press → Paste (or Ctrl+V) → Send.')}</p>
-      <label>${L('أوامر للمتابعة في نفس المحادثة','Follow-up commands (same chat)')}</label>
-      <div class="chips">${[['escalate',L('بلاغ للسنيور','Senior report')],['refer',L('تحويل','Referral')],['plan',L('الخطة','Plan')],['summary',L('ملخص','Summary')]].map(([c,t])=>`<span class="chip" onclick="cmd('${c}')">${t}</span>`).join('')}</div></div>
+    <div class="card"><button class="btn" style="width:100%;justify-content:center" onclick="document.getElementById('aiCard').scrollIntoView({behavior:'smooth'});${Gemini.ready()?'aiStart()':'aiSetupModal()'}">🤖 ${L('اسأل الذكاء الاصطناعي','Ask the AI')}</button></div>
     <div class="card"><div class="row">
       <button class="btn" onclick="signVisit()">✔ ${L('اعتماد وإصدار الروشتة','Sign & issue prescription')}</button>
       <button class="btn sec" onclick="saveVisit(true)">💾 ${L('حفظ','Save')}</button>
@@ -709,7 +828,7 @@ function vVisit(id){
       <p class="muted" id="saved"></p></div>
   </aside></div>`;
   F.forEach(f=>{ const e=$(f); if(e && e.tagName!=='SELECT') e.value=v[f]||'' });
-  drawMeds();
+  drawMeds(); drawChat();
   // events
   document.querySelectorAll('[data-cc]').forEach(ch=>ch.onclick=()=>{ if(isLocked())return; const x=ch.dataset.cc, cur=$('cc').value.trim(); $('cc').value=cur?(cur.includes(x)?cur:cur+', '+x):x; onEdit() });
   document.querySelectorAll('[data-res]').forEach(ch=>ch.onclick=()=>{ if(isLocked())return; if(ch.classList.contains('on')){ch.classList.remove('on');ch.classList.add('no')}else if(ch.classList.contains('no'))ch.classList.remove('no');else ch.classList.add('on'); onEdit() });
@@ -759,8 +878,64 @@ async function sendAI(which){
   window.open(AI_URL[which],'_blank','noopener');
   toast(L('تم النسخ ✔ الصق في المحادثة الجديدة ثم أرسل','Copied ✔ Paste into the new chat and send'));
 }
+function drawChat(){
+  const box=$('chatBox'); if(!box) return;
+  const ch=(curVisit&&curVisit.chat)||[];
+  box.innerHTML = ch.map((m,i)=> m.role==='user'
+    ? `<div class="msg user">${m.kind==='case'? `<div class="sum">📤 ${L('تم إرسال الحالة','Case sent')} · ${fmtDate(m.at,true)}</div>` : esc(m.text)}</div>`
+    : `<div class="msg model" dir="auto">${md(m.text)}</div>`).join('') + (aiBusy?`<div class="typing">⏳ ${L('الذكاء الاصطناعي يكتب…','The AI is writing…')}</div>`:'');
+  box.scrollTop=box.scrollHeight;
+}
+let aiBusy=false;
+async function aiTurn(userMsg){
+  const v=curVisit; v.chat=v.chat||[]; v.chat.push(userMsg); aiBusy=true; drawChat(); saveVisit();
+  const btn=$('aiGo'); if(btn) btn.disabled=true;
+  try{
+    const text=await Gemini.generate(v.chat.map(m=>({role:m.role,parts:[{text:m.text}]})));
+    v.chat.push({role:'model',text,at:new Date().toISOString()});
+  }catch(e){ v.chat.pop(); toast(Gemini.human(e)); if(e.nokey) aiSetupModal() }
+  aiBusy=false; if(btn) btn.disabled=false; v.updated=Date.now(); persist(); drawChat();
+}
+function aiStart(){
+  const v=collectVisit(); if(!v.cc){ toast(L('اكتب الشكوى الأساسية أولًا','Enter the chief complaint first')); $('cc').focus(); return }
+  if(!Gemini.ready()){ aiSetupModal(); return }
+  const first=!(v.chat||[]).length;
+  aiTurn({role:'user',kind:'case',at:new Date().toISOString(),text:(first?'NEW CASE (de-identified). Follow your instructions.\n\n':'UPDATED CASE DATA (re-assess with this):\n\n')+caseText(v)});
+}
+function aiSend(c){
+  if(!Gemini.ready()){ aiSetupModal(); return }
+  const t=c || ($('chatIn').value||'').trim(); if(!t) return;
+  if(!(curVisit.chat||[]).length){ aiStart(); return }
+  if(!c) $('chatIn').value='';
+  aiTurn({role:'user',text:t,at:new Date().toISOString()});
+}
+async function aiFill(){
+  const v=collectVisit();
+  if(!(v.chat||[]).some(m=>m.role==='model')){ toast(L('اسأل الذكاء الاصطناعي الأول','Ask the AI first')); return }
+  toast(L('⏳ جاري التعبئة…','⏳ Filling…'));
+  const ask=`From the conversation above, return ONLY a JSON object with keys:
+"diagnosis" (short working diagnosis),
+"meds" (array of {"name","dose","freq","dur"}; ONLY drugs already recommended in the conversation; if a dose was not stated or needs weight/verification write "verify" as the dose),
+"instructions_ar" (patient instructions in simple Egyptian Arabic, short lines starting with "- ", include warning signs to return immediately),
+"instructions_en" (same in simple English),
+"followUpDays" (integer or null).
+No other text.`;
+  try{
+    const contents=v.chat.map(m=>({role:m.role,parts:[{text:m.text}]})).concat([{role:'user',parts:[{text:ask}]}]);
+    const raw=await Gemini.generate(contents,{system:false,json:true});
+    const j=JSON.parse(raw.replace(/^```(json)?|```$/g,'').trim());
+    if(j.diagnosis && (!$('rxDx').value.trim() || confirm(L('استبدال التشخيص الحالي بالمقترح؟','Replace the current diagnosis with the suggestion?')))) $('rxDx').value=j.diagnosis;
+    if(Array.isArray(j.meds)&&j.meds.length){ v.rx.meds=(v.rx.meds||[]).filter(m=>m.name).concat(j.meds.map(m=>({name:m.name||'',dose:m.dose||'',freq:m.freq||'',dur:m.dur||''}))); drawMeds() }
+    const ins=$('rxLang').value==='en'? j.instructions_en : j.instructions_ar;
+    if(ins && (!$('rxInstr').value.trim() || confirm(L('استبدال التعليمات الحالية؟','Replace the current instructions?')))) $('rxInstr').value=ins;
+    if(j.followUpDays && !$('rxFu').value){ $('rxFu').value=new Date(Date.now()+j.followUpDays*864e5).toISOString().slice(0,10) }
+    onEdit(); $('rxDx').scrollIntoView({behavior:'smooth',block:'center'});
+    toast(L('✔ تمت التعبئة. راجع كل شيء والجرعات قبل الاعتماد.','✔ Filled. Review everything, especially doses, before signing.'));
+  }catch(e){ toast(e instanceof SyntaxError? L('تعذر قراءة الرد، حاول تاني','Could not read the reply, try again') : Gemini.human(e)) }
+}
 async function cmd(c){ await copy(c); toast(L('تم نسخ الأمر. الصقه في نفس المحادثة','Command copied. Paste it into the same chat')) }
 async function askInstr(){
+  if(Gemini.ready() && (curVisit.chat||[]).some(m=>m.role==='model')) return aiFill();
   const lang=$('rxLang').value==='en'?'English':'simple Egyptian Arabic';
   const v=collectVisit();
   const meds=(v.rx.meds||[]).map(m=>`${m.name} ${m.dose} ${m.freq} ${m.dur}`).join('; ')||'as prescribed by the doctor';
@@ -819,15 +994,15 @@ function vGuide(){
    ['👤',L('اختر المريض','Choose the patient'),L('اختر مريض موجود أو أضف مريض جديد. الاسم يبقى عندك فقط.','Pick an existing patient or add a new one. The name stays with you.')],
    ['📋',L('أدخل البيانات','Enter the data'),L('العلامات الحيوية، العلامات الحمراء، القصة، والفحص. كل شيء يُحفظ تلقائيًا.','Vitals, red flags, history and exam. Everything auto-saves.')],
    ['🚨',L('راجع فحص الأمان','Check the safety panel'),L('التنبيهات العاجلة تظهر فورًا. تصرف فيها قبل أي شيء.','Urgent alerts appear instantly. Act on them first.')],
-   ['🤖',L('اسأل الذكاء الاصطناعي','Ask the AI'),L('اضغط Claude أو ChatGPT. الحالة تُنسخ تلقائيًا. الصقها في المحادثة الجديدة وأرسل.','Tap Claude or ChatGPT. The case is copied automatically. Paste it into the new chat and send.')],
-   ['💬',L('ناقش وأجب','Discuss & answer'),L('أجب على أسئلته في نفس المحادثة. استخدم أزرار الأوامر لبلاغ السنيور أو التحويل.','Answer its questions in the same chat. Use the command buttons for senior report or referral.')],
+   ['🤖',L('اسأل الذكاء الاصطناعي','Ask the AI'),L('اضغط «حلّل الحالة الآن»: الرد يظهر داخل التطبيق خلال ثوانٍ. (أو Claude/ChatGPT بالنسخ واللصق)','Tap “Analyse this case now”: the answer appears inside the app in seconds. (Or Claude/ChatGPT by copy & paste)')],
+   ['💬',L('ناقش وأجب','Discuss & answer'),L('اكتب إجاباتك في خانة الرد. أزرار: بلاغ للسنيور، تحويل، الخطة، ملخص. ثم «املأ التشخيص والأدوية» لتعبئة الروشتة تلقائيًا.','Type your answers in the reply box. Buttons: senior report, referral, plan, summary. Then “Fill diagnosis & medicines” to pre-fill the prescription.')],
    ['💊',L('قرّر واكتب الروشتة','Decide & prescribe'),L('أنت صاحب القرار: اكتب التشخيص والأدوية واختر قالب التعليمات وميعاد المتابعة.','You decide: write the diagnosis, medicines, choose an instruction template and the follow-up date.')],
    ['✔',L('اعتمد','Sign'),L('اضغط اعتماد. الحالة تُقفل وأي تعديل لاحق يُسجل.','Tap Sign. The case locks and later changes are recorded.')],
    ['🧾',L('اطبع أو شارك','Print or share'),L('اطبع الروشتة والتعليمات أو أرسلها للمريض على واتساب.','Print the prescription and instructions or send them via WhatsApp.')],
    ['📅',L('المتابعة','Follow-up'),L('المواعيد تظهر في صفحة المواعيد والرئيسية، وتاريخ كل مريض في الخط الزمني.','Follow-ups appear in Agenda and Home; each patient\'s history is on their timeline.')],
   ];
   $('app').innerHTML = `<h1 class="page">📖 ${L('طريقة الاستخدام','How to use Otolarix')}</h1>
-  <div class="alert info">💡 ${L('لا يحتاج أي إعداد: لا حساب، لا Project، لا نسخ تعليمات. التطبيق يرسل التعليمات للذكاء الاصطناعي تلقائيًا مع كل حالة.','No setup needed: no account, no Project, no copying instructions. The app sends the instructions to the AI automatically with each case.')}</div>
+  <div class="alert info">💡 ${L('الإعداد مرة واحدة فقط: مفتاح Gemini مجاني (دقيقة). بعدها كل شيء داخل التطبيق: الحالة، رد الذكاء الاصطناعي، الروشتة، والمتابعة.','One-time setup only: a free Gemini key (1 minute). After that everything happens inside the app: the case, the AI answer, the prescription and follow-up.')}</div>
   <div class="flow">${steps.map((s,i)=>`<div class="step"><span class="e">${s[0]}</span><div class="n">${i+1}</div><b>${s[1]}</b><p class="muted" style="margin:6px 0 0">${s[2]}</p></div>`).join('')}</div>
   <div class="card" style="margin-top:14px"><h2><span class="ic">❓</span>${L('أسئلة شائعة','FAQ')}</h2>
    <details class="faq"><summary>${L('هل أحتاج اشتراك مدفوع؟','Do I need a paid plan?')}</summary><p>${L('لا. الخطة المجانية من Claude أو ChatGPT تكفي. الخطة المدفوعة تعطي ردودًا أكثر قبل الوصول للحد اليومي.','No. The free Claude or ChatGPT plan works. A paid plan gives more replies before the daily limit.')}</p></details>
@@ -856,8 +1031,7 @@ function vSettings(){
    <div><label>${L('العيادة أو المستشفى','Clinic / hospital')}</label><input id="sClinic" value="${esc(S().clinic)}"></div>
    <div style="grid-column:1/-1"><label>${L('العنوان والتليفون','Address & phone')}</label><input id="sInfo" value="${esc(S().clinicInfo)}"></div></div>
    <button class="btn" style="margin-top:10px" onclick="S().doctor=$('sDoc').value.trim();S().clinic=$('sClinic').value.trim();S().clinicInfo=$('sInfo').value.trim();persist();toast(L('تم الحفظ','Saved'))">${L('حفظ','Save')}</button></div>
-  <div class="card"><h2><span class="ic">🤖</span>${L('الذكاء الاصطناعي المفضل','Preferred AI')}</h2><div class="row">
-   <button class="btn ${S().ai==='claude'?'claude':'ghost'}" onclick="S().ai='claude';persist();render()">Claude</button><button class="btn ${S().ai==='chatgpt'?'dark':'ghost'}" onclick="S().ai='chatgpt';persist();render()">ChatGPT</button></div></div>
+  <div class="card"><h2><span class="ic">🤖</span>${L('الذكاء الاصطناعي','AI assistant')}</h2><div id="aiSetup">${aiSetupHTML()}</div></div>
   <div class="card"><h2><span class="ic">☁️</span>Google Drive</h2>
    ${!GOOGLE_CLIENT_ID?`<p class="muted">${L('المزامنة مع Google Drive غير مفعّلة بعد في هذه النسخة.','Google Drive sync is not enabled in this build yet.')}</p>`:
    g.user?`<p>✔ ${L('متصل كـ','Signed in as')} <b>${esc(g.user)}</b></p><p class="muted">${L('آخر مزامنة','Last sync')}: ${g.last?new Date(g.last).toLocaleString():'—'}</p>
@@ -916,7 +1090,7 @@ const Drive = {
     if(!this.hasToken() && !show) return; // background sync never opens a Google pop-up
     try{
       const id=await this.findFile();
-      if(id){ const remote=await (await this.api(`https://www.googleapis.com/drive/v3/files/${id}?alt=media`)).json(); const s=DB.settings; merge(remote); DB.settings=s; localStorage.setItem(DBKEY,JSON.stringify(DB)) }
+      if(id){ const remote=await (await this.api(`https://www.googleapis.com/drive/v3/files/${id}?alt=media`)).json(); const s=DB.settings; merge(remote); DB.settings=s; const rs=remote.settings||{}; if(!s.geminiKey&&rs.geminiKey){ s.geminiKey=rs.geminiKey; s.geminiModel=rs.geminiModel; s.geminiModels=rs.geminiModels; s.ai='gemini' } localStorage.setItem(DBKEY,JSON.stringify(DB)) }
       await this.upload();
       this.state.last=Date.now(); this.save(); if(show) toast(L('تمت المزامنة ☁️','Synced ☁️'));
       const rn=route().name; if(['home','patients','agenda','settings'].includes(rn)) render();
