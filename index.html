@@ -1,537 +1,944 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="teal">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#102840">
+<meta name="theme-color" content="#0B5F6B">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Otolarix">
-<title>Otolarix — ENT Clinical Workspace</title>
+<title>Otolarix</title>
 <style>
-:root{--navy:#102840;--teal:#087F8C;--pale:#EAF5F7;--gray:#506173;--line:#D5E3E8;--red:#B42318;--redbg:#FEF3F2;--amber:#B54708;--amberbg:#FFFAEB;--ok:#067647}
+:root{--red:#B42318;--redbg:#FEF3F2;--amber:#B54708;--amberbg:#FFFAEB;--ok:#067647;--okbg:#ECFDF3;--r:14px}
+[data-theme=teal]{--pri:#0B7C89;--pri2:#0B3C49;--soft:#E6F4F5;--bg:#F3F7F8;--card:#fff;--text:#0F2733;--muted:#5B6B78;--line:#DCE6EA}
+[data-theme=ocean]{--pri:#2563EB;--pri2:#1E3A8A;--soft:#E8EFFE;--bg:#F4F6FB;--card:#fff;--text:#13213D;--muted:#5A6684;--line:#DDE3F0}
+[data-theme=violet]{--pri:#7C3AED;--pri2:#4C1D95;--soft:#F1EAFE;--bg:#F7F5FC;--card:#fff;--text:#24163F;--muted:#6B6382;--line:#E5DFF3}
+[data-theme=forest]{--pri:#15803D;--pri2:#14532D;--soft:#E7F6EC;--bg:#F4F8F5;--card:#fff;--text:#132A1C;--muted:#5A6E61;--line:#DCE9E0}
+[data-theme=rose]{--pri:#DB2777;--pri2:#831843;--soft:#FDE9F2;--bg:#FBF5F8;--card:#fff;--text:#3B1027;--muted:#7A5D6B;--line:#F1DEE7}
+[data-theme=dark]{--pri:#2DD4BF;--pri2:#0F172A;--soft:#13303A;--bg:#0B1220;--card:#121B2D;--text:#E5EDF5;--muted:#93A3B8;--line:#24324A;--redbg:#3A1515;--amberbg:#3A2A10;--okbg:#0F2F22;--red:#FCA5A5;--amber:#FCD34D;--ok:#6EE7B7}
 *{box-sizing:border-box}
-body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;color:var(--navy);background:#F5F8FA;font-size:15px}
-header{background:var(--navy);color:#fff;padding:10px 20px;display:flex;align-items:center;gap:20px;position:sticky;top:0;z-index:10}
-header h1{margin:0;font-size:22px}header small{color:#9FC3CC}
-nav{display:flex;gap:4px;margin-inline-start:auto}
-nav button{background:transparent;color:#cfe3e8;border:0;padding:8px 14px;border-radius:6px;cursor:pointer;font:inherit}
-nav button.active{background:var(--teal);color:#fff}
-main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px;padding:16px;max-width:1500px;margin:auto}
-main.single{grid-template-columns:1fr}
-.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
-.card h2{margin:0 0 10px;font-size:16px;color:var(--teal);display:flex;gap:8px;align-items:center}
-.card h2 .en{color:var(--gray);font-weight:400;font-size:13px}
+body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;color:var(--text);background:var(--bg);font-size:15px}
+a{color:var(--pri)}
+/* top bar */
+.top{background:linear-gradient(135deg,var(--pri2),var(--pri));color:#fff;padding:10px 18px;padding-top:calc(10px + env(safe-area-inset-top));display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:30}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;cursor:pointer}
+.logo i{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.18);display:grid;place-items:center;font-style:normal}
+.tnav{display:flex;gap:4px;margin-inline-start:auto}
+.tnav a{color:#e8f3f5;text-decoration:none;padding:8px 12px;border-radius:9px;font-size:14px;display:flex;gap:6px;align-items:center}
+.tnav a.on{background:rgba(255,255,255,.2);color:#fff}
+.langbtn{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:20px;padding:5px 12px;cursor:pointer;font:inherit;font-weight:700}
+.bnav{display:none}
+main{max-width:1280px;margin:auto;padding:16px}
+/* cards */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px}
+.card h2{margin:0 0 12px;font-size:16px;display:flex;align-items:center;gap:8px}
+.card h2 .ic{width:30px;height:30px;border-radius:9px;background:var(--soft);display:grid;place-items:center;font-size:16px}
+.card h2 .en{color:var(--muted);font-weight:400;font-size:13px}
+h1.page{font-size:22px;margin:4px 0 14px}
+.muted{color:var(--muted);font-size:13px}
 .req{color:var(--red)}
+/* tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:14px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 12px;text-align:center;cursor:pointer;position:relative;transition:.15s;text-decoration:none;color:var(--text)}
+.tile:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.08)}
+.tile .ti{width:52px;height:52px;border-radius:16px;margin:0 auto 8px;display:grid;place-items:center;font-size:26px}
+.tile b{display:block;font-size:14px}
+.tile .badge{position:absolute;top:8px;inset-inline-end:8px;background:var(--red);color:#fff;border-radius:12px;padding:1px 8px;font-size:12px}
+.c1{background:#E0F2F1}.c2{background:#E8EFFE}.c3{background:#FDF2E3}.c4{background:#F1EAFE}.c5{background:#FDE9F2}.c6{background:#E7F6EC}
+[data-theme=dark] .tile .ti{filter:brightness(.8)}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;border-inline-start:5px solid var(--pri)}
+.stat .v{font-size:26px;font-weight:800}
+.stat.red{border-inline-start-color:var(--red)}.stat.amber{border-inline-start-color:#F79009}.stat.ok{border-inline-start-color:#12B76A}
+.hero{background:linear-gradient(135deg,var(--pri2),var(--pri));color:#fff;border-radius:var(--r);padding:18px 20px;margin-bottom:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.hero h1{margin:0;font-size:22px}.hero p{margin:4px 0 0;opacity:.85}
+.hero .btn{background:#fff;color:var(--pri2);margin-inline-start:auto}
+/* forms */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
-label{display:block;font-size:13px;color:var(--gray);margin-bottom:3px}
-input,select,textarea{width:100%;min-width:0;font:inherit;padding:7px 9px;border:1px solid #C3D3DA;border-radius:6px;background:#fff;color:var(--navy)}
-textarea{min-height:60px;resize:vertical}
-input:focus,select:focus,textarea:focus{outline:2px solid var(--teal);border-color:var(--teal)}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:3px}
+input,select,textarea{width:100%;min-width:0;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--text)}
+textarea{min-height:64px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--pri);border-color:var(--pri)}
+input:disabled,select:disabled,textarea:disabled{opacity:.75}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
-.chip{border:1px solid #C3D3DA;background:#fff;border-radius:16px;padding:4px 11px;cursor:pointer;font-size:13px}
-.chip.on{background:var(--teal);color:#fff;border-color:var(--teal)}
-.chip.no{background:#F2F4F7;color:var(--gray);text-decoration:line-through}
-.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:4px 12px}
-.checks label{display:flex;gap:6px;align-items:center;color:var(--navy);font-size:14px;margin:0}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:18px;padding:5px 12px;cursor:pointer;font-size:13px;user-select:none}
+.chip.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+.chip.no{background:var(--bg);color:var(--muted);text-decoration:line-through}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:4px 12px}
+.checks label{display:flex;gap:6px;align-items:center;color:var(--text);font-size:14px;margin:0}
 .checks input{width:auto}
-.exam{display:grid;grid-template-columns:150px 150px 1fr;gap:6px 10px;align-items:center}
-.exam .h{font-weight:600}
+.exam{display:grid;grid-template-columns:180px 140px 1fr;gap:6px 10px;align-items:center}
+.exam .h{font-weight:600;font-size:13px;color:var(--muted)}
 table.aud{border-collapse:collapse;direction:ltr;font-size:13px}
 table.aud td,table.aud th{border:1px solid var(--line);padding:3px}
 table.aud input{width:58px;padding:4px}
-.btn{background:var(--teal);color:#fff;border:0;border-radius:7px;padding:9px 14px;font:inherit;cursor:pointer;font-weight:600}
-.btn.sec{background:#fff;color:var(--teal);border:1px solid var(--teal)}
-.btn.dark{background:var(--navy)}
+.btn{background:var(--pri);color:#fff;border:0;border-radius:10px;padding:9px 15px;font:inherit;cursor:pointer;font-weight:600;display:inline-flex;gap:6px;align-items:center;text-decoration:none}
+.btn.sec{background:var(--card);color:var(--pri);border:1px solid var(--pri)}
+.btn.dark{background:#10A37F}
+.btn.claude{background:#C2662D}
 .btn.red{background:var(--red)}
-.btn:disabled{opacity:.5;cursor:default}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.btn.sm{padding:5px 10px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:default}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.side{position:sticky;top:64px;align-self:start;max-height:calc(100vh - 80px);overflow:auto}
-.alert{border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:14px}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px}
+.side{position:sticky;top:76px;align-self:start;max-height:calc(100vh - 90px);overflow:auto}
+.alert{border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:14px}
 .alert.red{background:var(--redbg);border:1px solid #FDA29B;color:var(--red)}
 .alert.amber{background:var(--amberbg);border:1px solid #FEC84B;color:var(--amber)}
-.alert.ok{background:#ECFDF3;border:1px solid #75E0A7;color:var(--ok)}
+.alert.ok{background:var(--okbg);border:1px solid #75E0A7;color:var(--ok)}
+.alert.info{background:var(--soft);border:1px solid var(--line);color:var(--text)}
 .alert ul{margin:4px 0 0;padding-inline-start:18px}
-pre.msg{direction:ltr;text-align:left;white-space:pre-wrap;background:#0f1f30;color:#e6f0f3;padding:10px;border-radius:8px;font-size:12px;max-height:320px;overflow:auto}
-.muted{color:var(--gray);font-size:13px}
-.toast{position:fixed;bottom:20px;left:20px;background:var(--navy);color:#fff;padding:10px 16px;border-radius:8px;opacity:0;transition:.3s;z-index:99}
+.tag{display:inline-block;padding:2px 9px;border-radius:10px;font-size:12px;background:var(--soft);color:var(--text)}
+.tag.signed{background:var(--okbg);color:var(--ok)}.tag.urgent{background:var(--redbg);color:var(--red)}.tag.draft{background:var(--amberbg);color:var(--amber)}
+.list .item{display:flex;gap:12px;align-items:center;padding:10px 4px;border-bottom:1px solid var(--line);cursor:pointer}
+.list .item:last-child{border-bottom:0}
+.av{width:40px;height:40px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-weight:700;color:var(--pri);flex:0 0 auto}
+.grow{flex:1;min-width:0}
+.ell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* timeline */
+.tl{position:relative;padding-inline-start:26px}
+.tl:before{content:"";position:absolute;inset-inline-start:9px;top:4px;bottom:4px;width:3px;background:var(--line);border-radius:2px}
+.tl .ev{position:relative;margin-bottom:14px}
+.tl .ev:before{content:"";position:absolute;inset-inline-start:-23px;top:14px;width:13px;height:13px;border-radius:50%;background:var(--pri);border:3px solid var(--card);box-shadow:0 0 0 2px var(--pri)}
+.tl .ev.urg:before{background:var(--red);box-shadow:0 0 0 2px var(--red)}
+.tl .ev.fu:before{background:#F79009;box-shadow:0 0 0 2px #F79009}
+/* steps (guide) */
+.flow{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;position:relative}
+.step .n{width:34px;height:34px;border-radius:50%;background:var(--pri);color:#fff;display:grid;place-items:center;font-weight:800;margin-bottom:8px}
+.step .e{position:absolute;top:12px;inset-inline-end:12px;font-size:24px}
+details.faq{border-bottom:1px solid var(--line);padding:10px 0}
+details.faq summary{cursor:pointer;font-weight:600}
+/* theme swatches */
+.sw{display:flex;gap:10px;flex-wrap:wrap}
+.sw button{width:46px;height:46px;border-radius:50%;border:3px solid transparent;cursor:pointer}
+.sw button.on{border-color:var(--text)}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(10,20,30,.55);display:grid;place-items:center;z-index:100;padding:16px}
+.modal .box{background:var(--card);border-radius:18px;max-width:520px;width:100%;padding:22px;max-height:90vh;overflow:auto}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--pri2);color:#fff;padding:10px 18px;border-radius:10px;opacity:0;transition:.3s;z-index:200;pointer-events:none;max-width:90vw;text-align:center}
 .toast.show{opacity:1}
+.hidden{display:none!important}
 .ltr{direction:ltr;text-align:left}
-.caselist td,.caselist th{padding:8px;border-bottom:1px solid var(--line);text-align:right}
-.caselist{width:100%;border-collapse:collapse}
-.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;background:var(--pale)}
-.tag.signed{background:#ECFDF3;color:var(--ok)}
-.tag.urgent{background:var(--redbg);color:var(--red)}
-.hidden{display:none}
-.steps li{margin-bottom:6px}
-.mbar{display:none}
-#btnInstall{background:#fff;color:var(--navy);border:0;border-radius:6px;padding:6px 10px;font:inherit;cursor:pointer}
-@media(max-width:1000px){main{grid-template-columns:minmax(0,1fr)}.side{position:static;max-height:none}}
-@media(max-width:700px){
- body{font-size:16px;padding-bottom:calc(70px + env(safe-area-inset-bottom))}
+.meds td{padding:3px}.meds input{padding:6px}
+/* prescription sheet */
+.rx{background:#fff;color:#111;max-width:800px;margin:auto;border-radius:12px;padding:28px;border:1px solid var(--line)}
+.rx .rh{display:flex;justify-content:space-between;gap:10px;border-bottom:3px solid var(--pri);padding-bottom:10px;margin-bottom:12px}
+.rx h3{color:var(--pri);margin:16px 0 6px;font-size:15px}
+.rx table{width:100%;border-collapse:collapse}
+.rx td,.rx th{border:1px solid #ddd;padding:6px 8px;text-align:start;font-size:14px}
+.rx th{background:#f4f7f8}
+.rx .sig{margin-top:30px;display:flex;justify-content:space-between}
+.rx .instr{white-space:pre-wrap;line-height:1.8}
+@media(max-width:1000px){.cols{grid-template-columns:minmax(0,1fr)}.side{position:static;max-height:none}}
+@media(max-width:760px){
+ body{font-size:16px;padding-bottom:calc(74px + env(safe-area-inset-bottom))}
  input,select,textarea{font-size:16px}
- header{flex-wrap:wrap;gap:6px;padding:8px 12px;padding-top:calc(8px + env(safe-area-inset-top))}
- header h1{font-size:19px}
- nav{width:100%;margin:0}
- nav button{flex:1;padding:8px 4px;font-size:14px}
+ .tnav{display:none}
  main{padding:10px}
- .card{padding:12px}
  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- .grid>div[style]{grid-column:1/-1!important}
- .checks{grid-template-columns:1fr}
- .checks label{padding:6px 0}
- .exam{grid-template-columns:repeat(2,minmax(0,1fr))}
- .exam .h{display:none}
- .exam input{grid-column:1/-1;margin-bottom:8px}
+ .grid .wide{grid-column:1/-1}
+ .checks{grid-template-columns:1fr}.checks label{padding:5px 0}
+ .exam{grid-template-columns:repeat(2,minmax(0,1fr))}.exam .h{display:none}.exam input{grid-column:1/-1;margin-bottom:8px}
  .aud-wrap{overflow-x:auto}
- .chip{padding:7px 12px;font-size:14px}
- .mbar{display:flex;position:fixed;bottom:0;left:0;right:0;gap:6px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);z-index:20}
- .mbar .btn{flex:1;padding:11px 6px;font-size:14px}
- .mbar .btn.alerts{flex:0 0 auto;background:var(--navy)}
- .mbar .btn.alerts.hot{background:var(--red)}
- .caselist thead{display:none}
- .caselist tr{display:block;border-bottom:1px solid var(--line);padding:8px 0}
- .caselist td{display:block;border:0;padding:2px 0}
- .toast{left:10px;right:10px;bottom:calc(80px + env(safe-area-inset-bottom));text-align:center}
+ .tiles{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+ .tile{padding:12px 4px}.tile .ti{width:44px;height:44px;font-size:22px}.tile b{font-size:12px}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .bnav{display:flex;position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);z-index:40;padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+ .bnav a{flex:1;text-align:center;text-decoration:none;color:var(--muted);font-size:11px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 0;position:relative}
+ .bnav a span{font-size:21px}
+ .bnav a.on{color:var(--pri);font-weight:700}
+ .bnav a.new span{background:var(--pri);color:#fff;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;margin-top:-22px;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+ .rx{padding:16px}
+ .toast{bottom:calc(92px + env(safe-area-inset-bottom))}
 }
-@media print{header,.side,.noprint{display:none}main{display:block}}
+@media print{
+ body{background:#fff;padding:0}
+ .top,.bnav,.noprint,.toast{display:none!important}
+ main{padding:0;max-width:none}
+ .rx{border:0;border-radius:0;max-width:none}
+ .card{break-inside:avoid}
+}
 </style>
 </head>
 <body>
-<header>
-  <div><h1>Otolarix</h1><small>ENT Clinical Workspace · دعم القرار فقط</small></div>
-  <nav>
-    <button data-view="case" class="active">حالة جديدة</button>
-    <button data-view="cases">الحالات المحفوظة</button>
-    <button data-view="setup">الإعداد والـ Prompt</button>
-  </nav>
-  <button id="btnInstall" class="hidden">⬇ تثبيت</button>
+<header class="top noprint">
+  <div class="logo" onclick="go('home')"><i>👂</i><span>Otolarix</span></div>
+  <nav class="tnav" id="tnav"></nav>
+  <button class="langbtn" id="langBtn" onclick="toggleLang()">EN</button>
 </header>
-
-<!-- ============ CASE VIEW ============ -->
-<main id="view-case">
-<section>
-  <div class="alert amber noprint">🔒 لا تكتب اسم المريض أو رقم الملف أو التليفون. التطبيق يعمل على جهازك فقط، والبيانات لا تُرسل إلا عندما تلصقها أنت في ChatGPT أو Claude.</div>
-
-  <div class="card">
-    <h2>1. الشكوى الأساسية <span class="en">Chief complaint</span> <span class="req">*</span></h2>
-    <div class="chips" id="ccChips"></div>
-    <div class="grid">
-      <div style="grid-column:span 2"><label>الشكوى بكلمات المريض <span class="req">*</span></label><input id="cc" placeholder="مثال: نزيف من الفم بعد عملية اللوز"></div>
-      <div><label>المدة</label><input id="ccDur" placeholder="مثال: 3 days / 2 hours"></div>
-      <div><label>الجانب</label><select id="ccSide"><option value="">—</option><option>Right</option><option>Left</option><option>Bilateral</option><option>Midline / N/A</option></select></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>2. المريض والمكان <span class="en">Patient & setting</span></h2>
-    <div class="grid">
-      <div><label>العمر</label><input id="age" placeholder="e.g. 6 y / 18 m"></div>
-      <div><label>الجنس</label><select id="sex"><option value="">—</option><option>Male</option><option>Female</option></select></div>
-      <div><label>الوزن (kg)</label><input id="weight" type="number" min="0" step="0.1"></div>
-      <div><label>الحمل</label><select id="preg"><option value="">—</option><option>Not pregnant</option><option>Pregnant</option><option>N/A</option></select></div>
-      <div><label>المكان</label><select id="setting"><option>ER</option><option>Clinic</option><option>Ward</option><option>Pre-op</option><option>Post-op</option></select></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>3. العلامات الحيوية والـ Airway <span class="en">Vitals & airway</span></h2>
-    <div class="grid">
-      <div><label>Airway</label><select id="airway"><option value="">—</option><option>Patent, no distress</option><option>Stridor</option><option>Drooling / unable to swallow saliva</option><option>Muffled voice</option><option>Respiratory distress</option></select></div>
-      <div><label>HR</label><input id="hr" type="number"></div>
-      <div><label>BP</label><input id="bp" placeholder="120/80"></div>
-      <div><label>SpO2 %</label><input id="spo2" type="number"></div>
-      <div><label>RR</label><input id="rr" type="number"></div>
-      <div><label>Temp °C</label><input id="temp" type="number" step="0.1"></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>4. العلامات الحمراء <span class="en">Safety scan</span></h2>
-    <p class="muted">علّم الموجود فقط. ما لم يُعلَّم يُرسل كـ "not reported"، وليس كـ "absent".</p>
-    <div class="checks" id="flags"></div>
-  </div>
-
-  <div class="card">
-    <h2>5. القصة المرضية <span class="en">History</span></h2>
-    <label>تفاصيل الشكوى الحالية (البداية، التطور، أعراض مصاحبة، علاج سابق)</label>
-    <textarea id="hpi"></textarea>
-    <div class="grid" style="margin-top:8px">
-      <div><label>أمراض مزمنة</label><input id="pmh" placeholder="DM, HTN..."></div>
-      <div><label>عمليات أنف وأذن سابقة</label><input id="psh" placeholder="Tonsillectomy 5 days ago"></div>
-      <div><label>أدوية حالية</label><input id="meds"></div>
-      <div><label>Anticoagulants / antiplatelets</label><select id="anticoag"><option value="">—</option><option>None</option><option>Yes</option></select></div>
-      <div><label>الحساسية</label><input id="allergy" placeholder="NKDA أو اسم الدواء"></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2>6. الفحص <span class="en">Examination</span></h2>
-    <div class="exam" id="exam"></div>
-  </div>
-
-  <div class="card">
-    <h2>7. تخطيط السمع <span class="en">Audiogram (optional, dB HL)</span></h2>
-    <div class="aud-wrap"><table class="aud">
-      <tr><th></th><th>500</th><th>1000</th><th>2000</th><th>4000</th><th>PTA</th><th>ABG</th></tr>
-      <tr><th>Right AC</th><td><input data-a="RA0"></td><td><input data-a="RA1"></td><td><input data-a="RA2"></td><td><input data-a="RA3"></td><td id="ptaR">—</td><td id="abgR" rowspan="2">—</td></tr>
-      <tr><th>Right BC</th><td><input data-a="RB0"></td><td><input data-a="RB1"></td><td><input data-a="RB2"></td><td><input data-a="RB3"></td><td id="ptaRB">—</td></tr>
-      <tr><th>Left AC</th><td><input data-a="LA0"></td><td><input data-a="LA1"></td><td><input data-a="LA2"></td><td><input data-a="LA3"></td><td id="ptaL">—</td><td id="abgL" rowspan="2">—</td></tr>
-      <tr><th>Left BC</th><td><input data-a="LB0"></td><td><input data-a="LB1"></td><td><input data-a="LB2"></td><td><input data-a="LB3"></td><td id="ptaLB">—</td></tr>
-    </table>
-    </div>
-    <p class="muted" id="audNote"></p>
-  </div>
-
-  <div class="card">
-    <h2>8. الإمكانيات المتاحة <span class="en">Resources</span></h2>
-    <p class="muted">اضغط مرة = متاح، مرتين = مش متاح، الثالثة = غير محدد.</p>
-    <div class="chips" id="res"></div>
-  </div>
-
-  <div class="card">
-    <h2>9. فحوصات ونتائج <span class="en">Investigations</span></h2>
-    <textarea id="inv" placeholder="CBC, CT..., أو أي نتائج موجودة"></textarea>
-  </div>
-</section>
-
-<!-- side panel -->
-<aside class="side" id="sidePanel">
-  <div class="card">
-    <h2>🚨 فحص الأمان المحلي</h2>
-    <div id="ruleOut"></div>
-    <p class="muted">قواعد ثابتة تعمل على جهازك، مستقلة عن الذكاء الاصطناعي.</p>
-  </div>
-  <div class="card">
-    <h2>📋 البيانات الناقصة</h2>
-    <div id="missing"></div>
-  </div>
-  <div class="card">
-    <h2>📤 أرسل للذكاء الاصطناعي</h2>
-    <div class="row">
-      <button class="btn" id="btnClaude">نسخ + فتح Claude</button>
-      <button class="btn dark" id="btnGpt">نسخ + فتح ChatGPT</button>
-      <button class="btn sec" id="btnCopy">نسخ فقط</button>
-    </div>
-    <p class="muted">الرسالة تُنسخ فقط ولا تُوضع في الرابط. افتح الـ Project الذي فيه الـ Prompt، ثم الصق بـ Ctrl+V.</p>
-    <details><summary class="muted">معاينة الرسالة</summary><pre class="msg" id="preview"></pre></details>
-    <div style="margin-top:8px"><label>أوامر سريعة (تُنسخ للصق في نفس المحادثة)</label>
-    <div class="chips" id="cmds"></div></div>
-  </div>
-  <div class="card">
-    <h2>🩺 رد الذكاء الاصطناعي ومراجعة الطبيب</h2>
-    <label>الصق رد الذكاء الاصطناعي هنا</label>
-    <textarea id="aiReply" style="min-height:110px"></textarea>
-    <label style="margin-top:8px">قرار الطبيب النهائي / التعديلات</label>
-    <textarea id="final" style="min-height:80px"></textarea>
-    <div class="row" style="margin-top:8px">
-      <button class="btn sec" id="btnSave">حفظ</button>
-      <button class="btn" id="btnSign">اعتماد وتوقيع ✔</button>
-      <button class="btn sec" id="btnPrint">طباعة</button>
-      <button class="btn red" id="btnNew">حالة جديدة</button>
-    </div>
-    <p class="muted" id="status"></p>
-  </div>
-</aside>
-</main>
-
-<!-- ============ CASES VIEW ============ -->
-<main id="view-cases" class="single hidden">
-  <div class="card">
-    <h2>الحالات المحفوظة على هذا الجهاز</h2>
-    <div class="row" style="margin-bottom:10px">
-      <button class="btn sec" id="btnExport">تصدير JSON</button>
-      <label class="btn sec" style="margin:0">استيراد JSON<input type="file" id="importFile" accept=".json" class="hidden"></label>
-    </div>
-    <table class="caselist"><thead><tr><th>التاريخ</th><th>الشكوى الأساسية</th><th>العمر</th><th>الحالة</th><th></th></tr></thead><tbody id="caseRows"></tbody></table>
-  </div>
-</main>
-
-<!-- ============ SETUP VIEW ============ -->
-<main id="view-setup" class="single hidden">
-  <div class="card">
-    <h2>إعداد مرة واحدة: Project في Claude أو ChatGPT (الخطة المجانية تكفي)</h2>
-    <ol class="steps">
-      <li>انسخ الـ Prompt من الزر تحت.</li>
-      <li><b>Claude:</b> افتح Projects، ثم New project، وسمّه Otolarix. اختر Add instructions في Custom instructions، الصق الـ Prompt واحفظ.</li>
-      <li><b>ChatGPT:</b> افتح Projects، ثم New project، ثم Create. اختر Add instructions، الصق الـ Prompt، ثم Save.</li>
-      <li>لو الخطة المجانية لا تدعم Projects: الصق الـ Prompt كأول رسالة في محادثة جديدة، ثبّتها (pin)، وأرسل كل حالة بعدها.</li>
-      <li>كل حالة جديدة في محادثة جديدة داخل نفس الـ Project. استخدم زر "نسخ + فتح" من شاشة الحالة.</li>
-      <li>اقفل خيار استخدام المحادثات في تدريب النموذج من إعدادات حسابك.</li>
-    </ol>
-    <div class="row"><button class="btn" id="btnCopyPrompt">نسخ الـ Prompt</button>
-    <button class="btn sec" id="btnResetPrompt">استرجاع الـ Prompt الأصلي</button></div>
-    <label style="margin-top:10px">الـ Prompt (يمكنك تعديله؛ يُحفظ على هذا الجهاز)</label>
-    <textarea id="promptBox" class="ltr" style="min-height:420px;font-family:Consolas,monospace;font-size:12px"></textarea>
-  </div>
-</main>
-
-<div class="mbar noprint" id="mbar">
-  <button class="btn alerts" id="mAlerts">🚨 0</button>
-  <button class="btn" id="mClaude">Claude</button>
-  <button class="btn dark" id="mGpt">ChatGPT</button>
-</div>
+<main id="app"></main>
+<nav class="bnav noprint" id="bnav"></nav>
 <div class="toast" id="toast"></div>
+<div id="modal"></div>
 
 <script>
+'use strict';
 const DEFAULT_PROMPT = "ROLE\n\nYou are an ENT (otolaryngology, head and neck) clinical decision-support assistant working at the level of an experienced ENT consultant, helping a resident doctor in Egypt (emergency, clinic, pre-op, post-op). Give consultant-level reasoning, practical bedside guidance, safety-first decisions, and evidence-based advice. Do not claim to be a real physician or to have personal clinical experience.\n\nLANGUAGE (follow strictly)\n\n•\tReply in simple Egyptian Arabic, as a senior talks to a resident in the ward. Keep in English: medical terms, diagnoses, anatomy, drug names, doses, units, investigations (CT, MRI, CBC, audiogram), and ward words (airway, vitals, NPO, admit, discharge, follow-up, red flag, consult, OR, ICU, IV, SBAR). Everything else in Arabic.\n\n•\tExample: \"الـ airway لازم يتأمن الأول. افحص الـ oropharynx قبل أي تحليل للمريض.\"\n\n•\tUnderstand Arabic or English input, including dictated voice notes.\n\nPRIORITY ORDER (highest first)\n\n1.\tImmediate patient safety, stabilization, time-critical escalation. 2. Recognition of life-threatening ENT and non-ENT emergencies. 3. Evidence-based decisions and local emergency protocols. 4. Patient-specific findings, contraindications, available resources. 5. Scope boundaries and referral. 6. Format, language, question limits, style.\n\n•\tNever let a format rule, availability question, specialty boundary, or request for information delay airway management, hemorrhage control, emergency activation, or urgent referral. Never wait for tests, equipment, a full history, or answers before an essential action.\n\n•\tIf a non-ENT life-threatening condition is suspected, tell the resident to activate the emergency pathway now; do not manage it beyond stabilization.\n\n•\tIf instructions conflict, say so, choose the safer evidence-based action, and say what needs senior review. Never silently follow a lower-priority rule that could harm the patient.\n\n•\tIf information is missing, separate confirmed findings from assumptions, give safe immediate actions, and state the limits. Never fabricate findings, doses, guidelines, citations, results, or resource availability.\n\nSCOPE\n\n•\tHelp diagnose and manage ear, nose, throat, larynx, and head and neck conditions: history, ENT examination, ENT investigations, treatment.\n\n•\tENT symptoms can have serious non-ENT causes: do not ignore them, but do not diagnose or work up another specialty's disease. You may name a suspected non-ENT cause as a reason for referral (\"مشتبه فيه، ومحتاج تقييم عاجل\").\n\n•\tFinish the ENT history and examination first. If findings are normal or do not explain the symptoms, say so, state what was examined and what remains unassessed, and recommend the right specialty. Do not call an ENT assessment negative after a limited examination.\n\n•\tDo not recommend routine brain MRI, cardiac, endocrine, or other specialty tests for a stable patient, unless needed in a time-critical emergency or required by a local pathway. The colleague orders their own tests.\n\n•\tFor possible stroke, central vertigo, acute coronary syndrome, severe sudden headache with neurological signs, or other time-critical emergencies, tell the resident to call the emergency team now; do not wait for the ENT workup.\n\n•\tBrief non-ENT red-flag screening questions are allowed when they decide urgency. Orbital and intracranial complications of ENT infection stay in the ENT role. If unsure about scope, say so and advise the senior.\n\nCLINICAL-FIRST\n\n•\tBase the assessment on history, bedside examination, vitals, and evolution. Order a test only if it clarifies a meaningful uncertainty, assesses severity, excludes a dangerous condition, guides treatment, or decides disposition. For each test: one line on why and what it changes, labeled: مطلوب دلوقتي، أو مطلوب لو حصل كذا، أو مش لازم.\n\n•\tNever withhold a necessary test only because it is costly or unavailable: give its indication, urgency, and the referral or transfer route. A normal bedside exam does not exclude a dangerous condition when the exam has limited sensitivity.\n\n•\tJustified tests: suspected deep neck infection (imaging must not delay the airway); orbital or intracranial complications; foreign body not visible clinically; head and neck trauma with suspected fracture; penetrating ear injury with deeper signs; suspected head and neck malignancy, sinonasal tumor, or persistent neck mass; sudden or asymmetric sensorineural hearing loss (audiogram, MRI internal auditory canals); pre-op tests required by anesthesia or protocol; significant bleeding needing cross-match.\n\n•\tAn unstable patient is never made to wait for a test: secure the airway, control bleeding, stabilize, call the senior or emergency team first.\n\nRESOURCE AVAILABILITY\n\n•\tENT equipment is often missing in the ER (audiometer, tympanometer, flexible or rigid endoscopes, even a headlight or speculum). Never assume any device, drug, or consumable is available, and never build a plan that waits for a result that may never come.\n\n•\tAsk about availability only when the answer changes the next step, and never about unrelated equipment. When the case is stable, ask as question 1 of \"Now tell me\", as one grouped question with \"متاح\" or \"مش متاح\" per item. In emergencies, give safety instructions first and ask afterward.\n\n•\tEpistaxis: ask about packing and hemostatic materials (sponge pack, ribbon gauze, absorbable hemostatic, balloon, topical vasoconstrictor, tranexamic acid, cautery). Ear canal injury: ask about otoscope or microscope, suction, ear drops, wick or gauze.\n\n•\tAsk once per resource. Do not stall the reply: give safe actions and a bedside interim plan first, then two short branches \"لو متاح\" and \"لو مش متاح\". After the answer, follow only the matching branch.\n\n•\tIf unavailable, use bedside alternatives without implying equal accuracy. Hearing: Rinne, Weber, whisper test, otoscopy; for suspected sudden sensorineural loss, discuss treatment with the senior urgently and arrange audiometry at the earliest suitable facility. Larynx and voice: voice quality, stridor, drooling, neck findings; mirror laryngoscopy only if tolerated and never in a compromised airway; arrange early visualization or transfer. Nose: headlight or torch with speculum, suction, topical agents; never delay hemorrhage control for an endoscope. Fish bone or hypopharyngeal foreign body: oropharynx exam with light and tongue depressor, no blind instrumentation, early referral for endoscopy.\n\n•\tIf a missing resource makes local care unsafe, say so and tell the resident to call the senior now. Say where the test can be done and how urgent it is. Do not suggest next-day outpatient care when emergency evaluation is needed.\n\nHIGH-RISK ENT\n\n•\tButton battery (suspected contact, ingestion, aspiration): top emergency; urgent removal without delaying for imaging when suspicion is high.\n\n•\tDeep neck infection (Ludwig's, parapharyngeal, retropharyngeal): airway first (stridor, drooling, trismus); no forced oral exam if airway compromise is impending.\n\n•\tEpistaxis: advise against simultaneous bilateral septal cautery (septal perforation).\n\nEPISTAXIS AND SUSPECTED NASAL MASS\n\n•\tHemostasis, airway, and circulation come first; never delay control of severe bleeding because of a possible mass. Assess stability, severity, laterality, recurrence, trauma, anticoagulants, likely site.\n\n•\tConsider a mass without overstating it. Red flags: unilateral recurrent bleeding, unilateral obstruction, visible mass or friable tissue, adolescent male with profuse unilateral bleeding (juvenile angiofibroma), older age with risk factors, smoking or occupational exposure, facial pain or numbness, proptosis, neck node, prior head and neck cancer, bleeding out of proportion. A vascular tumor can occur outside the classic age, sex, or site.\n\n•\tIf a mass is possible and bleeding is controllable: avoid unnecessary traumatic instrumentation, blind forceful packing (including a large sponge pack pushed blindly), and blind cautery of a vascular lesion. This is clinical reasoning, not an established protocol; the final choice is a bedside decision with the senior. It must never prevent effective hemostasis in severe or ongoing bleeding.\n\n•\tSteps: stabilize airway and circulation, IV access, cross-match if significant; gentle suction under light; consider topical vasoconstrictor and tranexamic acid (verify dose); find the bleeding point under vision; if packing is needed, use the least traumatic effective method (for example a small gentle pack under vision, reassess before packing more); no biopsy in the ER; contrast CT or MRI when a vascular tumor is suspected, CT angiography or angiographic assessment for severe or persistent bleeding; if bleeding is severe, use whatever effective pack, balloon, or posterior packing is available, mention its risks, call the senior now, and discuss interventional radiology or surgery; document the concern, decisions, risks, and the discussion with the patient or family.\n\n•\tIf a mass is unlikely: sustained pressure, topical agents, cautery of an identified point, anterior packing, then posterior packing or balloon when needed. State which step fits.\n\n•\tIf a pack is placed: removal plan, who, where, and return precautions. If a mass was suspected and bleeding stops, arrange ENT follow-up with endoscopy and imaging; do not close it as simple epistaxis.\n\nEAR CANAL LACERATION FROM AN OBJECT (pencil, key, cotton bud; any age or immune status)\n\n•\tEvidence: no high-quality trial or guideline exists for minor lacerations. Stenosis is reported mainly after severe trauma. In a small pediatric polytrauma series all patients got antibiotic drops and still developed stenosis. Prevention is not standardized. Textbooks advise antibiotic and steroid drops, with a wick or gauze when the canal is too swollen. State this honestly and label the choices below as clinical reasoning.\n\n•\tAlways check: object and depth, time since injury, bleeding or clear fluid, hearing loss, vertigo, facial weakness, whether the tympanic membrane is seen, retained fragment, tetanus status, age, diabetes or immune compromise, and non-accidental injury in a child. If the membrane, ossicles, facial nerve, temporal bone, or CSF may be involved, it is more than a simple laceration: call the senior now and consider CT temporal bone.\n\n•\tSuperficial, clean, membrane intact: gentle aural toilet, keep dry, no packing, drops optional, review in a few days. Deep or circumferential, exposed cartilage or bone, marked edema: consider antibiotic and steroid drops with a wick or lubricated gauze to keep the lumen open, review in 2 to 3 days. Perforation or membrane not seen: avoid aminoglycoside drops, prefer fluoroquinolone-based drops, no irrigation. Diabetic, immunocompromised, or elderly: lower threshold for fluoroquinolone drops (cover Pseudomonas), earlier follow-up; severe pain, granulation, cranial nerve palsy, or fever suggest necrotizing otitis externa and need the senior; systemic antibiotics only for cellulitis or perichondritis, with the senior. Child: may need sedation; involve the senior early.\n\n•\tUpdate tetanus if due. Give a clear recommendation (wick, drops, or nothing) with the reason, the review date, wick removal plan, and return precautions. At follow-up check for early narrowing. Late complications: stenosis, conductive loss, cholesteatoma.\n\nMEDICATION SAFETY\n\n•\tNever state a dose from memory when uncertain; if it cannot be verified, say so and ask for confirmation from the formulary, a current reference, or the senior. Children: get the weight in kg first. Check age, allergies, pregnancy, current drugs, renal or hepatic impairment, and contraindications.\n\n•\tSeparate adult and pediatric doses; state route, frequency, duration, maximum when verified; metric units; distinguish concentration from dose. Never invent concentrations, maximums, or dilutions. Consider interactions (anticoagulants, antiplatelets).\n\n•\tPrefer drugs common in Egypt without substituting an unsuitable one. No automatic antibiotics: state the indication or say they are unnecessary. Be careful with systemic steroids, vasoconstrictors, and ototoxic drops. In unstable cases never delay resuscitation to check references. If the resident proposes an unsafe drug or dose, say so and give the safer step. Mark off-label or limited-evidence use.\n\nDISPOSITION\n\nEnd each assessment with one of: discharge (only if stable, dangers addressed, return precautions given), observation (what to monitor and what triggers escalation), admission (indication and team), urgent transfer or senior escalation (urgency and reason).\n\nIMAGES, VIDEO, PDF, AUDIO\n\n•\tImaging (CT, MRI, X-ray, endoscopy, otoscopy, audiogram, photos): state type and quality, describe findings as short bullets, give an impression, and say it is \"not a formal radiology report\"; say what a radiologist or better study should confirm. If unclear, cropped, or without side, ask for a better one. A non-ENT finding is mentioned as incidental with a referral, not interpreted in depth. Clinical photos and endoscopy images count as bedside findings.\n\n•\tVideo: describe what you see and the limits; if unreadable, ask for 3 to 5 still frames plus a short description. PDF: summarize key findings and flag abnormal values. Dictation: confirm ambiguous laterality, drug names, or numbers. Do not read or repeat names or IDs in media; remind the resident to crop them.\n\nRIGHT-TO-LEFT CONSISTENCY (follow strictly)\n\n•\tEvery line starts with an Arabic word, never an English word, digit, or symbol-only token. If the natural first word is English, put an Arabic word before it (\"افحص\" before \"otoscopy\", \"ابعت\" before \"CBC\", \"أعطي\" before a drug name). Start every line with the invisible mark U+200F.\n\n•\tBody lines end with an Arabic word or an emoji, never an English word, digit, unit, or bracket. Headings and code blocks are the only exceptions.\n\n•\tUse Arabic punctuation (\"،\" \"؛\" \"؟\"). Never put punctuation, digits, brackets, or slashes next to an English term at a line edge.\n\n•\tOne sentence per line; a sentence mixing Arabic and English never shares its line. At most two English terms in a row. Doses and units go mid-line. One drug per bullet, starting with an Arabic word (\"أعطي\", \"استخدم\").\n\n•\tFully English text (senior report, SBAR, referral) goes in a code block; Arabic comments go outside it.\n\nHEADINGS AND SPACING\n\n•\tEvery heading is \"## \" plus a BOLD title: Arabic title, space, dash, space, English term, then the symbol at the end. Example: ## خطر عاجل - URGENT 🚨. Use exactly the headings in the template.\n\n•\tTwo blank lines between sections: after a section's last line, an empty line, a line containing only U+2800 (⠀), an empty line, then the next heading. One blank line between bullet groups. Never write a paragraph; one idea per bullet, about 12 words.\n\nFORMAT\n\n•\tMarkdown. Symbols: 🚨 urgent, 🩺 impression, ✅ do now, ❓❓ questions with 🙋‍♂️, 🔍 differential, 🧪 tests, 🔄 referral, 💊 treatment, 🏥 disposition, 📚 source, 🎯 confidence, 📞 senior report. Bold only critical items and headings. Numbered steps only for ordered actions. Tables only to compare options.\n\n•\tIn emergencies put URGENT and Do now first, then questions, then the rest, each short. Template (drop sections not needed; ⠀ is the spacer line):\n\nخطر عاجل - URGENT 🚨\n\n•\tسطر عن الخطر\n\n•\tأول إجراء\n\n•\tكلم السنيور حالًا\n\n⠀\n\nالانطباع - IMPRESSION 🩺\n\n•\tسطر واحد\n\n⠀\n\nاعمل دلوقتي - DO NOW ✅\n\n1.\tأهم خطوة\n\n2.\tالخطوة اللي بعدها\n\n⠀\n\nقولي دلوقتي - NOW TELL ME ❓❓🙋‍♂️\n\nأنا مستني إجابتك على الأسئلة دي:\n\n1.\tالسؤال الأهم، أو الأجهزة المتاحة لو لازم\n\n2.\tالسؤال التاني\n\n📩 رد برقم السؤال وإجابته، مثلًا: \"1: أيوه، 2: لأ\"\n\n📩 لو معلومة مش متاحة قول \"مش متاح\"\n\n⠀\n\nThen the same pattern (heading, short bullets, spacer line) for these sections, in order: ## التشخيص التفريقي - Differential 🔍 (most likely, then most dangerous); ## الفحوصات - Tests 🧪 (needed now with why, only if, not needed, bedside alternative if unavailable); ## التحويل - Referral 🔄 (what was examined and what remains, which specialty, urgency); ## الخطة - Plan 💊 (treatment, follow-up, return precautions); ## التصرف - Disposition 🏥; ## المرجع - Source 📚 (guideline family, or \"clinical reasoning\"); ## درجة الثقة - Confidence 🎯 (high, moderate, or low, with the reason); ## بلاغ للسنيور - Senior report 📞 (one line: copy it, and phone the senior first in emergencies; then the code block).\n\nSENIOR REPORT\n\nEnd every case reply, except trivial questions, with a short English report in a code block for the resident to send to a more senior doctor: at most 6 lines, only facts given so far, missing items as \"not available\", no invented findings or vitals, no name or ID, most urgent problem first, never wait for results. Don't uses labels or prefixes before any line. Full line space between and separate lines\n\n\nURGENT: <only if a red flag exists, one line>\n\n<age, sex, setting, main problem, time course>\n\n <relevant history, comorbidities, anticoagulants, allergies>\n\n<vitals, airway status, key exam findings, working impression>\n\n<what has been done, and what I need: advice, come to see, transfer>\n\n\nQUESTIONS\n\n•\tMaximum 4 questions, most critical first, only if the answer changes management, bedside-answerable first, ENT first. Equipment availability is question 1 when the plan depends on it (not in emergencies).\n\n•\tPut them right after \"Do now\". If a critical answer is missing, still give safe actions and say the plan will be refined. Do not repeat answered questions. Skip the section if none.\n\nSAFETY SCAN (always first)\n\nAirway compromise (stridor, drooling, trismus, muffled voice, distress); active or recurrent bleeding; expanding neck swelling or hematoma; deep neck infection; epiglottitis; foreign body (airway, button battery, magnets, sharp esophageal object); orbital cellulitis or vision change; intracranial signs after sinusitis or otitis; CSF leak; facial palsy; sudden hearing loss; vertigo with neurological signs; trauma (septal hematoma, temporal bone, laryngeal, facial fractures); penetrating ear canal injury; post-operative complications. Children, diabetics, immunocompromised and anticoagulated patients lower the threshold. If a red flag is possible, start with URGENT and tell the resident to call the senior now, before any test.\n\nEVIDENCE\n\nPriority: 1. Egyptian Ministry of Health and Egyptian ENT society guidance, when they exist. 2. AAO-HNSF and other American guidance. 3. NICE, ENT UK, and other British guidance. Name the guideline family in Source. Never invent a guideline, year, citation, or statistic. If unsure an Egyptian guideline exists, say so in Arabic, say you follow American or British guidance, and advise local verification. Say clearly when advice is clinical reasoning or low-quality evidence (case reports, textbooks).\n\nCOMMANDS (the resident types one word)\n\n•\tescalate: regenerate the senior report with the latest information, in a code block, fully in English.\n\n•\trefer: short English referral message to the other specialty, in a code block: reason, ENT history and findings, what was excluded and what remains unassessed, urgency, the question. Do not include that specialty's tests.\n\n•\tplan: management plan as bullets: immediate actions, findings to monitor, tests only if justified and available (with the bedside alternative), treatment, referral, disposition, follow-up, what would change the plan, assumptions. Include a senior's opinion if given.\n\n•\tsummary: 5-line handover, one sentence per line. new: treat the next message as a new case and forget the previous patient.\n\nPRIVACY AND HONESTY\n\nNever ask for or repeat patient name, file number, phone, or ID. If you disagree with the resident's plan, say so respectfully and explain why. State uncertainty honestly; do not guess missing facts. You are decision support only, not a replacement for the senior, the clinical examination, or local protocols. End every substantial answer, after the senior report, with this line in Arabic only: _للدعم في القرار فقط،";
+const GOOGLE_CLIENT_ID = "";
+const APP_VERSION = '2.0.0';
+
+/* =================== state & storage =================== */
 const $ = id => document.getElementById(id);
-const store = {
-  get(k, d){ try{ return JSON.parse(localStorage.getItem('otolarix.'+k)) ?? d }catch{ return d } },
-  set(k, v){ localStorage.setItem('otolarix.'+k, JSON.stringify(v)) }
-};
-function toast(t){ const e=$('toast'); e.textContent=t; e.classList.add('show'); setTimeout(()=>e.classList.remove('show'),2200) }
-async function copy(t){
-  try{ await navigator.clipboard.writeText(t) }
-  catch{ const a=document.createElement('textarea'); a.value=t; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove() }
+const DBKEY = 'otolarix.db';
+let DB = loadDB();
+function loadDB(){
+  let d; try{ d = JSON.parse(localStorage.getItem(DBKEY)) }catch{}
+  d = d || {};
+  d.patients = d.patients || {};
+  d.visits = d.visits || [];
+  d.settings = Object.assign({lang:'ar', theme:'teal', doctor:'', clinic:'', clinicInfo:'', ai:'claude', onboarded:false}, d.settings||{});
+  // migrate v1 cases
+  try{ const old = JSON.parse(localStorage.getItem('otolarix.cases')||'[]');
+    old.forEach(c=>{ if(!d.visits.some(v=>v.id===c.id)) d.visits.push(Object.assign({updated:Date.now()}, c)) });
+    localStorage.removeItem('otolarix.cases') }catch{}
+  return d;
 }
+let saveTimer=null;
+function persist(){ localStorage.setItem(DBKEY, JSON.stringify(DB)); clearTimeout(saveTimer); saveTimer=setTimeout(()=>Drive.push(), 4000) }
+const S = () => DB.settings;
+const EN = () => S().lang==='en';
+const L = (ar,en) => EN()? en : ar;
+function toast(t){ const e=$('toast'); e.textContent=t; e.classList.add('show'); clearTimeout(e._t); e._t=setTimeout(()=>e.classList.remove('show'),2600) }
+async function copy(t){ try{ await navigator.clipboard.writeText(t) }catch{ const a=document.createElement('textarea'); a.value=t; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove() } }
+const esc = s => String(s??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const uid = p => p + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+const today = () => new Date().toISOString().slice(0,10);
+const fmtDate = (d, time) => { if(!d) return ''; const x=new Date(d); return x.toLocaleDateString(EN()?'en-GB':'ar-EG',{day:'numeric',month:'short',year:'numeric'}) + (time? ' · '+x.toLocaleTimeString(EN()?'en-GB':'ar-EG',{hour:'2-digit',minute:'2-digit'}) : '') };
+const visits = () => DB.visits.filter(v=>!v.deleted);
+const patients = () => Object.values(DB.patients).filter(p=>!p.deleted);
 
-/* ---------- static data ---------- */
-const CC = ['Ear pain','Hearing loss','Sudden hearing loss','Tinnitus','Ear discharge','Vertigo','Epistaxis','Nasal obstruction','Sore throat','Post-tonsillectomy bleeding','Neck swelling / mass','Hoarseness','Dysphagia','Stridor / breathing difficulty','Foreign body','Facial weakness','Trauma'];
+function applyLook(){
+  const h=document.documentElement;
+  h.lang = EN()?'en':'ar'; h.dir = EN()?'ltr':'rtl';
+  h.dataset.theme = S().theme;
+  $('langBtn').textContent = EN()? 'عربي' : 'EN';
+  document.querySelector('meta[name=theme-color]').content = getComputedStyle(h).getPropertyValue('--pri2').trim()||'#0B3C49';
+}
+function toggleLang(){ if(route().name==='visit'&&curVisit&&!isLocked()) saveVisit(); S().lang = EN()?'ar':'en'; persist(); applyLook(); render() }
+
+/* =================== static clinical data =================== */
+const CC = [['Ear pain','ألم بالأذن'],['Hearing loss','ضعف سمع'],['Sudden hearing loss','ضعف سمع مفاجئ'],['Tinnitus','طنين'],['Ear discharge','إفرازات من الأذن'],['Vertigo','دوخة'],['Epistaxis','رعاف'],['Nasal obstruction','انسداد الأنف'],['Sore throat','التهاب الحلق'],['Post-tonsillectomy bleeding','نزيف بعد اللوز'],['Neck swelling / mass','ورم بالرقبة'],['Hoarseness','بحة'],['Dysphagia','صعوبة البلع'],['Stridor / breathing difficulty','صعوبة تنفس'],['Foreign body','جسم غريب'],['Facial weakness','ضعف عصب الوجه'],['Trauma','إصابة']];
 const FLAGS = [
- ['stridor','Stridor / airway compromise'],['drool','Drooling / trismus / muffled voice'],['bleedActive','Active or recurrent bleeding'],
- ['neckSwell','Expanding neck swelling / hematoma'],['deepNeck','Suspected deep neck infection'],['battery','Button battery / magnet / sharp FB'],
- ['orbital','Orbital swelling / vision change'],['intracranial','Intracranial signs (headache, vomiting, ↓GCS, neck stiffness)'],
- ['csf','Clear fluid from nose or ear (CSF?)'],['facial','Facial nerve palsy'],['ssnhl','Sudden hearing loss (< 72 h)'],
- ['centralVert','Vertigo with neurological signs'],['septalHem','Septal hematoma'],['earPen','Penetrating ear canal injury'],
- ['postop','Post-operative complication'],['massUni','Unilateral nasal mass / unilateral bloody discharge'],
- ['neckMass','Persistent neck mass > 3 weeks (adult)'],['hoarse3w','Hoarseness > 3 weeks'],['immuno','Diabetic / immunocompromised'],
+ ['stridor','Stridor / airway compromise','صرير أو صعوبة تنفس'],['drool','Drooling / trismus / muffled voice','ريالة أو صعوبة فتح الفم أو صوت مكتوم'],['bleedActive','Active or recurrent bleeding','نزيف نشط أو متكرر'],
+ ['neckSwell','Expanding neck swelling / hematoma','تورم رقبة متزايد'],['deepNeck','Suspected deep neck infection','اشتباه عدوى عميقة بالرقبة'],['battery','Button battery / magnet / sharp FB','بطارية زر أو مغناطيس أو جسم حاد'],
+ ['orbital','Orbital swelling / vision change','تورم حول العين أو تغير بالنظر'],['intracranial','Intracranial signs (headache, vomiting, ↓GCS)','علامات داخل الجمجمة'],
+ ['csf','Clear fluid from nose or ear (CSF?)','سائل شفاف من الأنف أو الأذن'],['facial','Facial nerve palsy','شلل العصب السابع'],['ssnhl','Sudden hearing loss (< 72 h)','ضعف سمع مفاجئ أقل من 72 ساعة'],
+ ['centralVert','Vertigo with neurological signs','دوخة مع علامات عصبية'],['septalHem','Septal hematoma','تجمع دموي بالحاجز'],['earPen','Penetrating ear canal injury','إصابة نافذة بقناة الأذن'],
+ ['postop','Post-operative complication','مضاعفة بعد عملية'],['massUni','Unilateral nasal mass / bloody discharge','كتلة أو نزيف من جهة واحدة بالأنف'],
+ ['neckMass','Persistent neck mass > 3 weeks (adult)','ورم رقبة أكثر من 3 أسابيع'],['hoarse3w','Hoarseness > 3 weeks','بحة أكثر من 3 أسابيع'],['immuno','Diabetic / immunocompromised','سكري أو ضعف مناعة'],
 ];
-const EXAM = [['earR','Right ear (otoscopy)'],['earL','Left ear (otoscopy)'],['nose','Nose / anterior rhinoscopy'],['oro','Oral cavity / oropharynx'],['larynx','Larynx (voice, laryngoscopy)'],['neck','Neck'],['cn7','Facial nerve (CN VII)'],['tf','Tuning fork (Rinne / Weber)'],['neuro','Neuro / eye movements']];
+const EXAM = [['earR','Right ear (otoscopy)','الأذن اليمنى'],['earL','Left ear (otoscopy)','الأذن اليسرى'],['nose','Nose / anterior rhinoscopy','الأنف'],['oro','Oral cavity / oropharynx','الفم والحلق'],['larynx','Larynx (voice, laryngoscopy)','الحنجرة'],['neck','Neck','الرقبة'],['cn7','Facial nerve (CN VII)','العصب السابع'],['tf','Tuning fork (Rinne / Weber)','الشوكة الرنانة'],['neuro','Neuro / eye movements','الأعصاب وحركة العين']];
 const RES = ['Otoscope','Headlight','Nasal speculum','Suction','Flexible scope','Microscope','Audiometer','Tympanometer','Nasal packing / Merocel','Ribbon gauze','Balloon catheter','Absorbable hemostatic','Cautery (silver nitrate)','Topical vasoconstrictor','Tranexamic acid','Ear drops','Ear wick','CT available','Blood bank / cross-match'];
-const CMDS = ['escalate','refer','plan','summary','new'];
 
-/* ---------- build UI ---------- */
-$('ccChips').innerHTML = CC.map(c=>`<span class="chip" data-cc="${c}">${c}</span>`).join('');
-$('flags').innerHTML = FLAGS.map(([k,t])=>`<label><input type="checkbox" data-flag="${k}"> ${t}</label>`).join('');
-$('exam').innerHTML = '<div class="h">الجزء</div><div class="h">الحالة</div><div class="h">الملاحظات</div>' + EXAM.map(([k,t])=>
- `<div>${t}</div><select data-ex="${k}"><option value="">Not assessed</option><option>Normal</option><option>Abnormal</option></select><input data-exn="${k}">`).join('');
-$('res').innerHTML = RES.map(r=>`<span class="chip" data-res="${r}">${r}</span>`).join('');
-$('cmds').innerHTML = CMDS.map(c=>`<span class="chip" data-cmd="${c}">${c}</span>`).join('');
+/* Patient instruction templates [key, en title, ar title, en text, ar text] */
+const TPL = [
+ ['tons','After tonsillectomy','بعد عملية اللوز',
+`- Drink plenty of cold fluids. Start with soft, cool food, then normal food.
+- Avoid hard, spicy or very hot food for 2 weeks.
+- Take pain relief regularly as prescribed, especially before meals.
+- White patches in the throat are normal healing.
+- Avoid heavy effort and dusty places for 2 weeks.
+- RETURN IMMEDIATELY if: any bleeding from the mouth or nose, vomiting blood, high fever, or unable to drink.`,
+`- اشرب سوائل باردة كتير، وابدأ بأكل طري بارد ثم الأكل العادي.
+- ابعد عن الأكل الناشف أو الحار أو السخن جدًا لمدة أسبوعين.
+- خذ المسكن بانتظام زي ما الدكتور كتب، خصوصًا قبل الأكل.
+- البقع البيضاء في الزور طبيعية وده جزء من الالتئام.
+- ابعد عن المجهود الشديد والأماكن المتربة لمدة أسبوعين.
+- ارجع فورًا لو: أي نزيف من الفم أو الأنف، أو ترجيع دم، أو حرارة عالية، أو مش قادر تشرب.`],
+ ['epi','Nosebleed (epistaxis)','نزيف الأنف (الرعاف)',
+`- If bleeding starts: sit up, lean forward, pinch the soft part of the nose for 10–15 minutes.
+- Do not blow your nose hard or pick it for 1 week.
+- Avoid hot drinks, heavy lifting and bending for a few days.
+- Use the nasal ointment as prescribed.
+- RETURN IMMEDIATELY if bleeding lasts more than 20 minutes, is heavy, or you feel dizzy.`,
+`- لو النزيف بدأ: اقعد وميّل راسك لقدام، واضغط على الجزء الطري من الأنف 10 إلى 15 دقيقة.
+- ماتمخطش جامد وماتلعبش في الأنف لمدة أسبوع.
+- ابعد عن المشروبات السخنة وشيل الحاجات التقيلة والانحناء كام يوم.
+- استخدم المرهم زي ما الدكتور كتب.
+- ارجع فورًا لو النزيف استمر أكتر من 20 دقيقة، أو كان كتير، أو حسيت بدوخة.`],
+ ['pack','Nasal packing care','العناية بحشو الأنف',
+`- Keep the packing in place until your review appointment.
+- Breathe through your mouth; sip water often.
+- Do not blow your nose or remove the packing yourself.
+- RETURN IMMEDIATELY if the packing falls back into the throat, heavy bleeding, fever or severe pain.`,
+`- سيب الحشو مكانه لحد ميعاد المتابعة.
+- اتنفس من بقك واشرب مية على فترات.
+- ماتمخطش وماتشيلش الحشو بنفسك.
+- ارجع فورًا لو الحشو نزل في الزور، أو نزيف شديد، أو حرارة، أو ألم شديد.`],
+ ['oe','Outer ear infection','التهاب الأذن الخارجية',
+`- Keep the ear completely dry: cotton with Vaseline in the ear while showering; no swimming.
+- Use the ear drops as prescribed: lie on your side for 3 minutes after the drops.
+- Do not use cotton buds or put anything in the ear.
+- RETURN if pain gets worse, swelling spreads to the face, fever, or no improvement in 3 days.`,
+`- خلي الأذن ناشفة تمامًا: قطنة بفازلين في الأذن وقت الاستحمام، وممنوع السباحة.
+- استخدم النقط زي ما الدكتور كتب، ونام على جنبك 3 دقايق بعدها.
+- ماتستخدمش أعواد القطن ومتدخلش أي حاجة في الأذن.
+- ارجع لو الألم زاد، أو الورم وصل للوش، أو حرارة، أو مفيش تحسن خلال 3 أيام.`],
+ ['aom','Middle ear infection','التهاب الأذن الوسطى',
+`- Give the medicines exactly as prescribed and complete the course.
+- Use fever / pain relief as prescribed.
+- Keep the ear dry if there is discharge.
+- RETURN IMMEDIATELY if: swelling or redness behind the ear, severe headache, stiff neck, facial weakness, or very sleepy child.`,
+`- خد الأدوية بالظبط زي ما الدكتور كتب وكمّل الكورس.
+- استخدم خافض الحرارة والمسكن زي ما هو مكتوب.
+- خلي الأذن ناشفة لو فيه إفرازات.
+- ارجع فورًا لو: ورم أو احمرار ورا الأذن، صداع شديد، تيبس في الرقبة، ضعف في الوش، أو الطفل نعسان جدًا.`],
+ ['ssnhl','Sudden hearing loss','ضعف السمع المفاجئ',
+`- This is urgent: take the treatment exactly as prescribed, starting today.
+- Do the hearing test (audiogram) on the date given.
+- Avoid loud noise.
+- RETURN IMMEDIATELY if: severe dizziness, facial weakness, severe headache, or weakness in arms or legs.`,
+`- الحالة دي مستعجلة: خد العلاج بالظبط زي ما الدكتور كتب من النهارده.
+- اعمل رسم السمع في الميعاد المحدد.
+- ابعد عن الأصوات العالية.
+- ارجع فورًا لو: دوخة شديدة، ضعف في الوش، صداع شديد، أو ضعف في الإيد أو الرجل.`],
+ ['fb','After foreign body removal','بعد إزالة جسم غريب',
+`- Mild discomfort for 1–2 days is normal.
+- Keep small objects and button batteries away from children.
+- RETURN IMMEDIATELY if: bleeding, fever, discharge, difficulty breathing or swallowing.`,
+`- شوية إزعاج يوم أو اتنين طبيعي.
+- خلي الحاجات الصغيرة وبطاريات الزرار بعيد عن الأطفال.
+- ارجع فورًا لو: نزيف، حرارة، إفرازات، صعوبة في التنفس أو البلع.`],
+ ['gen','General','تعليمات عامة',
+`- Take the medicines exactly as prescribed.
+- Come to your follow-up appointment.
+- RETURN IMMEDIATELY if you feel worse, have high fever, bleeding, or difficulty breathing or swallowing.`,
+`- خد الأدوية بالظبط زي ما الدكتور كتب.
+- احضر ميعاد المتابعة.
+- ارجع فورًا لو حالتك ساءت، أو حرارة عالية، أو نزيف، أو صعوبة في التنفس أو البلع.`],
+];
 
-document.querySelectorAll('[data-cc]').forEach(ch=>ch.onclick=()=>{
-  const v=ch.dataset.cc, cur=$('cc').value.trim();
-  $('cc').value = cur ? (cur.includes(v)?cur:cur+', '+v) : v; update();
-});
-document.querySelectorAll('[data-res]').forEach(ch=>ch.onclick=()=>{
-  if(ch.classList.contains('on')){ch.classList.remove('on');ch.classList.add('no')}
-  else if(ch.classList.contains('no')){ch.classList.remove('no')}
-  else ch.classList.add('on'); update();
-});
-document.querySelectorAll('[data-cmd]').forEach(ch=>ch.onclick=async()=>{ await copy(ch.dataset.cmd); toast('تم نسخ: '+ch.dataset.cmd) });
-
-/* ---------- state ---------- */
-const FIELDS=['cc','ccDur','ccSide','age','sex','weight','preg','setting','airway','hr','bp','spo2','rr','temp','hpi','pmh','psh','meds','anticoag','allergy','inv','aiReply','final'];
-let current = newCase();
-function newCase(){ return {id:'c'+Date.now(), created:new Date().toISOString(), signed:null} }
-function collect(){
-  const c = {...current};
-  FIELDS.forEach(f=>c[f]=$(f).value.trim());
-  c.flags = [...document.querySelectorAll('[data-flag]:checked')].map(e=>e.dataset.flag);
-  c.exam = {}; EXAM.forEach(([k])=>c.exam[k]={s:document.querySelector(`[data-ex="${k}"]`).value, n:document.querySelector(`[data-exn="${k}"]`).value.trim()});
-  c.aud = {}; document.querySelectorAll('[data-a]').forEach(i=>{ if(i.value!=='') c.aud[i.dataset.a]=+i.value });
-  c.res = {}; document.querySelectorAll('[data-res]').forEach(ch=>{ if(ch.classList.contains('on')) c.res[ch.dataset.res]='available'; else if(ch.classList.contains('no')) c.res[ch.dataset.res]='not available' });
-  return c;
-}
-function load(c){
-  current = c;
-  FIELDS.forEach(f=>$(f).value=c[f]||'');
-  document.querySelectorAll('[data-flag]').forEach(e=>e.checked=(c.flags||[]).includes(e.dataset.flag));
-  EXAM.forEach(([k])=>{ const x=(c.exam||{})[k]||{}; document.querySelector(`[data-ex="${k}"]`).value=x.s||''; document.querySelector(`[data-exn="${k}"]`).value=x.n||'' });
-  document.querySelectorAll('[data-a]').forEach(i=>i.value=(c.aud||{})[i.dataset.a]??'');
-  document.querySelectorAll('[data-res]').forEach(ch=>{ ch.classList.remove('on','no'); const v=(c.res||{})[ch.dataset.res]; if(v==='available')ch.classList.add('on'); if(v==='not available')ch.classList.add('no') });
-  update();
-}
-
-/* ---------- audiogram ---------- */
-function audio(c){
-  // 4-frequency PTA (500,1k,2k,4k) when all present, else 3-frequency
-  const f=p=>{const v=[0,1,2,3].map(i=>c.aud[p+i]); if(v.every(x=>x!==undefined))return Math.round(v.reduce((a,b)=>a+b)/4); if(v.slice(0,3).every(x=>x!==undefined))return Math.round((v[0]+v[1]+v[2])/3); return null};
+/* =================== clinical logic =================== */
+function parseAge(s){ if(!s)return null; const m=String(s).match(/([\d.]+)\s*(m|mo|month|شهر)?/i); if(!m)return null; return m[2]? +m[1]/12 : +m[1] }
+function ageOf(v){ if(v.age) return v.age; const p=DB.patients[v.patient]; if(p&&p.birthYear){ return String(new Date().getFullYear()-(+p.birthYear)) } return '' }
+function audio(v){
+  const a=v.aud||{};
+  const f=p=>{const x=[0,1,2,3].map(i=>a[p+i]); if(x.every(y=>y!==undefined))return Math.round(x.reduce((s,y)=>s+y)/4); if(x.slice(0,3).every(y=>y!==undefined))return Math.round((x[0]+x[1]+x[2])/3); return null};
   const r={RA:f('RA'),RB:f('RB'),LA:f('LA'),LB:f('LB')};
   r.abgR = r.RA!=null&&r.RB!=null ? r.RA-r.RB : null;
   r.abgL = r.LA!=null&&r.LB!=null ? r.LA-r.LB : null;
-  r.asym = r.RA!=null&&r.LA!=null && (()=>{let n=0;for(let i=0;i<4;i++){const a=c.aud['RB'+i]??c.aud['RA'+i],b=c.aud['LB'+i]??c.aud['LA'+i];if(a!=null&&b!=null&&Math.abs(a-b)>=15)n++}return n>=2})();
-  // possible SNHL: worse ear PTA > 25 with ABG < 10
+  let n=0; for(let i=0;i<4;i++){const x=a['RB'+i]??a['RA'+i],y=a['LB'+i]??a['LA'+i]; if(x!=null&&y!=null&&Math.abs(x-y)>=15)n++}
+  r.asym = n>=2;
   r.snhl = ['R','L'].filter(s=>{const ac=r[s+'A'],abg=r['abg'+s];return ac!=null&&ac>25&&abg!=null&&abg<10});
   return r;
 }
-function grade(x){ if(x==null)return''; return x<=25?'normal':x<=40?'mild':x<=55?'moderate':x<=70?'mod-severe':x<=90?'severe':'profound' }
-
-/* ---------- rule engine ---------- */
-function rules(c){
-  const u=[], w=[], f=new Set(c.flags), cc=(c.cc+' '+c.hpi).toLowerCase(), a=audio(c);
-  const ageY = parseAge(c.age);
-  if(f.has('stridor')||/^(Stridor|Respiratory distress)$/.test(c.airway)) u.push('Airway compromise: أمّن الـ airway، كلم السنيور والتخدير حالًا، ولا تؤخر بسبب أشعة.');
-  if(f.has('drool')||/drool|muffled/i.test(c.airway)) u.push('Drooling أو muffled voice: اشتباه epiglottitis أو deep neck infection. لا تفحص الحلق بالقوة.');
-  if(+c.spo2 && +c.spo2<92) u.push(`SpO2 ${c.spo2}%: أكسجين وتقييم الـ airway فورًا.`);
-  if((f.has('bleedActive')||/bleed/i.test(cc)) && /tonsil/i.test(cc+' '+c.psh)) u.push('Post-tonsillectomy bleeding: IV access، cross-match، NPO، وكلم السنيور حالًا.');
-  else if(f.has('bleedActive')) u.push('نزيف نشط: hemostasis، IV access، وقيّم الـ circulation.');
-  if(f.has('battery')) u.push('Button battery / magnet / sharp FB: طوارئ قصوى، إزالة عاجلة.');
-  if(f.has('neckSwell')||f.has('deepNeck')) u.push('Neck swelling / deep neck infection: الـ airway أولًا، وكلم السنيور.');
-  if(f.has('orbital')) u.push('Orbital signs: اشتباه orbital complication. كلم السنيور، وفحص عيون عاجل.');
-  if(f.has('intracranial')) u.push('Intracranial signs: طوارئ. فعّل مسار الطوارئ وكلم السنيور.');
-  if(f.has('centralVert')) u.push('Vertigo مع علامات عصبية: اشتباه stroke. فعّل مسار الـ stroke حالًا.');
-  if(f.has('septalHem')) u.push('Septal hematoma: تصريف عاجل لتجنب الـ abscess وانهيار الحاجز.');
-  if(f.has('ssnhl')||/sudden hearing/i.test(cc)) u.push('Sudden hearing loss: تُعتبر SSNHL حتى يثبت العكس. ناقش الكورتيزون مع السنيور اليوم، واعمل audiogram في أقرب وقت.');
-  if(+c.temp>=38.5 && (f.has('deepNeck')||f.has('orbital'))) u.push(`حرارة ${c.temp}°C مع عدوى معقدة: sepsis screen.`);
-  if(+c.hr && ageY!=null && ageY>=12 && +c.hr>120) w.push(`Tachycardia (${c.hr}): راجع الـ circulation والنزيف.`);
-  const sbp = parseInt((c.bp||'').split('/')[0]); if(sbp && sbp<90) u.push(`Hypotension (SBP ${sbp}): resuscitation، وكلم السنيور حالًا.`);
-  if(f.has('csf')) w.push('سائل شفاف: اشتباه CSF leak. لا packing ولا irrigation، وبلّغ السنيور.');
-  if(f.has('facial')) w.push('Facial palsy: حدّد درجتها (House-Brackmann)، وافحص الأذن. لو السبب otitis تكون urgent.');
-  if(f.has('earPen')) w.push('Penetrating ear injury: افحص الـ TM والدوار والـ facial nerve. لا irrigation.');
-  if(f.has('massUni')) w.push('Unilateral nasal mass أو نزيف: لا packing أعمى بالقوة، ولا biopsy في الطوارئ. يحتاج endoscopy وimaging.');
-  if(f.has('neckMass')) w.push('Persistent adult neck mass: اشتباه malignancy حتى يثبت العكس. مسار two-week wait.');
-  if(f.has('hoarse3w')) w.push('Hoarseness > 3 weeks: يلزم laryngoscopy، خصوصًا مع التدخين.');
-  if(f.has('immuno')) w.push('DM أو immunocompromised: عتبة أقل للتصعيد. فكّر في necrotizing otitis externa لو فيه ألم أذن شديد.');
-  if(c.anticoag==='Yes') w.push('Anticoagulants: راجع الـ INR أو الجرعة قبل أي إجراء.');
-  if(a.snhl.length) w.push(`Audiogram: نمط sensorineural في ${a.snhl.join(' و ')}. لو حديث، اعتبره SSNHL.`);
-  if(a.asym) w.push('Asymmetric SNHL (≥15 dB في ترددين): يحتاج MRI IAC حسب الإرشادات.');
-  if(ageY!=null && ageY<16 && !c.weight) w.push('طفل بدون وزن: جرعات الأدوية معلّقة حتى تسجيل الوزن بالـ kg.');
-  if(c.preg==='Pregnant') w.push('حامل: راجع أمان كل دواء قبل وصفه.');
+const grade = x => x==null?'':x<=25?'normal':x<=40?'mild':x<=55?'moderate':x<=70?'mod-severe':x<=90?'severe':'profound';
+function rules(v){
+  const u=[], w=[], f=new Set(v.flags||[]), cc=((v.cc||'')+' '+(v.hpi||'')).toLowerCase(), a=audio(v), ageY=parseAge(ageOf(v)), aw=v.airway||'';
+  if(f.has('stridor')||/^(Stridor|Respiratory distress)$/.test(aw)) u.push(L('Airway compromise: أمّن الـ airway وكلم السنيور والتخدير حالًا، ولا تؤخر بسبب أشعة.','Airway compromise: secure the airway, call senior and anaesthesia now; do not delay for imaging.'));
+  if(f.has('drool')||/drool|muffled/i.test(aw)) u.push(L('Drooling أو muffled voice: اشتباه epiglottitis أو deep neck infection. لا تفحص الحلق بالقوة.','Drooling / muffled voice: suspect epiglottitis or deep neck infection. No forced throat exam.'));
+  if(+v.spo2 && +v.spo2<92) u.push(L(`SpO2 ${v.spo2}%: أكسجين وتقييم الـ airway فورًا.`,`SpO2 ${v.spo2}%: oxygen and airway assessment now.`));
+  if((f.has('bleedActive')||/bleed/i.test(cc)) && /tonsil/i.test(cc+' '+(v.psh||''))) u.push(L('Post-tonsillectomy bleeding: IV access و cross-match و NPO، وكلم السنيور حالًا.','Post-tonsillectomy bleeding: IV access, cross-match, NPO, call senior now.'));
+  else if(f.has('bleedActive')) u.push(L('نزيف نشط: hemostasis و IV access، وقيّم الـ circulation.','Active bleeding: hemostasis, IV access, assess circulation.'));
+  if(f.has('battery')) u.push(L('Button battery أو magnet أو sharp FB: طوارئ قصوى، إزالة عاجلة.','Button battery / magnet / sharp FB: top emergency, urgent removal.'));
+  if(f.has('neckSwell')||f.has('deepNeck')) u.push(L('Neck swelling أو deep neck infection: الـ airway أولًا، وكلم السنيور.','Neck swelling / deep neck infection: airway first, call senior.'));
+  if(f.has('orbital')) u.push(L('Orbital signs: اشتباه orbital complication. كلم السنيور واطلب فحص عيون عاجل.','Orbital signs: suspect orbital complication. Call senior, urgent ophthalmology.'));
+  if(f.has('intracranial')) u.push(L('Intracranial signs: طوارئ. فعّل مسار الطوارئ وكلم السنيور.','Intracranial signs: emergency. Activate emergency pathway, call senior.'));
+  if(f.has('centralVert')) u.push(L('Vertigo مع علامات عصبية: اشتباه stroke. فعّل مسار الـ stroke حالًا.','Vertigo with neurological signs: suspect stroke. Activate stroke pathway now.'));
+  if(f.has('septalHem')) u.push(L('Septal hematoma: تصريف عاجل لتجنب الـ abscess.','Septal hematoma: urgent drainage to prevent abscess.'));
+  if(f.has('ssnhl')||/sudden hearing/i.test(cc)) u.push(L('Sudden hearing loss: اعتبرها SSNHL حتى يثبت العكس. ناقش الكورتيزون مع السنيور اليوم، واعمل audiogram بأسرع وقت.','Sudden hearing loss: treat as SSNHL until proven otherwise. Discuss steroids with senior today; audiogram ASAP.'));
+  const sbp=parseInt((v.bp||'').split('/')[0]); if(sbp && sbp<90) u.push(L(`Hypotension (SBP ${sbp}): resuscitation، وكلم السنيور حالًا.`,`Hypotension (SBP ${sbp}): resuscitate, call senior now.`));
+  if(+v.temp>=38.5 && (f.has('deepNeck')||f.has('orbital'))) u.push(L(`حرارة ${v.temp}°C مع عدوى معقدة: sepsis screen.`,`Temp ${v.temp}°C with complicated infection: sepsis screen.`));
+  if(+v.hr && ageY!=null && ageY>=12 && +v.hr>120) w.push(L(`Tachycardia (${v.hr}): راجع الـ circulation والنزيف.`,`Tachycardia (${v.hr}): reassess circulation and bleeding.`));
+  if(f.has('csf')) w.push(L('سائل شفاف: اشتباه CSF leak. لا packing ولا irrigation، وبلّغ السنيور.','Clear fluid: suspect CSF leak. No packing or irrigation; inform senior.'));
+  if(f.has('facial')) w.push(L('Facial palsy: حدّد الدرجة (House-Brackmann) وافحص الأذن.','Facial palsy: grade it (House-Brackmann) and examine the ear.'));
+  if(f.has('earPen')) w.push(L('Penetrating ear injury: افحص الـ TM والدوخة والعصب السابع. لا irrigation.','Penetrating ear injury: check TM, vertigo, facial nerve. No irrigation.'));
+  if(f.has('massUni')) w.push(L('كتلة أو نزيف من جهة واحدة: لا packing أعمى بالقوة ولا biopsy في الطوارئ.','Unilateral nasal mass / bleeding: no blind forceful packing, no ER biopsy.'));
+  if(f.has('neckMass')) w.push(L('ورم رقبة مستمر: اشتباه malignancy حتى يثبت العكس.','Persistent adult neck mass: malignancy until proven otherwise.'));
+  if(f.has('hoarse3w')) w.push(L('بحة أكثر من 3 أسابيع: يلزم laryngoscopy.','Hoarseness > 3 weeks: laryngoscopy needed.'));
+  if(f.has('immuno')) w.push(L('سكري أو ضعف مناعة: عتبة أقل للتصعيد، وفكّر في necrotizing otitis externa.','Diabetic / immunocompromised: lower escalation threshold; consider necrotizing otitis externa.'));
+  if(v.anticoag==='Yes') w.push(L('Anticoagulants: راجع الـ INR أو الجرعة قبل أي إجراء.','Anticoagulants: check INR / dosing before any procedure.'));
+  if(a.snhl.length) w.push(L(`Audiogram: نمط sensorineural في ${a.snhl.join(' و ')}.`,`Audiogram: sensorineural pattern in ${a.snhl.join(' & ')}.`));
+  if(a.asym) w.push(L('Asymmetric SNHL: يحتاج MRI IAC حسب الإرشادات.','Asymmetric SNHL: MRI IAC per guidelines.'));
+  if(ageY!=null && ageY<16 && !v.weight) w.push(L('طفل بدون وزن: جرعات الأدوية معلّقة حتى تسجيل الوزن.','Child without weight: drug doses on hold until weight is recorded.'));
+  if(v.preg==='Pregnant') w.push(L('حامل: راجع أمان كل دواء.','Pregnant: check every drug for safety.'));
   return {u,w,a};
 }
-function parseAge(s){ if(!s)return null; const m=s.match(/([\d.]+)\s*(m|mo|month|شهر)?/i); if(!m)return null; return m[2]? +m[1]/12 : +m[1] }
-
-function missing(c){
+function missing(v){
   const m=[];
-  if(!c.cc) m.push('Chief complaint (مطلوب)');
-  if(!c.ccDur) m.push('Duration');
-  if(!c.age) m.push('Age');
-  if(parseAge(c.age)!=null && parseAge(c.age)<16 && !c.weight) m.push('Weight (طفل)');
-  if(!c.airway) m.push('Airway status');
-  if(!c.hr && !c.bp && !c.spo2) m.push('Vitals');
-  if(!c.allergy) m.push('Allergies');
-  if(!c.anticoag) m.push('Anticoagulants');
-  if(!Object.values(c.exam).some(x=>x.s)) m.push('Examination');
+  if(!v.cc) m.push(L('الشكوى الأساسية','Chief complaint'));
+  if(!v.ccDur) m.push(L('المدة','Duration'));
+  if(!ageOf(v)) m.push(L('العمر','Age'));
+  const ag=parseAge(ageOf(v)); if(ag!=null&&ag<16&&!v.weight) m.push(L('الوزن (طفل)','Weight (child)'));
+  if(!v.airway) m.push('Airway');
+  if(!v.hr&&!v.bp&&!v.spo2) m.push(L('العلامات الحيوية','Vitals'));
+  if(!v.allergy) m.push(L('الحساسية','Allergies'));
+  if(!v.anticoag) m.push('Anticoagulants');
+  if(!Object.values(v.exam||{}).some(x=>x.s)) m.push(L('الفحص','Examination'));
   return m;
 }
+/* message sent to the AI: hidden prompt + de-identified case (no name / phone) */
+function caseText(v){
+  const r=rules(v), a=r.a, out=[], val=(x,d='not available')=>x||d;
+  out.push(`CHIEF COMPLAINT: ${val(v.cc)}${v.ccDur?' — duration '+v.ccDur:''}${v.ccSide?' — side: '+v.ccSide:''}`);
+  out.push(`Patient: age ${val(ageOf(v))}, sex ${val(v.sex||(DB.patients[v.patient]||{}).sex)}, weight ${v.weight?v.weight+' kg':'not available'}${v.preg&&v.preg!=='N/A'?', '+v.preg:''}. Setting: ${v.setting||'ER'}.`);
+  out.push(`Airway: ${val(v.airway)}. Vitals: HR ${val(v.hr,'—')}, BP ${val(v.bp,'—')}, SpO2 ${val(v.spo2,'—')}%, RR ${val(v.rr,'—')}, T ${val(v.temp,'—')}°C.`);
+  const fl=FLAGS.filter(([k])=>(v.flags||[]).includes(k)).map(x=>x[1]);
+  out.push(`Red flags reported: ${fl.length?fl.join('; '):'none reported (not a confirmed absence)'}.`);
+  if(v.hpi) out.push(`HPI: ${v.hpi}`);
+  out.push(`PMH: ${val(v.pmh)}. Prior ENT surgery: ${val(v.psh)}. Medications: ${val(v.meds)}. Anticoagulants: ${val(v.anticoag)}. Allergies: ${val(v.allergy)}.`);
+  out.push('Examination:'); EXAM.forEach(([k,t])=>{const x=(v.exam||{})[k]||{}; out.push(`- ${t}: ${x.s||'not assessed'}${x.n?' — '+x.n:''}`)});
+  if(Object.keys(v.aud||{}).length) out.push(`Audiogram: R AC PTA ${a.RA??'—'} dB (${grade(a.RA)}), R BC ${a.RB??'—'}, ABG ${a.abgR??'—'}; L AC PTA ${a.LA??'—'} dB (${grade(a.LA)}), L BC ${a.LB??'—'}, ABG ${a.abgL??'—'}.${a.asym?' Asymmetry ≥15 dB at ≥2 frequencies.':''}`);
+  const rs=Object.entries(v.res||{});
+  out.push(rs.length? `Resources: ${rs.map(([k,x])=>k+' '+x).join('; ')}. Other equipment: not specified.` : 'Resources: not specified (ask only if it changes the next step).');
+  if(v.inv) out.push(`Investigations/results: ${v.inv}`);
+  const ms=missing(v); if(ms.length) out.push(`Missing / not available: ${ms.join(', ')}.`);
+  return out.join('\n');
+}
+function aiMessage(v){
+  const lang = EN()? '\n\nREPLY LANGUAGE: The doctor uses English. Reply fully in clear English (same structure and headings, English only). This overrides the Egyptian Arabic language rule.' : '';
+  return `${DEFAULT_PROMPT}\n\n════════ NEW CASE ════════\nFollow the instructions above for this de-identified case.${lang}\n\n${caseText(v)}`;
+}
+const AI_URL = {claude:'https://claude.ai/new', chatgpt:'https://chatgpt.com/'};
 
-/* ---------- message ---------- */
-function message(c){
-  const r=rules(c), a=r.a, L=[];
-  const val=(x,d='not available')=>x||d;
-  L.push('NEW CASE (de-identified, entered via Otolarix)');
-  L.push('');
-  L.push(`CHIEF COMPLAINT: ${val(c.cc)}${c.ccDur?' — duration '+c.ccDur:''}${c.ccSide?' — side: '+c.ccSide:''}`);
-  L.push(`Patient: age ${val(c.age)}, sex ${val(c.sex)}, weight ${c.weight?c.weight+' kg':'not available'}${c.preg&&c.preg!=='N/A'?', '+c.preg:''}. Setting: ${c.setting}.`);
-  L.push(`Airway: ${val(c.airway)}. Vitals: HR ${val(c.hr,'—')}, BP ${val(c.bp,'—')}, SpO2 ${val(c.spo2,'—')}%, RR ${val(c.rr,'—')}, T ${val(c.temp,'—')}°C.`);
-  const fl=FLAGS.filter(([k])=>c.flags.includes(k)).map(x=>x[1]);
-  L.push(`Red flags reported: ${fl.length?fl.join('; '):'none reported (not a confirmed absence)'}.`);
-  if(c.hpi) L.push(`HPI: ${c.hpi}`);
-  L.push(`PMH: ${val(c.pmh)}. Prior ENT surgery: ${val(c.psh)}. Medications: ${val(c.meds)}. Anticoagulants: ${val(c.anticoag)}. Allergies: ${val(c.allergy)}.`);
-  const ex=EXAM.map(([k,t])=>{const x=c.exam[k];return `- ${t}: ${x.s||'not assessed'}${x.n?' — '+x.n:''}`});
-  L.push('Examination:'); L.push(...ex);
-  if(Object.keys(c.aud).length){
-    L.push(`Audiogram: R AC PTA ${a.RA??'—'} dB (${grade(a.RA)}), R BC ${a.RB??'—'}, ABG ${a.abgR??'—'}; L AC PTA ${a.LA??'—'} dB (${grade(a.LA)}), L BC ${a.LB??'—'}, ABG ${a.abgL??'—'}.${a.asym?' Asymmetry ≥15 dB at ≥2 frequencies.':''}`);
-  }
-  const rs=Object.entries(c.res);
-  if(rs.length) L.push(`Resources: ${rs.map(([k,v])=>k+' '+v).join('; ')}. Other equipment: not specified.`);
-  else L.push('Resources: not specified (ask only if it changes the next step).');
-  if(c.inv) L.push(`Investigations/results: ${c.inv}`);
-  const miss=missing(c); if(miss.length) L.push(`Missing / not available: ${miss.join(', ')}.`);
-  if(r.u.length||r.w.length) L.push(`Local rule-engine alerts: ${[...r.u,...r.w].length} flagged (please verify and address urgent items first).`);
-  return L.join('\n');
+/* =================== router & shell =================== */
+const NAV = [
+  ['home','🏠',()=>L('الرئيسية','Home')],
+  ['patients','👥',()=>L('المرضى','Patients')],
+  ['new','➕',()=>L('حالة جديدة','New case')],
+  ['agenda','📅',()=>L('المواعيد','Agenda')],
+  ['more','☰',()=>L('المزيد','More')],
+];
+function go(r){ location.hash = r }
+window.addEventListener('hashchange', render);
+let curVisit=null;
+function route(){ const h=location.hash.slice(1)||'home'; const [name,arg]=h.split('/'); return {name,arg:decodeURIComponent(arg||'')} }
+function shell(active){
+  const items=NAV.filter(n=>n[0]!=='more').concat([['guide','📖',()=>L('طريقة الاستخدام','How to use')],['settings','⚙️',()=>L('الإعدادات','Settings')]]);
+  $('tnav').innerHTML = items.map(([k,i,t])=>`<a href="#${k}" class="${active===k?'on':''}">${i} ${t()}</a>`).join('');
+  $('bnav').innerHTML = NAV.map(([k,i,t])=>`<a href="#${k}" class="${k==='new'?'new ':''}${active===k||(k==='more'&&['settings','guide','more'].includes(active))?'on':''}"><span>${i}</span>${t()}</a>`).join('');
+}
+function render(){
+  if(editTimer){ clearTimeout(editTimer); editTimer=null; if($('form')&&curVisit&&!isLocked()) saveVisit() } // flush pending auto-save before leaving
+  applyLook();
+  const {name,arg}=route();
+  // drop abandoned empty drafts (no complaint, no patient)
+  const before=DB.visits.length;
+  DB.visits=DB.visits.filter(v=>v.deleted||v.cc||v.patient||v.signed||(name==='visit'&&v.id===arg));
+  if(DB.visits.length!==before) localStorage.setItem(DBKEY,JSON.stringify(DB));
+  const views={home:vHome,patients:vPatients,patient:vPatient,new:vNew,visit:vVisit,agenda:vAgenda,guide:vGuide,settings:vSettings,more:vMore,rx:vRx};
+  (views[name]||vHome)(arg);
+  shell(name==='visit'?'new':name==='patient'?'patients':name==='rx'?'patients':name);
+  window.scrollTo(0,0);
+  if(!S().onboarded) onboarding();
 }
 
-/* ---------- render ---------- */
-function update(){
-  const c=collect(), r=rules(c), a=r.a;
-  // audiogram cells
-  const set=(id,v)=>$(id).textContent = v==null?'—':v;
-  set('ptaR',a.RA); set('ptaRB',a.RB); set('ptaL',a.LA); set('ptaLB',a.LB); set('abgR',a.abgR); set('abgL',a.abgL);
-  $('audNote').textContent = (a.RA!=null||a.LA!=null) ? `Right: ${grade(a.RA)||'—'} · Left: ${grade(a.LA)||'—'}${a.asym?' · ⚠ asymmetric':''}` : 'PTA = متوسط 500 و1000 و2000 و4000 (أو الثلاثة الأولى). ABG = AC − BC.';
-  let h='';
-  if(r.u.length) h+=`<div class="alert red"><b>URGENT 🚨</b><ul>${r.u.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
-  if(r.w.length) h+=`<div class="alert amber"><b>تنبيه</b><ul>${r.w.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
-  if(!h) h='<div class="alert ok">لا توجد تنبيهات من البيانات المُدخلة. هذا لا يعني أن الحالة آمنة.</div>';
-  $('ruleOut').innerHTML=h;
-  const n=r.u.length+r.w.length; $('mAlerts').textContent='🚨 '+n; $('mAlerts').classList.toggle('hot',r.u.length>0);
-  const m=missing(c);
-  $('missing').innerHTML = m.length ? `<ul>${m.map(x=>`<li>${x}</li>`).join('')}</ul>` : '<span class="muted">البيانات الأساسية مكتملة.</span>';
-  $('preview').textContent = message(c);
-  const ok=!!c.cc; ['btnClaude','btnGpt','btnCopy'].forEach(b=>$(b).disabled=!ok);
-  $('status').textContent = current.signed ? 'معتمدة في '+new Date(current.signed).toLocaleString() : '';
+/* =================== HOME / DASHBOARD =================== */
+function followUps(){
+  return visits().filter(v=>v.rx&&v.rx.followUp&&!v.fuDone).map(v=>({v,date:v.rx.followUp})).sort((a,b)=>a.date.localeCompare(b.date));
 }
-document.addEventListener('input', e=>{ if(e.target.closest('#view-case')) update() });
-document.addEventListener('change', e=>{ if(e.target.closest('#view-case')) update() });
-
-/* ---------- actions ---------- */
-async function send(url){
-  const c=collect(); if(!c.cc){ toast('اكتب الشكوى الأساسية أولًا'); $('cc').focus(); return }
-  await copy(message(c)); saveCase(false);
-  if(url) window.open(url,'_blank','noopener');
-  toast('تم النسخ. الصق الرسالة بـ Ctrl+V داخل الـ Project');
+function vHome(){
+  const vs=visits(), t=today(), wk=Date.now()-7*864e5;
+  const todayN=vs.filter(v=>(v.created||'').slice(0,10)===t).length;
+  const drafts=vs.filter(v=>!v.signed).length;
+  const urgent=vs.filter(v=>new Date(v.created)>wk && rules(v).u.length).length;
+  const fu=followUps(), due=fu.filter(x=>x.date<=t).length;
+  const durs=vs.filter(v=>v.signed&&v.started).map(v=>(new Date(v.signed)-new Date(v.started))/6e4).filter(x=>x>0&&x<600).slice(-30);
+  const avg=durs.length? Math.round(durs.reduce((a,b)=>a+b,0)/durs.length) : '—';
+  const hr=new Date().getHours(), greet = hr<12? L('صباح الخير','Good morning') : L('مساء الخير','Good evening');
+  const recent=[...vs].sort((a,b)=>(b.updated||0)-(a.updated||0)).slice(0,6);
+  $('app').innerHTML = `
+  <div class="hero">
+    <div><h1>${greet}${S().doctor? '، '+esc(S().doctor):''} 👋</h1><p>${fmtDate(new Date())} · ${todayN} ${L('حالة اليوم','cases today')}</p></div>
+    <a class="btn" href="#new">➕ ${L('حالة جديدة','New case')}</a>
+  </div>
+  ${installBanner()}
+  <div class="tiles">
+    <a class="tile" href="#new"><div class="ti c1">🩺</div><b>${L('حالة جديدة','New case')}</b></a>
+    <a class="tile" href="#patients"><div class="ti c2">👥</div><b>${L('المرضى','Patients')}</b></a>
+    <a class="tile" href="#agenda">${due?`<span class="badge">${due}</span>`:''}<div class="ti c3">📅</div><b>${L('المواعيد','Agenda')}</b></a>
+    <a class="tile" href="#guide"><div class="ti c4">📖</div><b>${L('طريقة الاستخدام','How to use')}</b></a>
+    <a class="tile" href="#settings"><div class="ti c5">🎨</div><b>${L('الإعدادات والألوان','Settings & themes')}</b></a>
+    <a class="tile" onclick="openAI()"><div class="ti c6">🤖</div><b>${S().ai==='chatgpt'?'ChatGPT':'Claude'}</b></a>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="muted">${L('حالات اليوم','Cases today')}</div><div class="v">${todayN}</div></div>
+    <div class="stat amber"><div class="muted">${L('مسودات غير معتمدة','Unsigned drafts')}</div><div class="v">${drafts}</div></div>
+    <div class="stat red"><div class="muted">${L('حالات عاجلة هذا الأسبوع','Urgent this week')}</div><div class="v">${urgent}</div></div>
+    <div class="stat ${due?'red':'ok'}"><div class="muted">${L('متابعات مستحقة','Follow-ups due')}</div><div class="v">${due}</div></div>
+    <div class="stat ok"><div class="muted">${L('متوسط الوقت حتى الاعتماد','Avg time to sign')}</div><div class="v">${avg}<small style="font-size:13px"> ${L('دقيقة','min')}</small></div></div>
+    <div class="stat"><div class="muted">${L('إجمالي المرضى','Total patients')}</div><div class="v">${patients().length}</div></div>
+  </div>
+  <div class="cols" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+    <div class="card"><h2><span class="ic">🕘</span>${L('آخر الحالات','Recent cases')}</h2>
+      <div class="list">${recent.length? recent.map(visitItem).join('') : `<p class="muted">${L('لا توجد حالات بعد. ابدأ بحالة جديدة.','No cases yet. Start a new case.')}</p>`}</div></div>
+    <div class="card"><h2><span class="ic">📅</span>${L('المتابعات القادمة','Upcoming follow-ups')}</h2>
+      <div class="list">${fu.slice(0,6).map(fuItem).join('') || `<p class="muted">${L('لا توجد متابعات.','No follow-ups.')}</p>`}</div></div>
+  </div>
+  <p class="muted" style="text-align:center">Otolarix v${APP_VERSION} · ${L('للدعم في القرار فقط، وليس بديلًا عن الحكم السريري','Decision support only, not a substitute for clinical judgement')}</p>`;
 }
-$('btnClaude').onclick=()=>send('https://claude.ai/projects');
-$('btnGpt').onclick=()=>send('https://chatgpt.com/');
-$('btnCopy').onclick=()=>send(null);
-
-function saveCase(showToast=true){
-  const c=collect(); current=c;
-  const all=store.get('cases',[]); const i=all.findIndex(x=>x.id===c.id);
-  if(i>=0) all[i]=c; else all.unshift(c);
-  store.set('cases',all); if(showToast) toast('تم الحفظ'); renderCases();
+function pName(code){ const p=DB.patients[code]; return p? (p.name||code) : L('بدون مريض','No patient') }
+function visitItem(v){
+  const urg=rules(v).u.length;
+  return `<div class="item" onclick="go('visit/${v.id}')"><div class="av">${esc((pName(v.patient)||'?').trim().charAt(0))}</div>
+  <div class="grow"><div class="ell"><b>${esc(pName(v.patient))}</b> · ${esc(v.cc||'—')}</div><div class="muted">${fmtDate(v.created,true)}</div></div>
+  ${urg?'<span class="tag urgent">URGENT</span>':''} ${v.signed?`<span class="tag signed">${L('معتمدة','Signed')}</span>`:`<span class="tag draft">${L('مسودة','Draft')}</span>`}</div>`;
 }
-$('btnSave').onclick=()=>saveCase();
-$('btnSign').onclick=()=>{
-  if(!$('final').value.trim()){ toast('اكتب القرار النهائي قبل الاعتماد'); $('final').focus(); return }
-  current.signed=new Date().toISOString(); saveCase(false); update(); toast('تم الاعتماد');
-};
-$('btnPrint').onclick=()=>window.print();
-$('btnNew').onclick=()=>{ if(confirm('بدء حالة جديدة؟ الحالة الحالية ستُحفظ.')){ saveCase(false); load(newCase()); window.scrollTo(0,0) } };
-
-/* ---------- cases list ---------- */
-function renderCases(){
-  const all=store.get('cases',[]);
-  $('caseRows').innerHTML = all.length ? all.map(c=>{
-    const urgent=rules(c).u.length;
-    return `<tr><td>${new Date(c.created).toLocaleString()}</td><td>${esc(c.cc||'—')}</td><td>${esc(c.age||'—')}</td>
-    <td>${c.signed?'<span class="tag signed">معتمدة</span>':'<span class="tag">مسودة</span>'} ${urgent?'<span class="tag urgent">URGENT</span>':''}</td>
-    <td><button class="btn sec" data-open="${c.id}">فتح</button> <button class="btn sec" data-del="${c.id}">حذف</button></td></tr>`}).join('')
-    : '<tr><td colspan="5" class="muted">لا توجد حالات محفوظة.</td></tr>';
-  document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{ load(store.get('cases',[]).find(x=>x.id===b.dataset.open)); show('case') });
-  document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{ if(confirm('حذف هذه الحالة نهائيًا من هذا الجهاز؟')){ store.set('cases',store.get('cases',[]).filter(x=>x.id!==b.dataset.del)); renderCases() } });
+function fuItem({v,date}){
+  const t=today(), cls=date<t?'urgent':date===t?'draft':'';
+  return `<div class="item" onclick="go('patient/${v.patient||''}')"><div class="av">📅</div><div class="grow"><div class="ell"><b>${esc(pName(v.patient))}</b> · ${esc(v.rx.diagnosis||v.cc||'')}</div><div class="muted">${fmtDate(date)}</div></div>
+  <span class="tag ${cls}">${date<t?L('متأخر','Overdue'):date===t?L('اليوم','Today'):L('قادم','Upcoming')}</span></div>`;
 }
-function esc(s){ return String(s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch])) }
-$('btnExport').onclick=()=>{
-  const b=new Blob([JSON.stringify(store.get('cases',[]),null,2)],{type:'application/json'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='otolarix-cases.json'; a.click();
-};
-$('importFile').onchange=e=>{
-  const f=e.target.files[0]; if(!f)return; const r=new FileReader();
-  r.onload=()=>{ try{ const inc=JSON.parse(r.result); const all=store.get('cases',[]); inc.forEach(c=>{ if(!all.some(x=>x.id===c.id)) all.push(c) }); store.set('cases',all); renderCases(); toast('تم الاستيراد') }catch{ toast('ملف غير صالح') } };
-  r.readAsText(f);
-};
+function openAI(){ window.open(AI_URL[S().ai]||AI_URL.claude,'_blank','noopener') }
 
-/* ---------- prompt ---------- */
-$('promptBox').value = store.get('prompt', DEFAULT_PROMPT);
-$('promptBox').oninput=()=>store.set('prompt',$('promptBox').value);
-$('btnCopyPrompt').onclick=async()=>{ await copy($('promptBox').value); toast('تم نسخ الـ Prompt') };
-$('btnResetPrompt').onclick=()=>{ if(confirm('استرجاع الـ Prompt الأصلي؟')){ $('promptBox').value=DEFAULT_PROMPT; store.set('prompt',DEFAULT_PROMPT) } };
-
-/* ---------- nav ---------- */
-function show(v){
-  ['case','cases','setup'].forEach(x=>$('view-'+x).classList.toggle('hidden',x!==v));
-  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
-  if(v==='cases') renderCases();
-}
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.view));
-
-// mobile bar
-$('mAlerts').onclick=()=>$('sidePanel').scrollIntoView({behavior:'smooth'});
-$('mClaude').onclick=()=>send('https://claude.ai/projects');
-$('mGpt').onclick=()=>send('https://chatgpt.com/');
-// install (PWA)
+/* =================== install (automatic) =================== */
 let deferredInstall=null;
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;$('btnInstall').classList.remove('hidden')});
-$('btnInstall').onclick=async()=>{ if(!deferredInstall)return; deferredInstall.prompt(); await deferredInstall.userChoice; deferredInstall=null; $('btnInstall').classList.add('hidden') };
+const isStandalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent);
+window.addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); deferredInstall=e; if(route().name==='home') render() });
+function installBanner(){
+  if(isStandalone()) return '';
+  if(!deferredInstall && !isIOS()) return '';
+  return `<div class="alert info noprint row"><span style="font-size:22px">📲</span><div class="grow"><b>${L('ثبّت Otolarix على جهازك','Install Otolarix on your device')}</b><div class="muted">${L('بضغطة واحدة يصبح تطبيقًا على الشاشة الرئيسية ويعمل بدون إنترنت.','One tap: it becomes an app on your home screen and works offline.')}</div></div><button class="btn" onclick="doInstall()">${L('تثبيت','Install')}</button></div>`;
+}
+async function doInstall(){
+  if(deferredInstall){ deferredInstall.prompt(); await deferredInstall.userChoice; deferredInstall=null; render(); return }
+  if(isIOS()) modal(`<h2>📲 ${L('التثبيت على iPhone','Install on iPhone')}</h2>
+   <ol style="line-height:2"><li>${L('اضغط زر المشاركة','Tap the Share button')} <b>⬆️</b> ${L('أسفل Safari','at the bottom of Safari')}</li>
+   <li>${L('اختر','Choose')} <b>${L('إضافة إلى الشاشة الرئيسية','Add to Home Screen')}</b> ➕</li><li>${L('اضغط','Tap')} <b>${L('إضافة','Add')}</b></li></ol>
+   <button class="btn" onclick="closeModal()">${L('تمام','OK')}</button>`);
+}
+function modal(html){ $('modal').innerHTML=`<div class="modal" onclick="if(event.target===this)closeModal()"><div class="box">${html}</div></div>` }
+function closeModal(){ $('modal').innerHTML='' }
+
+/* =================== onboarding (first run) =================== */
+function onboarding(){
+  if($('modal').innerHTML) return;
+  modal(`<div style="text-align:center"><div style="font-size:48px">👂</div><h2 style="margin:6px 0">${L('أهلًا بك في Otolarix','Welcome to Otolarix')}</h2>
+  <p class="muted">${L('إعداد سريع لمرة واحدة فقط. لا يحتاج أي خبرة تقنية.','A one-time quick setup. No technical knowledge needed.')}</p></div>
+  <label>${L('اللغة','Language')}</label><div class="row" style="margin-bottom:10px"><button class="btn ${EN()?'sec':''}" onclick="S().lang='ar';applyLook();closeModal();onboarding()">العربية</button><button class="btn ${EN()?'':'sec'}" onclick="S().lang='en';applyLook();closeModal();onboarding()">English</button></div>
+  <label>${L('اسمك (يظهر على الروشتة)','Your name (shown on prescriptions)')}</label><input id="obDoc" value="${esc(S().doctor)}" placeholder="${L('د. ...','Dr ...')}">
+  <label style="margin-top:8px">${L('اسم العيادة أو المستشفى','Clinic or hospital name')}</label><input id="obClinic" value="${esc(S().clinic)}">
+  <label style="margin-top:8px">${L('أي ذكاء اصطناعي تستخدم؟ (المجاني يكفي)','Which AI do you use? (free plan is enough)')}</label>
+  <div class="row"><button class="btn ${S().ai==='claude'?'claude':'ghost'}" onclick="S().ai='claude';closeModal();onboarding()">Claude</button><button class="btn ${S().ai==='chatgpt'?'dark':'ghost'}" onclick="S().ai='chatgpt';closeModal();onboarding()">ChatGPT</button></div>
+  <label style="margin-top:10px">${L('اختر لونك المفضل','Pick your colour theme')}</label>${swatches()}
+  <div class="alert amber" style="margin-top:12px">🔒 ${L('بيانات المرضى تبقى على جهازك (وعلى Google Drive لو سجلت الدخول). اسم المريض لا يُرسل للذكاء الاصطناعي أبدًا.','Patient data stays on your device (and your Google Drive if you sign in). The patient name is never sent to the AI.')}</div>
+  <button class="btn" style="width:100%;justify-content:center;margin-top:8px" onclick="finishOnboarding()">${L('ابدأ ✔','Start ✔')}</button>`);
+}
+function finishOnboarding(){ S().doctor=$('obDoc').value.trim(); S().clinic=$('obClinic').value.trim(); S().onboarded=true; persist(); closeModal(); render() }
+const THEMES=[['teal','#0B7C89'],['ocean','#2563EB'],['violet','#7C3AED'],['forest','#15803D'],['rose','#DB2777'],['dark','#0F172A']];
+function swatches(){ return `<div class="sw">${THEMES.map(([k,c])=>`<button title="${k}" class="${S().theme===k?'on':''}" style="background:${c}" onclick="setTheme('${k}')"></button>`).join('')}</div>` }
+function setTheme(k){ S().theme=k; persist(); applyLook(); document.querySelectorAll('.sw button').forEach(b=>b.classList.toggle('on',b.title===k)) }
+
+/* =================== PATIENTS =================== */
+function vPatients(){
+  $('app').innerHTML = `<h1 class="page">👥 ${L('المرضى','Patients')}</h1>
+  <div class="card"><div class="row"><input id="pq" placeholder="🔎 ${L('ابحث بالاسم أو الكود أو التليفون','Search by name, code or phone')}" oninput="drawPatients()" style="flex:1"><button class="btn" onclick="newPatientModal()">➕ ${L('مريض جديد','New patient')}</button></div></div>
+  <div class="card"><div class="list" id="plist"></div></div>`;
+  drawPatients();
+}
+function drawPatients(){
+  const q=($('pq').value||'').toLowerCase();
+  const ps=patients().filter(p=>!q||[p.name,p.code,p.phone].some(x=>(x||'').toLowerCase().includes(q)));
+  $('plist').innerHTML = ps.length? ps.sort((a,b)=>(b.updated||0)-(a.updated||0)).map(p=>{
+    const vs=visits().filter(v=>v.patient===p.code), last=vs.sort((a,b)=>b.created.localeCompare(a.created))[0];
+    const nf=vs.filter(v=>v.rx&&v.rx.followUp&&!v.fuDone).map(v=>v.rx.followUp).sort()[0];
+    return `<div class="item" onclick="go('patient/${p.code}')"><div class="av">${esc((p.name||p.code).charAt(0))}</div>
+    <div class="grow"><div class="ell"><b>${esc(p.name||p.code)}</b> <span class="muted">· ${p.code}${p.birthYear?' · '+(new Date().getFullYear()-p.birthYear)+L(' سنة',' y'):''}</span></div>
+    <div class="muted ell">${vs.length} ${L('زيارة','visits')}${last?' · '+L('آخر زيارة','last')+': '+fmtDate(last.created)+' · '+esc(last.cc||''):''}</div></div>
+    ${nf?`<span class="tag ${nf<=today()?'urgent':''}">📅 ${fmtDate(nf)}</span>`:''}</div>`}).join('')
+   : `<p class="muted">${L('لا يوجد مرضى بعد.','No patients yet.')}</p>`;
+}
+function nextCode(){ let n=patients().length+1, c; do{ c='P-'+String(n).padStart(4,'0'); n++ }while(DB.patients[c]); return c }
+function newPatientModal(after){
+  modal(`<h2>➕ ${L('مريض جديد','New patient')}</h2>
+  <div class="alert info">🔒 ${L('الاسم والتليفون يُحفظان عندك فقط ولا يُرسلان للذكاء الاصطناعي.','Name and phone are stored only for you and are never sent to the AI.')}</div>
+  <div class="grid"><div class="wide" style="grid-column:1/-1"><label>${L('الاسم','Name')}</label><input id="npName"></div>
+  <div><label>${L('سنة الميلاد','Birth year')}</label><input id="npYear" type="number" min="1900" max="${new Date().getFullYear()}"></div>
+  <div><label>${L('الجنس','Sex')}</label><select id="npSex"><option value="">—</option><option>Male</option><option>Female</option></select></div>
+  <div style="grid-column:1/-1"><label>${L('التليفون (اختياري)','Phone (optional)')}</label><input id="npPhone" type="tel"></div></div>
+  <div class="row" style="margin-top:12px"><button class="btn" onclick="savePatient(${after?`'${after}'`:''})">${L('حفظ','Save')}</button><button class="btn ghost" onclick="closeModal()">${L('إلغاء','Cancel')}</button></div>`);
+  setTimeout(()=>{ const e=$('npName'); if(e) e.focus() },50);
+}
+function savePatient(after){
+  const name=$('npName').value.trim(); if(!name){ toast(L('اكتب اسم المريض','Enter the patient name')); return }
+  const code=nextCode();
+  DB.patients[code]={code,name,birthYear:$('npYear').value||'',sex:$('npSex').value,phone:$('npPhone').value.trim(),created:new Date().toISOString(),updated:Date.now()};
+  persist(); closeModal();
+  if(after==='visit'){ curVisit.patient=code; curVisit.sex=curVisit.sex||DB.patients[code].sex; saveVisit(); vVisit(curVisit.id) }
+  else go('patient/'+code);
+}
+function vPatient(code){
+  const p=DB.patients[code];
+  if(!p){ $('app').innerHTML=`<div class="card">${L('المريض غير موجود','Patient not found')}</div>`; return }
+  const vs=visits().filter(v=>v.patient===code).sort((a,b)=>b.created.localeCompare(a.created));
+  const events=[];
+  vs.forEach(v=>{
+    events.push({d:v.created, html:`<div class="ev ${rules(v).u.length?'urg':''}"><div class="card" style="margin:0">
+      <div class="row"><b>${fmtDate(v.created,true)}</b>${rules(v).u.length?'<span class="tag urgent">URGENT</span>':''}${v.signed?`<span class="tag signed">${L('معتمدة','Signed')}</span>`:`<span class="tag draft">${L('مسودة','Draft')}</span>`}</div>
+      <div style="margin:6px 0"><b>${L('الشكوى','Complaint')}:</b> ${esc(v.cc||'—')}${v.rx&&v.rx.diagnosis?`<br><b>${L('التشخيص','Diagnosis')}:</b> ${esc(v.rx.diagnosis)}`:''}${v.rx&&v.rx.meds&&v.rx.meds.length?`<br><b>${L('العلاج','Treatment')}:</b> ${esc(v.rx.meds.map(m=>m.name).filter(Boolean).join('، '))}`:''}</div>
+      <div class="row"><button class="btn sm sec" onclick="go('visit/${v.id}')">${L('فتح','Open')}</button>${v.signed?`<button class="btn sm sec" onclick="go('rx/${v.id}')">🧾 ${L('الروشتة','Prescription')}</button>`:''}</div></div></div>`});
+    if(v.rx&&v.rx.followUp) events.push({d:v.rx.followUp+'T09:00', html:`<div class="ev fu"><div class="card" style="margin:0"><b>📅 ${L('متابعة','Follow-up')} · ${fmtDate(v.rx.followUp)}</b> ${v.fuDone?`<span class="tag signed">${L('تمت','Done')}</span>`:v.rx.followUp<today()?`<span class="tag urgent">${L('متأخرة','Overdue')}</span>`:''}
+      <div class="muted">${esc(v.rx.diagnosis||v.cc||'')}</div></div></div>`});
+  });
+  events.sort((a,b)=>b.d.localeCompare(a.d));
+  $('app').innerHTML = `<div class="hero"><div class="av" style="width:56px;height:56px;font-size:24px;background:rgba(255,255,255,.2);color:#fff">${esc(p.name.charAt(0))}</div>
+   <div><h1>${esc(p.name)}</h1><p>${p.code}${p.birthYear?' · '+(new Date().getFullYear()-p.birthYear)+L(' سنة',' years'):''}${p.sex?' · '+p.sex:''}${p.phone?' · '+esc(p.phone):''}</p></div>
+   <button class="btn" onclick="startVisit('${code}')">🩺 ${L('زيارة جديدة','New visit')}</button></div>
+  <div class="card"><h2><span class="ic">🕰️</span>${L('التاريخ المرضي (الخط الزمني)','History timeline')}</h2>
+  ${events.length?`<div class="tl">${events.map(e=>e.html).join('')}</div>`:`<p class="muted">${L('لا توجد زيارات بعد.','No visits yet.')}</p>`}</div>
+  <div class="row noprint"><button class="btn red sm" onclick="delPatient('${code}')">🗑 ${L('حذف المريض','Delete patient')}</button></div>`;
+}
+function delPatient(code){ if(!confirm(L('حذف المريض وكل زياراته من هذا الجهاز؟','Delete this patient and all visits?')))return; DB.patients[code].deleted=true; DB.patients[code].updated=Date.now(); DB.visits.forEach(v=>{ if(v.patient===code){v.deleted=true;v.updated=Date.now()} }); persist(); go('patients') }
+
+/* =================== AGENDA / TIME =================== */
+function vAgenda(){
+  const t=today(), fu=followUps(), wk=new Date(Date.now()+7*864e5).toISOString().slice(0,10);
+  const grp=[[L('متأخرة','Overdue'),fu.filter(x=>x.date<t),'red'],[L('اليوم','Today'),fu.filter(x=>x.date===t),'amber'],[L('خلال 7 أيام','Next 7 days'),fu.filter(x=>x.date>t&&x.date<=wk),''],[L('لاحقًا','Later'),fu.filter(x=>x.date>wk),'']];
+  const todays=visits().filter(v=>(v.created||'').slice(0,10)===t).sort((a,b)=>a.created.localeCompare(b.created));
+  const mins=todays.filter(v=>v.signed&&v.started).map(v=>Math.round((new Date(v.signed)-new Date(v.started))/6e4));
+  $('app').innerHTML = `<h1 class="page">📅 ${L('المواعيد وإدارة الوقت','Agenda & time')}</h1>
+  <div class="stats"><div class="stat"><div class="muted">${L('حالات اليوم','Cases today')}</div><div class="v">${todays.length}</div></div>
+  <div class="stat ok"><div class="muted">${L('وقت الحالات المعتمدة اليوم','Time on signed cases today')}</div><div class="v">${mins.reduce((a,b)=>a+b,0)} <small style="font-size:13px">${L('دقيقة','min')}</small></div></div>
+  <div class="stat red"><div class="muted">${L('متابعات متأخرة','Overdue follow-ups')}</div><div class="v">${grp[0][1].length}</div></div></div>
+  <div class="cols" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr))">
+  <div>${grp.map(([title,items,c])=>`<div class="card"><h2><span class="ic">${c==='red'?'⏰':c==='amber'?'📌':'🗓️'}</span>${title} <span class="tag">${items.length}</span></h2>
+    <div class="list">${items.map(x=>`<div class="item"><div class="grow" onclick="go('patient/${x.v.patient}')"><b>${esc(pName(x.v.patient))}</b> · ${esc(x.v.rx.diagnosis||x.v.cc||'')}<div class="muted">${fmtDate(x.date)}${(DB.patients[x.v.patient]||{}).phone?' · 📞 '+esc(DB.patients[x.v.patient].phone):''}</div></div>
+    <button class="btn sm sec" onclick="fuDone('${x.v.id}')">✔ ${L('تمت','Done')}</button></div>`).join('')||`<p class="muted">—</p>`}</div></div>`).join('')}</div>
+  <div class="card"><h2><span class="ic">⏱️</span>${L('حالات اليوم بالترتيب','Today\'s cases')}</h2>
+   <div class="list">${todays.map(v=>{const m=v.signed&&v.started?Math.round((new Date(v.signed)-new Date(v.started))/6e4):null;
+     return `<div class="item" onclick="go('visit/${v.id}')"><div class="av">${new Date(v.created).toLocaleTimeString(EN()?'en-GB':'ar-EG',{hour:'2-digit',minute:'2-digit'})}</div><div class="grow"><b>${esc(pName(v.patient))}</b> · ${esc(v.cc||'—')}</div>${m!=null?`<span class="tag signed">${m} ${L('د','min')}</span>`:`<span class="tag draft">${L('جارية','In progress')}</span>`}</div>`}).join('')||`<p class="muted">${L('لا توجد حالات اليوم.','No cases today.')}</p>`}</div></div></div>`;
+}
+function fuDone(id){ const v=DB.visits.find(x=>x.id===id); v.fuDone=true; v.updated=Date.now(); persist(); vAgenda(); toast(L('تم','Done')) }
+
+/* =================== VISIT (case) =================== */
+function vNew(){ startVisit('') }
+function startVisit(code){
+  const v={id:uid('v'),patient:code||'',created:new Date().toISOString(),started:new Date().toISOString(),updated:Date.now(),setting:'ER',flags:[],exam:{},aud:{},res:{},rx:{meds:[]}};
+  if(code&&DB.patients[code]) v.sex=DB.patients[code].sex;
+  DB.visits.unshift(v); persist();
+  location.replace('#visit/'+v.id);
+}
+const F=['cc','ccDur','ccSide','age','sex','weight','preg','setting','airway','hr','bp','spo2','rr','temp','hpi','pmh','psh','meds','anticoag','allergy','inv','aiReply'];
+function vVisit(id){
+  const v=DB.visits.find(x=>x.id===id&&!x.deleted);
+  if(!v){ $('app').innerHTML=`<div class="card">${L('الحالة غير موجودة','Case not found')}</div>`; return }
+  curVisit=v; v.rx=v.rx||{meds:[]};
+  const locked=!!v.signed && !v.editing;
+  const opt=(arr,val)=>arr.map(o=>{const [k,t]=Array.isArray(o)?o:[o,o];return `<option value="${esc(k)}" ${val===k?'selected':''}>${esc(t)}</option>`}).join('');
+  const pOpts=`<option value="">${L('— اختر مريض —','— choose patient —')}</option>`+patients().map(p=>`<option value="${p.code}" ${v.patient===p.code?'selected':''}>${esc(p.name)} (${p.code})</option>`).join('');
+  $('app').innerHTML = `
+  <div class="row noprint" style="margin-bottom:10px"><h1 class="page" style="margin:0">🩺 ${L('حالة','Case')} · ${fmtDate(v.created,true)}</h1>
+   ${v.signed?`<span class="tag signed">✔ ${L('معتمدة','Signed')} ${fmtDate(v.signed,true)}</span>`:`<span class="tag draft">${L('مسودة','Draft')}</span>`}
+   ${(v.amendments||[]).length?`<span class="tag">${L('تعديلات','Amendments')}: ${v.amendments.length}</span>`:''}</div>
+  ${locked?`<div class="alert info row"><span class="grow">🔒 ${L('الحالة معتمدة. أي تعديل يُسجَّل كـ amendment.','This case is signed. Any change is recorded as an amendment.')}</span><button class="btn sm" onclick="amend()">✏️ ${L('تعديل','Amend')}</button><button class="btn sm sec" onclick="go('rx/${v.id}')">🧾 ${L('الروشتة','Prescription')}</button></div>`:''}
+  <div class="cols"><section id="form">
+  <div class="card"><h2><span class="ic">👤</span>${L('المريض','Patient')}</h2>
+    <div class="row"><select id="patSel" style="flex:1">${pOpts}</select><button class="btn sec" onclick="newPatientModal('visit')">➕ ${L('مريض جديد','New patient')}</button></div>
+    <p class="muted">🔒 ${L('اسم المريض لا يُرسل للذكاء الاصطناعي. يُرسل العمر والجنس فقط.','The patient name is never sent to the AI; only age and sex.')}</p></div>
+
+  <div class="card"><h2><span class="ic">🗣️</span>1. ${L('الشكوى الأساسية','Chief complaint')} <span class="req">*</span></h2>
+    <div class="chips">${CC.map(([e,a])=>`<span class="chip" data-cc="${esc(e)}">${EN()?e:a}</span>`).join('')}</div>
+    <div class="grid"><div class="wide" style="grid-column:span 2"><label>${L('الشكوى بكلمات المريض','Complaint in the patient\'s words')} <span class="req">*</span></label><input id="cc"></div>
+    <div><label>${L('المدة','Duration')}</label><input id="ccDur" placeholder="3 days / 2 hours"></div>
+    <div><label>${L('الجانب','Side')}</label><select id="ccSide">${opt([['','—'],'Right','Left','Bilateral','Midline / N/A'],v.ccSide)}</select></div></div></div>
+
+  <div class="card"><h2><span class="ic">📋</span>2. ${L('بيانات الزيارة','Visit details')}</h2><div class="grid">
+    <div><label>${L('العمر','Age')}</label><input id="age" placeholder="${esc(ageOf({patient:v.patient})||'e.g. 6 / 18 m')}"></div>
+    <div><label>${L('الجنس','Sex')}</label><select id="sex">${opt([['','—'],'Male','Female'],v.sex)}</select></div>
+    <div><label>${L('الوزن (kg)','Weight (kg)')}</label><input id="weight" type="number" min="0" step="0.1"></div>
+    <div><label>${L('الحمل','Pregnancy')}</label><select id="preg">${opt([['','—'],'Not pregnant','Pregnant','N/A'],v.preg)}</select></div>
+    <div><label>${L('المكان','Setting')}</label><select id="setting">${opt(['ER','Clinic','Ward','Pre-op','Post-op'],v.setting)}</select></div></div></div>
+
+  <div class="card"><h2><span class="ic">❤️</span>3. ${L('العلامات الحيوية والـ Airway','Vitals & airway')}</h2><div class="grid">
+    <div><label>Airway</label><select id="airway">${opt([['','—'],'Patent, no distress','Stridor','Drooling / unable to swallow saliva','Muffled voice','Respiratory distress'],v.airway)}</select></div>
+    <div><label>HR</label><input id="hr" type="number"></div><div><label>BP</label><input id="bp" placeholder="120/80"></div>
+    <div><label>SpO2 %</label><input id="spo2" type="number"></div><div><label>RR</label><input id="rr" type="number"></div><div><label>Temp °C</label><input id="temp" type="number" step="0.1"></div></div></div>
+
+  <div class="card"><h2><span class="ic">🚩</span>4. ${L('العلامات الحمراء','Red flags')}</h2>
+    <p class="muted">${L('علّم الموجود فقط. غير المعلَّم يُرسل كـ "not reported" وليس "absent".','Tick only what is present. Unticked is sent as "not reported", not "absent".')}</p>
+    <div class="checks">${FLAGS.map(([k,e,a])=>`<label><input type="checkbox" data-flag="${k}" ${(v.flags||[]).includes(k)?'checked':''}> ${EN()?e:a}</label>`).join('')}</div></div>
+
+  <div class="card"><h2><span class="ic">📝</span>5. ${L('القصة المرضية','History')}</h2>
+    <label>${L('تفاصيل الشكوى (البداية، التطور، أعراض مصاحبة، علاج سابق)','Details (onset, course, associated symptoms, prior treatment)')}</label><textarea id="hpi"></textarea>
+    <div class="grid" style="margin-top:8px"><div><label>${L('أمراض مزمنة','Comorbidities')}</label><input id="pmh" placeholder="DM, HTN..."></div>
+    <div><label>${L('عمليات أنف وأذن سابقة','Prior ENT surgery')}</label><input id="psh"></div><div><label>${L('أدوية حالية','Current medications')}</label><input id="meds"></div>
+    <div><label>Anticoagulants</label><select id="anticoag">${opt([['','—'],'None','Yes'],v.anticoag)}</select></div><div><label>${L('الحساسية','Allergies')}</label><input id="allergy" placeholder="NKDA"></div></div></div>
+
+  <div class="card"><h2><span class="ic">🔦</span>6. ${L('الفحص','Examination')}</h2><div class="exam">
+    <div class="h">${L('الجزء','Area')}</div><div class="h">${L('الحالة','Status')}</div><div class="h">${L('ملاحظات','Notes')}</div>
+    ${EXAM.map(([k,e,a])=>{const x=(v.exam||{})[k]||{};return `<div>${EN()?e:a}</div><select data-ex="${k}">${opt([['','Not assessed'],'Normal','Abnormal'],x.s||'')}</select><input data-exn="${k}" value="${esc(x.n||'')}">`}).join('')}</div></div>
+
+  <div class="card"><h2><span class="ic">🎧</span>7. ${L('تخطيط السمع (اختياري)','Audiogram (optional)')} <span class="en">dB HL</span></h2><div class="aud-wrap"><table class="aud">
+    <tr><th></th><th>500</th><th>1000</th><th>2000</th><th>4000</th><th>PTA</th><th>ABG</th></tr>
+    ${[['RA','Right AC'],['RB','Right BC'],['LA','Left AC'],['LB','Left BC']].map(([p,t],i)=>`<tr><th>${t}</th>${[0,1,2,3].map(j=>`<td><input type="number" data-a="${p}${j}" value="${(v.aud||{})[p+j]??''}"></td>`).join('')}<td id="pta${p}">—</td>${i%2===0?`<td id="abg${p[0]}" rowspan="2">—</td>`:''}</tr>`).join('')}
+    </table></div><p class="muted" id="audNote"></p></div>
+
+  <div class="card"><h2><span class="ic">🧰</span>8. ${L('الإمكانيات المتاحة','Available resources')}</h2>
+    <p class="muted">${L('ضغطة = متاح، ضغطتين = مش متاح، الثالثة = غير محدد.','Tap once = available, twice = not available, third = unspecified.')}</p>
+    <div class="chips">${RES.map(r=>{const s=(v.res||{})[r];return `<span class="chip ${s==='available'?'on':s==='not available'?'no':''}" data-res="${esc(r)}">${r}</span>`}).join('')}</div></div>
+
+  <div class="card"><h2><span class="ic">🧪</span>9. ${L('فحوصات ونتائج','Investigations')}</h2><textarea id="inv"></textarea></div>
+
+  <div class="card" id="aiCard"><h2><span class="ic">🤖</span>10. ${L('رد الذكاء الاصطناعي','AI reply')}</h2>
+    <label>${L('الصق رد الذكاء الاصطناعي هنا (اختياري، للحفظ في السجل)','Paste the AI reply here (optional, kept in the record)')}</label><textarea id="aiReply" style="min-height:120px"></textarea></div>
+
+  <div class="card"><h2><span class="ic">💊</span>11. ${L('القرار والروشتة','Decision & prescription')}</h2>
+    <div class="grid"><div style="grid-column:1/-1"><label>${L('التشخيص النهائي','Final diagnosis')} <span class="req">*</span></label><input id="rxDx" value="${esc(v.rx.diagnosis||'')}"></div></div>
+    <label style="margin-top:8px">${L('الأدوية','Medications')}</label>
+    <table class="meds" style="width:100%"><thead><tr class="muted"><th>${L('الدواء','Drug')}</th><th>${L('الجرعة','Dose')}</th><th>${L('عدد المرات','Frequency')}</th><th>${L('المدة','Duration')}</th><th></th></tr></thead><tbody id="medRows"></tbody></table>
+    <button class="btn sm sec" style="margin-top:6px" onclick="addMed()">➕ ${L('إضافة دواء','Add drug')}</button>
+    <p class="muted">⚠️ ${L('راجع كل جرعة بنفسك؛ التطبيق لا يتحقق من الجرعات.','Verify every dose yourself; the app does not check doses.')}</p>
+    <div class="grid" style="margin-top:6px"><div><label>${L('قالب تعليمات المريض','Patient instruction template')}</label><select id="tplSel"><option value="">—</option>${TPL.map(t=>`<option value="${t[0]}">${EN()?t[1]:t[2]}</option>`).join('')}</select></div>
+    <div><label>${L('لغة تعليمات المريض','Patient language')}</label><select id="rxLang">${opt([['ar','العربية'],['en','English']],v.rx.lang||'ar')}</select></div>
+    <div><label>${L('ميعاد المتابعة','Follow-up date')}</label><input id="rxFu" type="date" value="${v.rx.followUp||''}"></div></div>
+    <label style="margin-top:8px">${L('تعليمات المريض','Patient instructions')}</label><textarea id="rxInstr" style="min-height:120px">${esc(v.rx.instructions||'')}</textarea>
+    <button class="btn sm sec" style="margin-top:6px" onclick="askInstr()">🤖 ${L('اطلب التعليمات من الذكاء الاصطناعي','Ask the AI to write the instructions')}</button>
+    <label style="margin-top:8px">${L('ملاحظات الطبيب (لا تُطبع للمريض)','Doctor notes (not printed for the patient)')}</label><textarea id="rxNotes">${esc(v.rx.notes||'')}</textarea>
+  </div>
+  </section>
+
+  <aside class="side noprint">
+    <div class="card"><h2><span class="ic">🚨</span>${L('فحص الأمان','Safety check')}</h2><div id="ruleOut"></div><p class="muted">${L('قواعد ثابتة على جهازك، مستقلة عن الذكاء الاصطناعي.','Fixed rules on your device, independent of the AI.')}</p></div>
+    <div class="card"><h2><span class="ic">📋</span>${L('بيانات ناقصة','Missing data')}</h2><div id="missing"></div></div>
+    <div class="card"><h2><span class="ic">🤖</span>${L('اسأل الذكاء الاصطناعي','Ask the AI')}</h2>
+      <div class="row"><button class="btn claude" id="bClaude" onclick="sendAI('claude')">Claude</button><button class="btn dark" id="bGpt" onclick="sendAI('chatgpt')">ChatGPT</button></div>
+      <p class="muted">${L('يتم نسخ الحالة تلقائيًا ويفتح الموقع. في المحادثة الجديدة: اضغط مطولًا ثم لصق (أو Ctrl+V) ثم إرسال.','The case is copied and the site opens. In the new chat: long-press → Paste (or Ctrl+V) → Send.')}</p>
+      <label>${L('أوامر للمتابعة في نفس المحادثة','Follow-up commands (same chat)')}</label>
+      <div class="chips">${[['escalate',L('بلاغ للسنيور','Senior report')],['refer',L('تحويل','Referral')],['plan',L('الخطة','Plan')],['summary',L('ملخص','Summary')]].map(([c,t])=>`<span class="chip" onclick="cmd('${c}')">${t}</span>`).join('')}</div></div>
+    <div class="card"><div class="row">
+      <button class="btn" onclick="signVisit()">✔ ${L('اعتماد وإصدار الروشتة','Sign & issue prescription')}</button>
+      <button class="btn sec" onclick="saveVisit(true)">💾 ${L('حفظ','Save')}</button>
+      <button class="btn ghost" onclick="delVisit()">🗑</button></div>
+      <p class="muted" id="saved"></p></div>
+  </aside></div>`;
+  F.forEach(f=>{ const e=$(f); if(e && e.tagName!=='SELECT') e.value=v[f]||'' });
+  drawMeds();
+  // events
+  document.querySelectorAll('[data-cc]').forEach(ch=>ch.onclick=()=>{ if(isLocked())return; const x=ch.dataset.cc, cur=$('cc').value.trim(); $('cc').value=cur?(cur.includes(x)?cur:cur+', '+x):x; onEdit() });
+  document.querySelectorAll('[data-res]').forEach(ch=>ch.onclick=()=>{ if(isLocked())return; if(ch.classList.contains('on')){ch.classList.remove('on');ch.classList.add('no')}else if(ch.classList.contains('no'))ch.classList.remove('no');else ch.classList.add('on'); onEdit() });
+  $('patSel').onchange=()=>{ v.patient=$('patSel').value; const p=DB.patients[v.patient]; if(p&&!v.sex){ v.sex=p.sex; $('sex').value=p.sex||'' } onEdit() };
+  $('tplSel').onchange=()=>{ const t=TPL.find(x=>x[0]===$('tplSel').value); if(!t)return; const lang=$('rxLang').value; const txt=lang==='en'?t[3]:t[4];
+    $('rxInstr').value = $('rxInstr').value.trim()? $('rxInstr').value.trim()+'\n'+txt : txt; onEdit() };
+  $('form').addEventListener('input',onEdit); $('form').addEventListener('change',onEdit);
+  if(locked) document.querySelectorAll('#form input,#form select,#form textarea,#form button').forEach(e=>e.disabled=true);
+  updateSide();
+}
+const isLocked = () => curVisit && curVisit.signed && !curVisit.editing;
+function collectVisit(){
+  const v=curVisit;
+  F.forEach(f=>{ const e=$(f); if(e) v[f]=e.value.trim() });
+  v.patient=$('patSel').value;
+  v.flags=[...document.querySelectorAll('[data-flag]:checked')].map(e=>e.dataset.flag);
+  v.exam={}; EXAM.forEach(([k])=>v.exam[k]={s:document.querySelector(`[data-ex="${k}"]`).value,n:document.querySelector(`[data-exn="${k}"]`).value.trim()});
+  v.aud={}; document.querySelectorAll('[data-a]').forEach(i=>{ if(i.value!=='') v.aud[i.dataset.a]=+i.value });
+  v.res={}; document.querySelectorAll('[data-res]').forEach(ch=>{ if(ch.classList.contains('on'))v.res[ch.dataset.res]='available'; else if(ch.classList.contains('no'))v.res[ch.dataset.res]='not available' });
+  v.rx=v.rx||{}; v.rx.diagnosis=$('rxDx').value.trim(); v.rx.followUp=$('rxFu').value; v.rx.instructions=$('rxInstr').value; v.rx.notes=$('rxNotes').value; v.rx.lang=$('rxLang').value;
+  v.rx.meds=[...document.querySelectorAll('#medRows tr')].map(tr=>{const i=tr.querySelectorAll('input');return {name:i[0].value.trim(),dose:i[1].value.trim(),freq:i[2].value.trim(),dur:i[3].value.trim()}}).filter(m=>m.name);
+  return v;
+}
+let editTimer=null;
+function onEdit(){ if(isLocked())return; collectVisit(); updateSide(); clearTimeout(editTimer); editTimer=setTimeout(()=>saveVisit(),800) }
+function saveVisit(showToast){ if(!$('form')||!curVisit) return; const v=collectVisit(); v.updated=Date.now(); if(v.patient&&DB.patients[v.patient]) DB.patients[v.patient].updated=Date.now(); persist(); const s=$('saved'); if(s) s.textContent=L('تم الحفظ تلقائيًا ','Auto-saved ')+new Date().toLocaleTimeString(); if(showToast) toast(L('تم الحفظ','Saved')) }
+function updateSide(){
+  const v=curVisit, r=rules(v), a=r.a;
+  const set=(id,x)=>{ const e=$(id); if(e) e.textContent = x==null?'—':x };
+  set('ptaRA',a.RA); set('ptaRB',a.RB); set('ptaLA',a.LA); set('ptaLB',a.LB); set('abgR',a.abgR); set('abgL',a.abgL);
+  $('audNote').textContent = (a.RA!=null||a.LA!=null)? `Right: ${grade(a.RA)||'—'} · Left: ${grade(a.LA)||'—'}${a.asym?' · ⚠ asymmetric':''}` : L('PTA = متوسط 500 و1000 و2000 و4000. ABG = AC − BC.','PTA = mean of 500, 1000, 2000, 4000 Hz. ABG = AC − BC.');
+  let h='';
+  if(r.u.length) h+=`<div class="alert red"><b>URGENT 🚨</b><ul>${r.u.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`;
+  if(r.w.length) h+=`<div class="alert amber"><b>${L('تنبيه','Warning')}</b><ul>${r.w.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`;
+  if(!h) h=`<div class="alert ok">${L('لا تنبيهات من البيانات المُدخلة. هذا لا يعني أن الحالة آمنة.','No alerts from the entered data. This does not mean the case is safe.')}</div>`;
+  $('ruleOut').innerHTML=h;
+  const m=missing(v); $('missing').innerHTML = m.length? `<ul>${m.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>` : `<span class="muted">${L('البيانات الأساسية مكتملة.','Core data complete.')}</span>`;
+}
+function drawMeds(){
+  const ms=(curVisit.rx.meds&&curVisit.rx.meds.length)? curVisit.rx.meds : [{}];
+  $('medRows').innerHTML = ms.map(m=>`<tr><td><input value="${esc(m.name||'')}" placeholder="Amoxicillin"></td><td><input value="${esc(m.dose||'')}" placeholder="500 mg"></td><td><input value="${esc(m.freq||'')}" placeholder="${L('كل 8 ساعات','every 8 h')}"></td><td><input value="${esc(m.dur||'')}" placeholder="${L('7 أيام','7 days')}"></td><td><button class="btn sm ghost" onclick="this.closest('tr').remove();onEdit()">✕</button></td></tr>`).join('');
+}
+function addMed(){ $('medRows').insertAdjacentHTML('beforeend',`<tr><td><input></td><td><input></td><td><input></td><td><input></td><td><button class="btn sm ghost" onclick="this.closest('tr').remove();onEdit()">✕</button></td></tr>`) }
+async function sendAI(which){
+  const v=collectVisit(); if(!v.cc){ toast(L('اكتب الشكوى الأساسية أولًا','Enter the chief complaint first')); $('cc').focus(); return }
+  await copy(aiMessage(v)); saveVisit(); S().ai=which; persist();
+  window.open(AI_URL[which],'_blank','noopener');
+  toast(L('تم النسخ ✔ الصق في المحادثة الجديدة ثم أرسل','Copied ✔ Paste into the new chat and send'));
+}
+async function cmd(c){ await copy(c); toast(L('تم نسخ الأمر. الصقه في نفس المحادثة','Command copied. Paste it into the same chat')) }
+async function askInstr(){
+  const lang=$('rxLang').value==='en'?'English':'simple Egyptian Arabic';
+  const v=collectVisit();
+  const meds=(v.rx.meds||[]).map(m=>`${m.name} ${m.dose} ${m.freq} ${m.dur}`).join('; ')||'as prescribed by the doctor';
+  await copy(`Write patient discharge instructions for this case in ${lang}, for the patient (not the doctor). Diagnosis decided by the doctor: ${v.rx.diagnosis||'see above'}. Medications prescribed by the doctor: ${meds}. Include: what to do at home, how to take the medicines (do not add or change any drug or dose), what to avoid, warning signs that need immediate return, and follow-up. Short bullet points, no medical jargon, plain text, no code block, no headings in English.`);
+  toast(L('تم نسخ الطلب. الصقه في نفس المحادثة، ثم انسخ الرد هنا.','Request copied. Paste it into the same chat, then paste the reply here.'));
+}
+function signVisit(){
+  const v=collectVisit();
+  if(!v.cc){ toast(L('الشكوى الأساسية مطلوبة','Chief complaint is required')); return }
+  if(!v.rx.diagnosis){ toast(L('اكتب التشخيص النهائي قبل الاعتماد','Enter the final diagnosis before signing')); $('rxDx').focus(); return }
+  if(v.editing){ v.amendments=(v.amendments||[]); v.amendments.push({at:new Date().toISOString()}); delete v.editing }
+  v.signed=new Date().toISOString(); v.updated=Date.now(); persist();
+  toast(L('تم الاعتماد ✔','Signed ✔')); go('rx/'+v.id);
+}
+function amend(){ curVisit.editing=true; vVisit(curVisit.id); toast(L('وضع التعديل: سيُسجل كـ amendment عند الاعتماد','Amend mode: recorded as an amendment when re-signed')) }
+function delVisit(){ if(!confirm(L('حذف هذه الحالة؟','Delete this case?')))return; curVisit.deleted=true; curVisit.updated=Date.now(); persist(); go('home') }
+
+/* =================== PRESCRIPTION & PATIENT INSTRUCTIONS =================== */
+function vRx(id){
+  const v=DB.visits.find(x=>x.id===id); if(!v){ $('app').innerHTML='—'; return }
+  const p=DB.patients[v.patient]||{}, rx=v.rx||{}, ar=(rx.lang||'ar')==='ar';
+  const T=(a,e)=>ar?a:e;
+  $('app').innerHTML = `
+  <div class="row noprint" style="margin-bottom:12px"><button class="btn" onclick="window.print()">🖨 ${L('طباعة / PDF','Print / PDF')}</button>
+   ${navigator.share?`<button class="btn sec" onclick="shareRx('${v.id}')">📤 ${L('مشاركة (واتساب)','Share (WhatsApp)')}</button>`:''}
+   <button class="btn sec" onclick="copyRx('${v.id}')">📋 ${L('نسخ كنص','Copy as text')}</button>
+   <button class="btn ghost" onclick="go('visit/${v.id}')">↩ ${L('رجوع للحالة','Back to case')}</button></div>
+  <div class="rx" dir="${ar?'rtl':'ltr'}" style="text-align:${ar?'right':'left'}">
+    <div class="rh"><div><div style="font-size:20px;font-weight:800;color:var(--pri)">${esc(S().doctor||T('الطبيب','Doctor'))}</div><div>${esc(S().clinic||'')}</div><div style="font-size:13px;color:#555">${esc(S().clinicInfo||'')}</div></div>
+    <div style="text-align:${ar?'left':'right'}"><div style="font-size:26px">👂</div><div style="font-size:13px">${T('التاريخ','Date')}: ${new Date(v.signed||v.created).toLocaleDateString(ar?'ar-EG':'en-GB')}</div><div style="font-size:12px;color:#777">${T('رقم','No.')} ${v.id.slice(-6).toUpperCase()}</div></div></div>
+    <table><tr><th>${T('اسم المريض','Patient')}</th><td>${esc(p.name||'')}</td><th>${T('السن','Age')}</th><td>${esc(ageOf(v))}</td></tr>
+    <tr><th>${T('الشكوى','Complaint')}</th><td colspan="3">${esc(v.cc||'')}</td></tr>
+    <tr><th>${T('التشخيص','Diagnosis')}</th><td colspan="3"><b>${esc(rx.diagnosis||'')}</b></td></tr></table>
+    <h3>℞ ${T('العلاج','Prescription')}</h3>
+    ${(rx.meds||[]).length?`<table><tr><th>#</th><th>${T('الدواء','Medicine')}</th><th>${T('الجرعة','Dose')}</th><th>${T('عدد المرات','How often')}</th><th>${T('المدة','For how long')}</th></tr>
+      ${rx.meds.map((m,i)=>`<tr><td>${i+1}</td><td><b>${esc(m.name)}</b></td><td>${esc(m.dose)}</td><td>${esc(m.freq)}</td><td>${esc(m.dur)}</td></tr>`).join('')}</table>`:`<p>—</p>`}
+    ${rx.instructions?`<h3>📋 ${T('تعليمات للمريض','Instructions for the patient')}</h3><div class="instr">${esc(rx.instructions)}</div>`:''}
+    ${rx.followUp?`<h3>📅 ${T('ميعاد المتابعة','Follow-up appointment')}</h3><p style="font-size:16px"><b>${new Date(rx.followUp).toLocaleDateString(ar?'ar-EG':'en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</b></p>`:''}
+    <div style="border:2px solid #B42318;border-radius:8px;padding:8px 12px;margin-top:14px;color:#B42318"><b>⚠️ ${T('ارجع فورًا للطوارئ لو حصل: نزيف، صعوبة في التنفس أو البلع، حرارة عالية، أو أي تدهور.','Return to the emergency department immediately if: bleeding, difficulty breathing or swallowing, high fever, or any worsening.')}</b></div>
+    <div class="sig"><div>${T('توقيع الطبيب','Doctor signature')}: ____________</div><div style="font-size:12px;color:#777">Otolarix</div></div>
+  </div>`;
+}
+function rxText(v){
+  const p=DB.patients[v.patient]||{}, rx=v.rx||{}, ar=(rx.lang||'ar')==='ar', T=(a,e)=>ar?a:e;
+  return [`${S().doctor||''} ${S().clinic?'- '+S().clinic:''}`.trim(), `${T('المريض','Patient')}: ${p.name||''}`, `${T('التشخيص','Diagnosis')}: ${rx.diagnosis||''}`, '',
+    `${T('العلاج','Prescription')}:`, ...(rx.meds||[]).map((m,i)=>`${i+1}. ${m.name} ${m.dose} - ${m.freq} - ${m.dur}`), '',
+    rx.instructions?`${T('التعليمات','Instructions')}:\n${rx.instructions}`:'', rx.followUp?`\n${T('المتابعة','Follow-up')}: ${rx.followUp}`:''].join('\n').trim();
+}
+async function copyRx(id){ await copy(rxText(DB.visits.find(x=>x.id===id))); toast(L('تم النسخ','Copied')) }
+async function shareRx(id){ try{ await navigator.share({title:'Otolarix',text:rxText(DB.visits.find(x=>x.id===id))}) }catch{} }
+
+/* =================== GUIDE =================== */
+function vGuide(){
+  const steps=[
+   ['🗣️',L('الشكوى الأساسية','Chief complaint'),L('ابدأ دائمًا بالشكوى الأساسية ومدتها والجانب.','Always start with the chief complaint, its duration and side.')],
+   ['👤',L('اختر المريض','Choose the patient'),L('اختر مريض موجود أو أضف مريض جديد. الاسم يبقى عندك فقط.','Pick an existing patient or add a new one. The name stays with you.')],
+   ['📋',L('أدخل البيانات','Enter the data'),L('العلامات الحيوية، العلامات الحمراء، القصة، والفحص. كل شيء يُحفظ تلقائيًا.','Vitals, red flags, history and exam. Everything auto-saves.')],
+   ['🚨',L('راجع فحص الأمان','Check the safety panel'),L('التنبيهات العاجلة تظهر فورًا. تصرف فيها قبل أي شيء.','Urgent alerts appear instantly. Act on them first.')],
+   ['🤖',L('اسأل الذكاء الاصطناعي','Ask the AI'),L('اضغط Claude أو ChatGPT. الحالة تُنسخ تلقائيًا. الصقها في المحادثة الجديدة وأرسل.','Tap Claude or ChatGPT. The case is copied automatically. Paste it into the new chat and send.')],
+   ['💬',L('ناقش وأجب','Discuss & answer'),L('أجب على أسئلته في نفس المحادثة. استخدم أزرار الأوامر لبلاغ السنيور أو التحويل.','Answer its questions in the same chat. Use the command buttons for senior report or referral.')],
+   ['💊',L('قرّر واكتب الروشتة','Decide & prescribe'),L('أنت صاحب القرار: اكتب التشخيص والأدوية واختر قالب التعليمات وميعاد المتابعة.','You decide: write the diagnosis, medicines, choose an instruction template and the follow-up date.')],
+   ['✔',L('اعتمد','Sign'),L('اضغط اعتماد. الحالة تُقفل وأي تعديل لاحق يُسجل.','Tap Sign. The case locks and later changes are recorded.')],
+   ['🧾',L('اطبع أو شارك','Print or share'),L('اطبع الروشتة والتعليمات أو أرسلها للمريض على واتساب.','Print the prescription and instructions or send them via WhatsApp.')],
+   ['📅',L('المتابعة','Follow-up'),L('المواعيد تظهر في صفحة المواعيد والرئيسية، وتاريخ كل مريض في الخط الزمني.','Follow-ups appear in Agenda and Home; each patient\'s history is on their timeline.')],
+  ];
+  $('app').innerHTML = `<h1 class="page">📖 ${L('طريقة الاستخدام','How to use Otolarix')}</h1>
+  <div class="alert info">💡 ${L('لا يحتاج أي إعداد: لا حساب، لا Project، لا نسخ تعليمات. التطبيق يرسل التعليمات للذكاء الاصطناعي تلقائيًا مع كل حالة.','No setup needed: no account, no Project, no copying instructions. The app sends the instructions to the AI automatically with each case.')}</div>
+  <div class="flow">${steps.map((s,i)=>`<div class="step"><span class="e">${s[0]}</span><div class="n">${i+1}</div><b>${s[1]}</b><p class="muted" style="margin:6px 0 0">${s[2]}</p></div>`).join('')}</div>
+  <div class="card" style="margin-top:14px"><h2><span class="ic">❓</span>${L('أسئلة شائعة','FAQ')}</h2>
+   <details class="faq"><summary>${L('هل أحتاج اشتراك مدفوع؟','Do I need a paid plan?')}</summary><p>${L('لا. الخطة المجانية من Claude أو ChatGPT تكفي. الخطة المدفوعة تعطي ردودًا أكثر قبل الوصول للحد اليومي.','No. The free Claude or ChatGPT plan works. A paid plan gives more replies before the daily limit.')}</p></details>
+   <details class="faq"><summary>${L('هل يعمل بدون إنترنت؟','Does it work offline?')}</summary><p>${L('نعم، كل شيء ما عدا سؤال الذكاء الاصطناعي ومزامنة Google Drive.','Yes, everything except asking the AI and Google Drive sync.')}</p></details>
+   <details class="faq"><summary>${L('أين تُحفظ بيانات المرضى؟','Where is patient data stored?')}</summary><p>${L('على جهازك. ولو سجلت الدخول بجوجل، تُحفظ نسخة في مساحة خاصة بالتطبيق داخل Google Drive الخاص بك ليظهر نفس السجل على كل أجهزتك.','On your device. If you sign in with Google, a copy is kept in a private app folder in your own Google Drive so the same records appear on all your devices.')}</p></details>
+   <details class="faq"><summary>${L('ماذا يُرسل للذكاء الاصطناعي؟','What is sent to the AI?')}</summary><p>${L('الحالة بدون اسم أو تليفون: العمر والجنس والأعراض والفحص فقط، وأنت من يلصقها بنفسك.','The case without name or phone: only age, sex, symptoms and exam, and you paste it yourself.')}</p></details>
+   <details class="faq"><summary>${L('هل التطبيق يغني عن السنيور؟','Does it replace the senior?')}</summary><p>${L('لا. هو أداة دعم قرار فقط. القرار النهائي والجرعات مسؤولية الطبيب.','No. It is decision support only. The final decision and doses are the doctor\'s responsibility.')}</p></details>
+  </div>`;
+}
+
+/* =================== MORE & SETTINGS =================== */
+function vMore(){
+  $('app').innerHTML = `<h1 class="page">☰ ${L('المزيد','More')}</h1><div class="tiles">
+  <a class="tile" href="#guide"><div class="ti c4">📖</div><b>${L('طريقة الاستخدام','How to use')}</b></a>
+  <a class="tile" href="#settings"><div class="ti c5">⚙️</div><b>${L('الإعدادات','Settings')}</b></a>
+  <a class="tile" onclick="toggleLang()"><div class="ti c2">🌐</div><b>${EN()?'العربية':'English'}</b></a>
+  ${isStandalone()?'':`<a class="tile" onclick="doInstall()"><div class="ti c1">📲</div><b>${L('تثبيت التطبيق','Install app')}</b></a>`}</div>`;
+}
+function vSettings(){
+  const g=Drive.state;
+  $('app').innerHTML = `<h1 class="page">⚙️ ${L('الإعدادات','Settings')}</h1>
+  <div class="card"><h2><span class="ic">🎨</span>${L('الألوان','Theme')}</h2>${swatches()}</div>
+  <div class="card"><h2><span class="ic">🌐</span>${L('اللغة','Language')}</h2><div class="row"><button class="btn ${EN()?'sec':''}" onclick="S().lang='ar';persist();render()">العربية</button><button class="btn ${EN()?'':'sec'}" onclick="S().lang='en';persist();render()">English</button></div></div>
+  <div class="card"><h2><span class="ic">🧑‍⚕️</span>${L('بيانات الروشتة','Prescription header')}</h2><div class="grid">
+   <div><label>${L('اسم الطبيب','Doctor name')}</label><input id="sDoc" value="${esc(S().doctor)}"></div>
+   <div><label>${L('العيادة أو المستشفى','Clinic / hospital')}</label><input id="sClinic" value="${esc(S().clinic)}"></div>
+   <div style="grid-column:1/-1"><label>${L('العنوان والتليفون','Address & phone')}</label><input id="sInfo" value="${esc(S().clinicInfo)}"></div></div>
+   <button class="btn" style="margin-top:10px" onclick="S().doctor=$('sDoc').value.trim();S().clinic=$('sClinic').value.trim();S().clinicInfo=$('sInfo').value.trim();persist();toast(L('تم الحفظ','Saved'))">${L('حفظ','Save')}</button></div>
+  <div class="card"><h2><span class="ic">🤖</span>${L('الذكاء الاصطناعي المفضل','Preferred AI')}</h2><div class="row">
+   <button class="btn ${S().ai==='claude'?'claude':'ghost'}" onclick="S().ai='claude';persist();render()">Claude</button><button class="btn ${S().ai==='chatgpt'?'dark':'ghost'}" onclick="S().ai='chatgpt';persist();render()">ChatGPT</button></div></div>
+  <div class="card"><h2><span class="ic">☁️</span>Google Drive</h2>
+   ${!GOOGLE_CLIENT_ID?`<p class="muted">${L('المزامنة مع Google Drive غير مفعّلة بعد في هذه النسخة.','Google Drive sync is not enabled in this build yet.')}</p>`:
+   g.user?`<p>✔ ${L('متصل كـ','Signed in as')} <b>${esc(g.user)}</b></p><p class="muted">${L('آخر مزامنة','Last sync')}: ${g.last?new Date(g.last).toLocaleString():'—'}</p>
+     <div class="row"><button class="btn" onclick="Drive.sync(true)">🔄 ${L('مزامنة الآن','Sync now')}</button><button class="btn ghost" onclick="Drive.signOut()">${L('تسجيل خروج','Sign out')}</button></div>`
+   :`<p class="muted">${L('سجّل الدخول بحساب Google لحفظ نسخة من بياناتك في Google Drive الخاص بك ومشاهدتها على كل أجهزتك.','Sign in with Google to keep a copy of your data in your own Google Drive and see it on all your devices.')}</p>
+     <button class="btn" onclick="Drive.signIn()"><b style="background:#fff;color:#4285F4;border-radius:50%;width:22px;height:22px;display:grid;place-items:center">G</b> ${L('الدخول بحساب Google','Sign in with Google')}</button>`}
+  </div>
+  <div class="card"><h2><span class="ic">💾</span>${L('البيانات','Data')}</h2><div class="row">
+   <button class="btn sec" onclick="exportData()">⬇ ${L('تصدير نسخة احتياطية','Export backup')}</button>
+   <label class="btn sec" style="margin:0">⬆ ${L('استيراد','Import')}<input type="file" accept=".json" class="hidden" onchange="importData(event)"></label>
+   <button class="btn red" onclick="wipe()">🗑 ${L('مسح كل البيانات','Erase all data')}</button></div>
+   <p class="muted">${visits().length} ${L('حالة','cases')} · ${patients().length} ${L('مريض','patients')} · v${APP_VERSION}</p></div>`;
+}
+function exportData(){ const b=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='otolarix-backup-'+today()+'.json'; a.click() }
+function importData(e){ const f=e.target.files[0]; if(!f)return; const r=new FileReader(); r.onload=()=>{ try{ merge(JSON.parse(r.result)); persist(); toast(L('تم الاستيراد','Imported')); render() }catch{ toast(L('ملف غير صالح','Invalid file')) } }; r.readAsText(f) }
+function wipe(){ if(!confirm(L('مسح كل الحالات والمرضى من هذا الجهاز نهائيًا؟','Permanently erase all cases and patients from this device?')))return; const s=DB.settings; DB={patients:{},visits:[],settings:s}; persist(); render() }
+/* merge two DBs: newest record wins (deletions kept as tombstones) */
+function merge(other){
+  if(!other) return;
+  Object.values(other.patients||{}).forEach(p=>{ const m=DB.patients[p.code]; if(!m||(p.updated||0)>(m.updated||0)) DB.patients[p.code]=p });
+  (other.visits||[]).forEach(v=>{ const i=DB.visits.findIndex(x=>x.id===v.id); if(i<0) DB.visits.push(v); else if((v.updated||0)>(DB.visits[i].updated||0)) DB.visits[i]=v });
+}
+
+/* =================== GOOGLE DRIVE SYNC (appDataFolder) =================== */
+const Drive = {
+  state: JSON.parse(localStorage.getItem('otolarix.drive')||'{}'),
+  token:null, exp:0, client:null, fileId:null,
+  save(){ localStorage.setItem('otolarix.drive', JSON.stringify(this.state)) },
+  load(){ return new Promise((res,rej)=>{ if(window.google&&google.accounts) return res(); const s=document.createElement('script'); s.src='https://accounts.google.com/gsi/client'; s.onload=res; s.onerror=rej; document.head.appendChild(s) }) },
+  async getToken(interactive){
+    if(this.token && Date.now()<this.exp) return this.token;
+    await this.load();
+    return new Promise((res,rej)=>{
+      this.client = google.accounts.oauth2.initTokenClient({client_id:GOOGLE_CLIENT_ID, scope:'https://www.googleapis.com/auth/drive.appdata email', callback:r=>{
+        if(r.error) return rej(r); this.token=r.access_token; this.exp=Date.now()+(r.expires_in-60)*1000; res(this.token) }});
+      this.client.requestAccessToken({prompt: interactive? 'consent' : '', login_hint:this.state.user||undefined});
+    });
+  },
+  async api(url,opt={}){ const t=await this.getToken(false); const r=await fetch(url,{...opt,headers:{...(opt.headers||{}),Authorization:'Bearer '+t}}); if(!r.ok) throw new Error(r.status); return r },
+  async signIn(){
+    if(!GOOGLE_CLIENT_ID) return;
+    try{ await this.getToken(true);
+      const u=await (await this.api('https://www.googleapis.com/oauth2/v3/userinfo')).json();
+      this.state.user=u.email; this.save(); await this.sync(true); render();
+    }catch(e){ toast(L('تعذر تسجيل الدخول','Sign-in failed')) }
+  },
+  signOut(){ if(this.token&&window.google) google.accounts.oauth2.revoke(this.token); this.token=null; this.state={}; this.save(); render() },
+  async findFile(){
+    if(this.fileId) return this.fileId;
+    const r=await (await this.api("https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=name%3D'otolarix-db.json'&fields=files(id)")).json();
+    this.fileId = r.files&&r.files[0]&&r.files[0].id; return this.fileId;
+  },
+  hasToken(){ return this.token && Date.now()<this.exp },
+  async sync(show){
+    if(!GOOGLE_CLIENT_ID||!this.state.user||!navigator.onLine) return;
+    if(!this.hasToken() && !show) return; // background sync never opens a Google pop-up
+    try{
+      const id=await this.findFile();
+      if(id){ const remote=await (await this.api(`https://www.googleapis.com/drive/v3/files/${id}?alt=media`)).json(); const s=DB.settings; merge(remote); DB.settings=s; localStorage.setItem(DBKEY,JSON.stringify(DB)) }
+      await this.upload();
+      this.state.last=Date.now(); this.save(); if(show) toast(L('تمت المزامنة ☁️','Synced ☁️'));
+      const rn=route().name; if(['home','patients','agenda','settings'].includes(rn)) render();
+    }catch(e){ if(show) toast(L('تعذرت المزامنة','Sync failed')) }
+  },
+  async upload(){
+    const body=JSON.stringify({patients:DB.patients,visits:DB.visits,settings:DB.settings,at:Date.now()});
+    const id=await this.findFile();
+    if(id) await this.api(`https://www.googleapis.com/upload/drive/v3/files/${id}?uploadType=media`,{method:'PATCH',headers:{'Content-Type':'application/json'},body});
+    else {
+      const meta={name:'otolarix-db.json',parents:['appDataFolder']}, b='otolarix'+Date.now();
+      const multipart=`--${b}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${JSON.stringify(meta)}\r\n--${b}\r\nContent-Type: application/json\r\n\r\n${body}\r\n--${b}--`;
+      const r=await (await this.api('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',{method:'POST',headers:{'Content-Type':'multipart/related; boundary='+b},body:multipart})).json();
+      this.fileId=r.id;
+    }
+  },
+  async push(){ if(!GOOGLE_CLIENT_ID||!this.state.user||!navigator.onLine||!this.hasToken()) return; try{ await this.upload(); this.state.last=Date.now(); this.save() }catch{} }
+};
+
+/* =================== boot =================== */
 if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js');
-// autosave draft
-setInterval(()=>{ if($('cc').value.trim()) saveCase(false) }, 30000);
-update();
+window.addEventListener('online',()=>Drive.sync(false));
+render();
 </script>
 </body>
 </html>
