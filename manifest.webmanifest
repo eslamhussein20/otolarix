@@ -1,0 +1,30 @@
+{
+  "name": "Otolarix - ENT Clinical Workspace",
+  "short_name": "Otolarix",
+  "description": "ENT case entry, red-flag checks and AI-ready case messages. Decision support only.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F5F8FA",
+  "theme_color": "#102840",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

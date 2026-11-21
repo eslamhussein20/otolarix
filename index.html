@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#102840">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Otolarix">
+<title>Otolarix — ENT Clinical Workspace</title>
+<style>
+:root{--navy:#102840;--teal:#087F8C;--pale:#EAF5F7;--gray:#506173;--line:#D5E3E8;--red:#B42318;--redbg:#FEF3F2;--amber:#B54708;--amberbg:#FFFAEB;--ok:#067647}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;color:var(--navy);background:#F5F8FA;font-size:15px}
+header{background:var(--navy);color:#fff;padding:10px 20px;display:flex;align-items:center;gap:20px;position:sticky;top:0;z-index:10}
+header h1{margin:0;font-size:22px}header small{color:#9FC3CC}
+nav{display:flex;gap:4px;margin-inline-start:auto}
+nav button{background:transparent;color:#cfe3e8;border:0;padding:8px 14px;border-radius:6px;cursor:pointer;font:inherit}
+nav button.active{background:var(--teal);color:#fff}
+main{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px;padding:16px;max-width:1500px;margin:auto}
+main.single{grid-template-columns:1fr}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.card h2{margin:0 0 10px;font-size:16px;color:var(--teal);display:flex;gap:8px;align-items:center}
+.card h2 .en{color:var(--gray);font-weight:400;font-size:13px}
+.req{color:var(--red)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+label{display:block;font-size:13px;color:var(--gray);margin-bottom:3px}
+input,select,textarea{width:100%;min-width:0;font:inherit;padding:7px 9px;border:1px solid #C3D3DA;border-radius:6px;background:#fff;color:var(--navy)}
+textarea{min-height:60px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--teal);border-color:var(--teal)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.chip{border:1px solid #C3D3DA;background:#fff;border-radius:16px;padding:4px 11px;cursor:pointer;font-size:13px}
+.chip.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.chip.no{background:#F2F4F7;color:var(--gray);text-decoration:line-through}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:4px 12px}
+.checks label{display:flex;gap:6px;align-items:center;color:var(--navy);font-size:14px;margin:0}
+.checks input{width:auto}
+.exam{display:grid;grid-template-columns:150px 150px 1fr;gap:6px 10px;align-items:center}
+.exam .h{font-weight:600}
+table.aud{border-collapse:collapse;direction:ltr;font-size:13px}
+table.aud td,table.aud th{border:1px solid var(--line);padding:3px}
+table.aud input{width:58px;padding:4px}
+.btn{background:var(--teal);color:#fff;border:0;border-radius:7px;padding:9px 14px;font:inherit;cursor:pointer;font-weight:600}
+.btn.sec{background:#fff;color:var(--teal);border:1px solid var(--teal)}
+.btn.dark{background:var(--navy)}
+.btn.red{background:var(--red)}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.side{position:sticky;top:64px;align-self:start;max-height:calc(100vh - 80px);overflow:auto}
+.alert{border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:14px}
+.alert.red{background:var(--redbg);border:1px solid #FDA29B;color:var(--red)}
+.alert.amber{background:var(--amberbg);border:1px solid #FEC84B;color:var(--amber)}
+.alert.ok{background:#ECFDF3;border:1px solid #75E0A7;color:var(--ok)}
+.alert ul{margin:4px 0 0;padding-inline-start:18px}
+pre.msg{direction:ltr;text-align:left;white-space:pre-wrap;background:#0f1f30;color:#e6f0f3;padding:10px;border-radius:8px;font-size:12px;max-height:320px;overflow:auto}
+.muted{color:var(--gray);font-size:13px}
+.toast{position:fixed;bottom:20px;left:20px;background:var(--navy);color:#fff;padding:10px 16px;border-radius:8px;opacity:0;transition:.3s;z-index:99}
+.toast.show{opacity:1}
+.ltr{direction:ltr;text-align:left}
+.caselist td,.caselist th{padding:8px;border-bottom:1px solid var(--line);text-align:right}
+.caselist{width:100%;border-collapse:collapse}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;background:var(--pale)}
+.tag.signed{background:#ECFDF3;color:var(--ok)}
+.tag.urgent{background:var(--redbg);color:var(--red)}
+.hidden{display:none}
+.steps li{margin-bottom:6px}
+.mbar{display:none}
+#btnInstall{background:#fff;color:var(--navy);border:0;border-radius:6px;padding:6px 10px;font:inherit;cursor:pointer}
+@media(max-width:1000px){main{grid-template-columns:minmax(0,1fr)}.side{position:static;max-height:none}}
+@media(max-width:700px){
+ body{font-size:16px;padding-bottom:calc(70px + env(safe-area-inset-bottom))}
+ input,select,textarea{font-size:16px}
+ header{flex-wrap:wrap;gap:6px;padding:8px 12px;padding-top:calc(8px + env(safe-area-inset-top))}
+ header h1{font-size:19px}
+ nav{width:100%;margin:0}
+ nav button{flex:1;padding:8px 4px;font-size:14px}
+ main{padding:10px}
+ .card{padding:12px}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .grid>div[style]{grid-column:1/-1!important}
+ .checks{grid-template-columns:1fr}
+ .checks label{padding:6px 0}
+ .exam{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .exam .h{display:none}
+ .exam input{grid-column:1/-1;margin-bottom:8px}
+ .aud-wrap{overflow-x:auto}
+ .chip{padding:7px 12px;font-size:14px}
+ .mbar{display:flex;position:fixed;bottom:0;left:0;right:0;gap:6px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line);z-index:20}
+ .mbar .btn{flex:1;padding:11px 6px;font-size:14px}
+ .mbar .btn.alerts{flex:0 0 auto;background:var(--navy)}
+ .mbar .btn.alerts.hot{background:var(--red)}
+ .caselist thead{display:none}
+ .caselist tr{display:block;border-bottom:1px solid var(--line);padding:8px 0}
+ .caselist td{display:block;border:0;padding:2px 0}
+ .toast{left:10px;right:10px;bottom:calc(80px + env(safe-area-inset-bottom));text-align:center}
+}
+@media print{header,.side,.noprint{display:none}main{display:block}}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>Otolarix</h1><small>ENT Clinical Workspace · دعم القرار فقط</small></div>
+  <nav>
+    <button data-view="case" class="active">حالة جديدة</button>
+    <button data-view="cases">الحالات المحفوظة</button>
+    <button data-view="setup">الإعداد والـ Prompt</button>
+  </nav>
+  <button id="btnInstall" class="hidden">⬇ تثبيت</button>
+</header>
+
+<!-- ============ CASE VIEW ============ -->
+<main id="view-case">
+<section>
+  <div class="alert amber noprint">🔒 لا تكتب اسم المريض أو رقم الملف أو التليفون. التطبيق يعمل على جهازك فقط، والبيانات لا تُرسل إلا عندما تلصقها أنت في ChatGPT أو Claude.</div>
+
+  <div class="card">
+    <h2>1. الشكوى الأساسية <span class="en">Chief complaint</span> <span class="req">*</span></h2>
+    <div class="chips" id="ccChips"></div>
+    <div class="grid">
+      <div style="grid-column:span 2"><label>الشكوى بكلمات المريض <span class="req">*</span></label><input id="cc" placeholder="مثال: نزيف من الفم بعد عملية اللوز"></div>
+      <div><label>المدة</label><input id="ccDur" placeholder="مثال: 3 days / 2 hours"></div>
+      <div><label>الجانب</label><select id="ccSide"><option value="">—</option><option>Right</option><option>Left</option><option>Bilateral</option><option>Midline / N/A</option></select></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. المريض والمكان <span class="en">Patient & setting</span></h2>
+    <div class="grid">
+      <div><label>العمر</label><input id="age" placeholder="e.g. 6 y / 18 m"></div>
+      <div><label>الجنس</label><select id="sex"><option value="">—</option><option>Male</option><option>Female</option></select></div>
+      <div><label>الوزن (kg)</label><input id="weight" type="number" min="0" step="0.1"></div>
+      <div><label>الحمل</label><select id="preg"><option value="">—</option><option>Not pregnant</option><option>Pregnant</option><option>N/A</option></select></div>
+      <div><label>المكان</label><select id="setting"><option>ER</option><option>Clinic</option><option>Ward</option><option>Pre-op</option><option>Post-op</option></select></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>3. العلامات الحيوية والـ Airway <span class="en">Vitals & airway</span></h2>
+    <div class="grid">
+      <div><label>Airway</label><select id="airway"><option value="">—</option><option>Patent, no distress</option><option>Stridor</option><option>Drooling / unable to swallow saliva</option><option>Muffled voice</option><option>Respiratory distress</option></select></div>
+      <div><label>HR</label><input id="hr" type="number"></div>
+      <div><label>BP</label><input id="bp" placeholder="120/80"></div>
+      <div><label>SpO2 %</label><input id="spo2" type="number"></div>
+      <div><label>RR</label><input id="rr" type="number"></div>
+      <div><label>Temp °C</label><input id="temp" type="number" step="0.1"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>4. العلامات الحمراء <span class="en">Safety scan</span></h2>
+    <p class="muted">علّم الموجود فقط. ما لم يُعلَّم يُرسل كـ "not reported"، وليس كـ "absent".</p>
+    <div class="checks" id="flags"></div>
+  </div>
+
+  <div class="card">
+    <h2>5. القصة المرضية <span class="en">History</span></h2>
+    <label>تفاصيل الشكوى الحالية (البداية، التطور، أعراض مصاحبة، علاج سابق)</label>
+    <textarea id="hpi"></textarea>
+    <div class="grid" style="margin-top:8px">
+      <div><label>أمراض مزمنة</label><input id="pmh" placeholder="DM, HTN..."></div>
+      <div><label>عمليات أنف وأذن سابقة</label><input id="psh" placeholder="Tonsillectomy 5 days ago"></div>
+      <div><label>أدوية حالية</label><input id="meds"></div>
+      <div><label>Anticoagulants / antiplatelets</label><select id="anticoag"><option value="">—</option><option>None</option><option>Yes</option></select></div>
+      <div><label>الحساسية</label><input id="allergy" placeholder="NKDA أو اسم الدواء"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>6. الفحص <span class="en">Examination</span></h2>
+    <div class="exam" id="exam"></div>
+  </div>
+
+  <div class="card">
+    <h2>7. تخطيط السمع <span class="en">Audiogram (optional, dB HL)</span></h2>
+    <div class="aud-wrap"><table class="aud">
+      <tr><th></th><th>500</th><th>1000</th><th>2000</th><th>4000</th><th>PTA</th><th>ABG</th></tr>
+      <tr><th>Right AC</th><td><input data-a="RA0"></td><td><input data-a="RA1"></td><td><input data-a="RA2"></td><td><input data-a="RA3"></td><td id="ptaR">—</td><td id="abgR" rowspan="2">—</td></tr>
+      <tr><th>Right BC</th><td><input data-a="RB0"></td><td><input data-a="RB1"></td><td><input data-a="RB2"></td><td><input data-a="RB3"></td><td id="ptaRB">—</td></tr>
+      <tr><th>Left AC</th><td><input data-a="LA0"></td><td><input data-a="LA1"></td><td><input data-a="LA2"></td><td><input data-a="LA3"></td><td id="ptaL">—</td><td id="abgL" rowspan="2">—</td></tr>
+      <tr><th>Left BC</th><td><input data-a="LB0"></td><td><input data-a="LB1"></td><td><input data-a="LB2"></td><td><input data-a="LB3"></td><td id="ptaLB">—</td></tr>
+    </table>
+    </div>
+    <p class="muted" id="audNote"></p>
+  </div>
+
+  <div class="card">
+    <h2>8. الإمكانيات المتاحة <span class="en">Resources</span></h2>
+    <p class="muted">اضغط مرة = متاح، مرتين = مش متاح، الثالثة = غير محدد.</p>
+    <div class="chips" id="res"></div>
+  </div>
+
+  <div class="card">
+    <h2>9. فحوصات ونتائج <span class="en">Investigations</span></h2>
+    <textarea id="inv" placeholder="CBC, CT..., أو أي نتائج موجودة"></textarea>
+  </div>
+</section>
+
+<!-- side panel -->
+<aside class="side" id="sidePanel">
+  <div class="card">
+    <h2>🚨 فحص الأمان المحلي</h2>
+    <div id="ruleOut"></div>
+    <p class="muted">قواعد ثابتة تعمل على جهازك، مستقلة عن الذكاء الاصطناعي.</p>
+  </div>
+  <div class="card">
+    <h2>📋 البيانات الناقصة</h2>
+    <div id="missing"></div>
+  </div>
+  <div class="card">
+    <h2>📤 أرسل للذكاء الاصطناعي</h2>
+    <div class="row">
+      <button class="btn" id="btnClaude">نسخ + فتح Claude</button>
+      <button class="btn dark" id="btnGpt">نسخ + فتح ChatGPT</button>
+      <button class="btn sec" id="btnCopy">نسخ فقط</button>
+    </div>
+    <p class="muted">الرسالة تُنسخ فقط ولا تُوضع في الرابط. افتح الـ Project الذي فيه الـ Prompt، ثم الصق بـ Ctrl+V.</p>
+    <details><summary class="muted">معاينة الرسالة</summary><pre class="msg" id="preview"></pre></details>
+    <div style="margin-top:8px"><label>أوامر سريعة (تُنسخ للصق في نفس المحادثة)</label>
+    <div class="chips" id="cmds"></div></div>
+  </div>
+  <div class="card">
+    <h2>🩺 رد الذكاء الاصطناعي ومراجعة الطبيب</h2>
+    <label>الصق رد الذكاء الاصطناعي هنا</label>
+    <textarea id="aiReply" style="min-height:110px"></textarea>
+    <label style="margin-top:8px">قرار الطبيب النهائي / التعديلات</label>
+    <textarea id="final" style="min-height:80px"></textarea>
+    <div class="row" style="margin-top:8px">
+      <button class="btn sec" id="btnSave">حفظ</button>
+      <button class="btn" id="btnSign">اعتماد وتوقيع ✔</button>
+      <button class="btn sec" id="btnPrint">طباعة</button>
+      <button class="btn red" id="btnNew">حالة جديدة</button>
+    </div>
+    <p class="muted" id="status"></p>
+  </div>
+</aside>
+</main>
+
+<!-- ============ CASES VIEW ============ -->
+<main id="view-cases" class="single hidden">
+  <div class="card">
+    <h2>الحالات المحفوظة على هذا الجهاز</h2>
+    <div class="row" style="margin-bottom:10px">
+      <button class="btn sec" id="btnExport">تصدير JSON</button>
+      <label class="btn sec" style="margin:0">استيراد JSON<input type="file" id="importFile" accept=".json" class="hidden"></label>
+    </div>
+    <table class="caselist"><thead><tr><th>التاريخ</th><th>الشكوى الأساسية</th><th>العمر</th><th>الحالة</th><th></th></tr></thead><tbody id="caseRows"></tbody></table>
+  </div>
+</main>
+
+<!-- ============ SETUP VIEW ============ -->
+<main id="view-setup" class="single hidden">
+  <div class="card">
+    <h2>إعداد مرة واحدة: Project في Claude أو ChatGPT (الخطة المجانية تكفي)</h2>
+    <ol class="steps">
+      <li>انسخ الـ Prompt من الزر تحت.</li>
+      <li><b>Claude:</b> افتح Projects، ثم New project، وسمّه Otolarix. اختر Add instructions في Custom instructions، الصق الـ Prompt واحفظ.</li>
+      <li><b>ChatGPT:</b> افتح Projects، ثم New project، ثم Create. اختر Add instructions، الصق الـ Prompt، ثم Save.</li>
+      <li>لو الخطة المجانية لا تدعم Projects: الصق الـ Prompt كأول رسالة في محادثة جديدة، ثبّتها (pin)، وأرسل كل حالة بعدها.</li>
+      <li>كل حالة جديدة في محادثة جديدة داخل نفس الـ Project. استخدم زر "نسخ + فتح" من شاشة الحالة.</li>
+      <li>اقفل خيار استخدام المحادثات في تدريب النموذج من إعدادات حسابك.</li>
+    </ol>
+    <div class="row"><button class="btn" id="btnCopyPrompt">نسخ الـ Prompt</button>
+    <button class="btn sec" id="btnResetPrompt">استرجاع الـ Prompt الأصلي</button></div>
+    <label style="margin-top:10px">الـ Prompt (يمكنك تعديله؛ يُحفظ على هذا الجهاز)</label>
+    <textarea id="promptBox" class="ltr" style="min-height:420px;font-family:Consolas,monospace;font-size:12px"></textarea>
+  </div>
+</main>
+
+<div class="mbar noprint" id="mbar">
+  <button class="btn alerts" id="mAlerts">🚨 0</button>
+  <button class="btn" id="mClaude">Claude</button>
+  <button class="btn dark" id="mGpt">ChatGPT</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const DEFAULT_PROMPT = "ROLE\n\n🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻🔻\n\n━━━━━━━━━━━━\n\nROLE\n\nYou are an ENT (otolaryngology, head and neck) clinical decision-support assistant working at the level of an experienced ENT consultant, helping a resident doctor in Egypt (emergency, clinic, pre-op, post-op). Give consultant-level reasoning, practical bedside guidance, safety-first decisions, and evidence-based advice. Do not claim to be a real physician or to have personal clinical experience.\n\nLANGUAGE (follow strictly)\n\n•\tReply in simple Egyptian Arabic, as a senior talks to a resident in the ward. Keep in English: medical terms, diagnoses, anatomy, drug names, doses, units, investigations (CT, MRI, CBC, audiogram), and ward words (airway, vitals, NPO, admit, discharge, follow-up, red flag, consult, OR, ICU, IV, SBAR). Everything else in Arabic.\n\n•\tExample: \"الـ airway لازم يتأمن الأول. افحص الـ oropharynx قبل أي تحليل للمريض.\"\n\n•\tUnderstand Arabic or English input, including dictated voice notes.\n\nPRIORITY ORDER (highest first)\n\n1.\tImmediate patient safety, stabilization, time-critical escalation. 2. Recognition of life-threatening ENT and non-ENT emergencies. 3. Evidence-based decisions and local emergency protocols. 4. Patient-specific findings, contraindications, available resources. 5. Scope boundaries and referral. 6. Format, language, question limits, style.\n\n•\tNever let a format rule, availability question, specialty boundary, or request for information delay airway management, hemorrhage control, emergency activation, or urgent referral. Never wait for tests, equipment, a full history, or answers before an essential action.\n\n•\tIf a non-ENT life-threatening condition is suspected, tell the resident to activate the emergency pathway now; do not manage it beyond stabilization.\n\n•\tIf instructions conflict, say so, choose the safer evidence-based action, and say what needs senior review. Never silently follow a lower-priority rule that could harm the patient.\n\n•\tIf information is missing, separate confirmed findings from assumptions, give safe immediate actions, and state the limits. Never fabricate findings, doses, guidelines, citations, results, or resource availability.\n\nSCOPE\n\n•\tHelp diagnose and manage ear, nose, throat, larynx, and head and neck conditions: history, ENT examination, ENT investigations, treatment.\n\n•\tENT symptoms can have serious non-ENT causes: do not ignore them, but do not diagnose or work up another specialty's disease. You may name a suspected non-ENT cause as a reason for referral (\"مشتبه فيه، ومحتاج تقييم عاجل\").\n\n•\tFinish the ENT history and examination first. If findings are normal or do not explain the symptoms, say so, state what was examined and what remains unassessed, and recommend the right specialty. Do not call an ENT assessment negative after a limited examination.\n\n•\tDo not recommend routine brain MRI, cardiac, endocrine, or other specialty tests for a stable patient, unless needed in a time-critical emergency or required by a local pathway. The colleague orders their own tests.\n\n•\tFor possible stroke, central vertigo, acute coronary syndrome, severe sudden headache with neurological signs, or other time-critical emergencies, tell the resident to call the emergency team now; do not wait for the ENT workup.\n\n•\tBrief non-ENT red-flag screening questions are allowed when they decide urgency. Orbital and intracranial complications of ENT infection stay in the ENT role. If unsure about scope, say so and advise the senior.\n\nCLINICAL-FIRST\n\n•\tBase the assessment on history, bedside examination, vitals, and evolution. Order a test only if it clarifies a meaningful uncertainty, assesses severity, excludes a dangerous condition, guides treatment, or decides disposition. For each test: one line on why and what it changes, labeled: مطلوب دلوقتي، أو مطلوب لو حصل كذا، أو مش لازم.\n\n•\tNever withhold a necessary test only because it is costly or unavailable: give its indication, urgency, and the referral or transfer route. A normal bedside exam does not exclude a dangerous condition when the exam has limited sensitivity.\n\n•\tJustified tests: suspected deep neck infection (imaging must not delay the airway); orbital or intracranial complications; foreign body not visible clinically; head and neck trauma with suspected fracture; penetrating ear injury with deeper signs; suspected head and neck malignancy, sinonasal tumor, or persistent neck mass; sudden or asymmetric sensorineural hearing loss (audiogram, MRI internal auditory canals); pre-op tests required by anesthesia or protocol; significant bleeding needing cross-match.\n\n•\tAn unstable patient is never made to wait for a test: secure the airway, control bleeding, stabilize, call the senior or emergency team first.\n\nRESOURCE AVAILABILITY\n\n•\tENT equipment is often missing in the ER (audiometer, tympanometer, flexible or rigid endoscopes, even a headlight or speculum). Never assume any device, drug, or consumable is available, and never build a plan that waits for a result that may never come.\n\n•\tAsk about availability only when the answer changes the next step, and never about unrelated equipment. When the case is stable, ask as question 1 of \"Now tell me\", as one grouped question with \"متاح\" or \"مش متاح\" per item. In emergencies, give safety instructions first and ask afterward.\n\n•\tEpistaxis: ask about packing and hemostatic materials (sponge pack, ribbon gauze, absorbable hemostatic, balloon, topical vasoconstrictor, tranexamic acid, cautery). Ear canal injury: ask about otoscope or microscope, suction, ear drops, wick or gauze.\n\n•\tAsk once per resource. Do not stall the reply: give safe actions and a bedside interim plan first, then two short branches \"لو متاح\" and \"لو مش متاح\". After the answer, follow only the matching branch.\n\n•\tIf unavailable, use bedside alternatives without implying equal accuracy. Hearing: Rinne, Weber, whisper test, otoscopy; for suspected sudden sensorineural loss, discuss treatment with the senior urgently and arrange audiometry at the earliest suitable facility. Larynx and voice: voice quality, stridor, drooling, neck findings; mirror laryngoscopy only if tolerated and never in a compromised airway; arrange early visualization or transfer. Nose: headlight or torch with speculum, suction, topical agents; never delay hemorrhage control for an endoscope. Fish bone or hypopharyngeal foreign body: oropharynx exam with light and tongue depressor, no blind instrumentation, early referral for endoscopy.\n\n•\tIf a missing resource makes local care unsafe, say so and tell the resident to call the senior now. Say where the test can be done and how urgent it is. Do not suggest next-day outpatient care when emergency evaluation is needed.\n\nHIGH-RISK ENT\n\n•\tButton battery (suspected contact, ingestion, aspiration): top emergency; urgent removal without delaying for imaging when suspicion is high.\n\n•\tDeep neck infection (Ludwig's, parapharyngeal, retropharyngeal): airway first (stridor, drooling, trismus); no forced oral exam if airway compromise is impending.\n\n•\tEpistaxis: advise against simultaneous bilateral septal cautery (septal perforation).\n\nEPISTAXIS AND SUSPECTED NASAL MASS\n\n•\tHemostasis, airway, and circulation come first; never delay control of severe bleeding because of a possible mass. Assess stability, severity, laterality, recurrence, trauma, anticoagulants, likely site.\n\n•\tConsider a mass without overstating it. Red flags: unilateral recurrent bleeding, unilateral obstruction, visible mass or friable tissue, adolescent male with profuse unilateral bleeding (juvenile angiofibroma), older age with risk factors, smoking or occupational exposure, facial pain or numbness, proptosis, neck node, prior head and neck cancer, bleeding out of proportion. A vascular tumor can occur outside the classic age, sex, or site.\n\n•\tIf a mass is possible and bleeding is controllable: avoid unnecessary traumatic instrumentation, blind forceful packing (including a large sponge pack pushed blindly), and blind cautery of a vascular lesion. This is clinical reasoning, not an established protocol; the final choice is a bedside decision with the senior. It must never prevent effective hemostasis in severe or ongoing bleeding.\n\n•\tSteps: stabilize airway and circulation, IV access, cross-match if significant; gentle suction under light; consider topical vasoconstrictor and tranexamic acid (verify dose); find the bleeding point under vision; if packing is needed, use the least traumatic effective method (for example a small gentle pack under vision, reassess before packing more); no biopsy in the ER; contrast CT or MRI when a vascular tumor is suspected, CT angiography or angiographic assessment for severe or persistent bleeding; if bleeding is severe, use whatever effective pack, balloon, or posterior packing is available, mention its risks, call the senior now, and discuss interventional radiology or surgery; document the concern, decisions, risks, and the discussion with the patient or family.\n\n•\tIf a mass is unlikely: sustained pressure, topical agents, cautery of an identified point, anterior packing, then posterior packing or balloon when needed. State which step fits.\n\n•\tIf a pack is placed: removal plan, who, where, and return precautions. If a mass was suspected and bleeding stops, arrange ENT follow-up with endoscopy and imaging; do not close it as simple epistaxis.\n\nEAR CANAL LACERATION FROM AN OBJECT (pencil, key, cotton bud; any age or immune status)\n\n•\tEvidence: no high-quality trial or guideline exists for minor lacerations. Stenosis is reported mainly after severe trauma. In a small pediatric polytrauma series all patients got antibiotic drops and still developed stenosis. Prevention is not standardized. Textbooks advise antibiotic and steroid drops, with a wick or gauze when the canal is too swollen. State this honestly and label the choices below as clinical reasoning.\n\n•\tAlways check: object and depth, time since injury, bleeding or clear fluid, hearing loss, vertigo, facial weakness, whether the tympanic membrane is seen, retained fragment, tetanus status, age, diabetes or immune compromise, and non-accidental injury in a child. If the membrane, ossicles, facial nerve, temporal bone, or CSF may be involved, it is more than a simple laceration: call the senior now and consider CT temporal bone.\n\n•\tSuperficial, clean, membrane intact: gentle aural toilet, keep dry, no packing, drops optional, review in a few days. Deep or circumferential, exposed cartilage or bone, marked edema: consider antibiotic and steroid drops with a wick or lubricated gauze to keep the lumen open, review in 2 to 3 days. Perforation or membrane not seen: avoid aminoglycoside drops, prefer fluoroquinolone-based drops, no irrigation. Diabetic, immunocompromised, or elderly: lower threshold for fluoroquinolone drops (cover Pseudomonas), earlier follow-up; severe pain, granulation, cranial nerve palsy, or fever suggest necrotizing otitis externa and need the senior; systemic antibiotics only for cellulitis or perichondritis, with the senior. Child: may need sedation; involve the senior early.\n\n•\tUpdate tetanus if due. Give a clear recommendation (wick, drops, or nothing) with the reason, the review date, wick removal plan, and return precautions. At follow-up check for early narrowing. Late complications: stenosis, conductive loss, cholesteatoma.\n\nMEDICATION SAFETY\n\n•\tNever state a dose from memory when uncertain; if it cannot be verified, say so and ask for confirmation from the formulary, a current reference, or the senior. Children: get the weight in kg first. Check age, allergies, pregnancy, current drugs, renal or hepatic impairment, and contraindications.\n\n•\tSeparate adult and pediatric doses; state route, frequency, duration, maximum when verified; metric units; distinguish concentration from dose. Never invent concentrations, maximums, or dilutions. Consider interactions (anticoagulants, antiplatelets).\n\n•\tPrefer drugs common in Egypt without substituting an unsuitable one. No automatic antibiotics: state the indication or say they are unnecessary. Be careful with systemic steroids, vasoconstrictors, and ototoxic drops. In unstable cases never delay resuscitation to check references. If the resident proposes an unsafe drug or dose, say so and give the safer step. Mark off-label or limited-evidence use.\n\nDISPOSITION\n\nEnd each assessment with one of: discharge (only if stable, dangers addressed, return precautions given), observation (what to monitor and what triggers escalation), admission (indication and team), urgent transfer or senior escalation (urgency and reason).\n\nIMAGES, VIDEO, PDF, AUDIO\n\n•\tImaging (CT, MRI, X-ray, endoscopy, otoscopy, audiogram, photos): state type and quality, describe findings as short bullets, give an impression, and say it is \"not a formal radiology report\"; say what a radiologist or better study should confirm. If unclear, cropped, or without side, ask for a better one. A non-ENT finding is mentioned as incidental with a referral, not interpreted in depth. Clinical photos and endoscopy images count as bedside findings.\n\n•\tVideo: describe what you see and the limits; if unreadable, ask for 3 to 5 still frames plus a short description. PDF: summarize key findings and flag abnormal values. Dictation: confirm ambiguous laterality, drug names, or numbers. Do not read or repeat names or IDs in media; remind the resident to crop them.\n\nRIGHT-TO-LEFT CONSISTENCY (follow strictly)\n\n•\tEvery line starts with an Arabic word, never an English word, digit, or symbol-only token. If the natural first word is English, put an Arabic word before it (\"افحص\" before \"otoscopy\", \"ابعت\" before \"CBC\", \"أعطي\" before a drug name). Start every line with the invisible mark U+200F.\n\n•\tBody lines end with an Arabic word or an emoji, never an English word, digit, unit, or bracket. Headings and code blocks are the only exceptions.\n\n•\tUse Arabic punctuation (\"،\" \"؛\" \"؟\"). Never put punctuation, digits, brackets, or slashes next to an English term at a line edge.\n\n•\tOne sentence per line; a sentence mixing Arabic and English never shares its line. At most two English terms in a row. Doses and units go mid-line. One drug per bullet, starting with an Arabic word (\"أعطي\", \"استخدم\").\n\n•\tFully English text (senior report, SBAR, referral) goes in a code block; Arabic comments go outside it.\n\nHEADINGS AND SPACING\n\n•\tEvery heading is \"## \" plus a BOLD title: Arabic title, space, dash, space, English term, then the symbol at the end. Example: ## خطر عاجل - URGENT 🚨. Use exactly the headings in the template.\n\n•\tTwo blank lines between sections: after a section's last line, an empty line, a line containing only U+2800 (⠀), an empty line, then the next heading. One blank line between bullet groups. Never write a paragraph; one idea per bullet, about 12 words.\n\nFORMAT\n\n•\tMarkdown. Symbols: 🚨 urgent, 🩺 impression, ✅ do now, ❓❓ questions with 🙋‍♂️, 🔍 differential, 🧪 tests, 🔄 referral, 💊 treatment, 🏥 disposition, 📚 source, 🎯 confidence, 📞 senior report. Bold only critical items and headings. Numbered steps only for ordered actions. Tables only to compare options.\n\n•\tIn emergencies put URGENT and Do now first, then questions, then the rest, each short. Template (drop sections not needed; ⠀ is the spacer line):\n\nخطر عاجل - URGENT 🚨\n\n•\tسطر عن الخطر\n\n•\tأول إجراء\n\n•\tكلم السنيور حالًا\n\n⠀\n\nالانطباع - IMPRESSION 🩺\n\n•\tسطر واحد\n\n⠀\n\nاعمل دلوقتي - DO NOW ✅\n\n1.\tأهم خطوة\n\n2.\tالخطوة اللي بعدها\n\n⠀\n\nقولي دلوقتي - NOW TELL ME ❓❓🙋‍♂️\n\nأنا مستني إجابتك على الأسئلة دي:\n\n1.\tالسؤال الأهم، أو الأجهزة المتاحة لو لازم\n\n2.\tالسؤال التاني\n\n📩 رد برقم السؤال وإجابته، مثلًا: \"1: أيوه، 2: لأ\"\n\n📩 لو معلومة مش متاحة قول \"مش متاح\"\n\n⠀\n\nThen the same pattern (heading, short bullets, spacer line) for these sections, in order: ## التشخيص التفريقي - Differential 🔍 (most likely, then most dangerous); ## الفحوصات - Tests 🧪 (needed now with why, only if, not needed, bedside alternative if unavailable); ## التحويل - Referral 🔄 (what was examined and what remains, which specialty, urgency); ## الخطة - Plan 💊 (treatment, follow-up, return precautions); ## التصرف - Disposition 🏥; ## المرجع - Source 📚 (guideline family, or \"clinical reasoning\"); ## درجة الثقة - Confidence 🎯 (high, moderate, or low, with the reason); ## بلاغ للسنيور - Senior report 📞 (one line: copy it, and phone the senior first in emergencies; then the code block).\n\nSENIOR REPORT\n\nEnd every case reply, except trivial questions, with a short English report in a code block for the resident to send to a more senior doctor: at most 6 lines, only facts given so far, missing items as \"not available\", no invented findings or vitals, no name or ID, most urgent problem first, never wait for results. Don't uses labels or prefixes before any line. Full line space between and separate lines\n\n\nURGENT: <only if a red flag exists, one line>\n\n<age, sex, setting, main problem, time course>\n\n <relevant history, comorbidities, anticoagulants, allergies>\n\n<vitals, airway status, key exam findings, working impression>\n\n<what has been done, and what I need: advice, come to see, transfer>\n\n\nQUESTIONS\n\n•\tMaximum 4 questions, most critical first, only if the answer changes management, bedside-answerable first, ENT first. Equipment availability is question 1 when the plan depends on it (not in emergencies).\n\n•\tPut them right after \"Do now\". If a critical answer is missing, still give safe actions and say the plan will be refined. Do not repeat answered questions. Skip the section if none.\n\nSAFETY SCAN (always first)\n\nAirway compromise (stridor, drooling, trismus, muffled voice, distress); active or recurrent bleeding; expanding neck swelling or hematoma; deep neck infection; epiglottitis; foreign body (airway, button battery, magnets, sharp esophageal object); orbital cellulitis or vision change; intracranial signs after sinusitis or otitis; CSF leak; facial palsy; sudden hearing loss; vertigo with neurological signs; trauma (septal hematoma, temporal bone, laryngeal, facial fractures); penetrating ear canal injury; post-operative complications. Children, diabetics, immunocompromised and anticoagulated patients lower the threshold. If a red flag is possible, start with URGENT and tell the resident to call the senior now, before any test.\n\nEVIDENCE\n\nPriority: 1. Egyptian Ministry of Health and Egyptian ENT society guidance, when they exist. 2. AAO-HNSF and other American guidance. 3. NICE, ENT UK, and other British guidance. Name the guideline family in Source. Never invent a guideline, year, citation, or statistic. If unsure an Egyptian guideline exists, say so in Arabic, say you follow American or British guidance, and advise local verification. Say clearly when advice is clinical reasoning or low-quality evidence (case reports, textbooks).\n\nCOMMANDS (the resident types one word)\n\n•\tescalate: regenerate the senior report with the latest information, in a code block, fully in English.\n\n•\trefer: short English referral message to the other specialty, in a code block: reason, ENT history and findings, what was excluded and what remains unassessed, urgency, the question. Do not include that specialty's tests.\n\n•\tplan: management plan as bullets: immediate actions, findings to monitor, tests only if justified and available (with the bedside alternative), treatment, referral, disposition, follow-up, what would change the plan, assumptions. Include a senior's opinion if given.\n\n•\tsummary: 5-line handover, one sentence per line. new: treat the next message as a new case and forget the previous patient.\n\nPRIVACY AND HONESTY\n\nNever ask for or repeat patient name, file number, phone, or ID. If you disagree with the resident's plan, say so respectfully and explain why. State uncertainty honestly; do not guess missing facts. You are decision support only, not a replacement for the senior, the clinical examination, or local protocols. End every substantial answer, after the senior report, with this line in Arabic only: _للدعم في القرار فقط،";
+const $ = id => document.getElementById(id);
+const store = {
+  get(k, d){ try{ return JSON.parse(localStorage.getItem('otolarix.'+k)) ?? d }catch{ return d } },
+  set(k, v){ localStorage.setItem('otolarix.'+k, JSON.stringify(v)) }
+};
+function toast(t){ const e=$('toast'); e.textContent=t; e.classList.add('show'); setTimeout(()=>e.classList.remove('show'),2200) }
+async function copy(t){
+  try{ await navigator.clipboard.writeText(t) }
+  catch{ const a=document.createElement('textarea'); a.value=t; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove() }
+}
+
+/* ---------- static data ---------- */
+const CC = ['Ear pain','Hearing loss','Sudden hearing loss','Tinnitus','Ear discharge','Vertigo','Epistaxis','Nasal obstruction','Sore throat','Post-tonsillectomy bleeding','Neck swelling / mass','Hoarseness','Dysphagia','Stridor / breathing difficulty','Foreign body','Facial weakness','Trauma'];
+const FLAGS = [
+ ['stridor','Stridor / airway compromise'],['drool','Drooling / trismus / muffled voice'],['bleedActive','Active or recurrent bleeding'],
+ ['neckSwell','Expanding neck swelling / hematoma'],['deepNeck','Suspected deep neck infection'],['battery','Button battery / magnet / sharp FB'],
+ ['orbital','Orbital swelling / vision change'],['intracranial','Intracranial signs (headache, vomiting, ↓GCS, neck stiffness)'],
+ ['csf','Clear fluid from nose or ear (CSF?)'],['facial','Facial nerve palsy'],['ssnhl','Sudden hearing loss (< 72 h)'],
+ ['centralVert','Vertigo with neurological signs'],['septalHem','Septal hematoma'],['earPen','Penetrating ear canal injury'],
+ ['postop','Post-operative complication'],['massUni','Unilateral nasal mass / unilateral bloody discharge'],
+ ['neckMass','Persistent neck mass > 3 weeks (adult)'],['hoarse3w','Hoarseness > 3 weeks'],['immuno','Diabetic / immunocompromised'],
+];
+const EXAM = [['earR','Right ear (otoscopy)'],['earL','Left ear (otoscopy)'],['nose','Nose / anterior rhinoscopy'],['oro','Oral cavity / oropharynx'],['larynx','Larynx (voice, laryngoscopy)'],['neck','Neck'],['cn7','Facial nerve (CN VII)'],['tf','Tuning fork (Rinne / Weber)'],['neuro','Neuro / eye movements']];
+const RES = ['Otoscope','Headlight','Nasal speculum','Suction','Flexible scope','Microscope','Audiometer','Tympanometer','Nasal packing / Merocel','Ribbon gauze','Balloon catheter','Absorbable hemostatic','Cautery (silver nitrate)','Topical vasoconstrictor','Tranexamic acid','Ear drops','Ear wick','CT available','Blood bank / cross-match'];
+const CMDS = ['escalate','refer','plan','summary','new'];
+
+/* ---------- build UI ---------- */
+$('ccChips').innerHTML = CC.map(c=>`<span class="chip" data-cc="${c}">${c}</span>`).join('');
+$('flags').innerHTML = FLAGS.map(([k,t])=>`<label><input type="checkbox" data-flag="${k}"> ${t}</label>`).join('');
+$('exam').innerHTML = '<div class="h">الجزء</div><div class="h">الحالة</div><div class="h">الملاحظات</div>' + EXAM.map(([k,t])=>
+ `<div>${t}</div><select data-ex="${k}"><option value="">Not assessed</option><option>Normal</option><option>Abnormal</option></select><input data-exn="${k}">`).join('');
+$('res').innerHTML = RES.map(r=>`<span class="chip" data-res="${r}">${r}</span>`).join('');
+$('cmds').innerHTML = CMDS.map(c=>`<span class="chip" data-cmd="${c}">${c}</span>`).join('');
+
+document.querySelectorAll('[data-cc]').forEach(ch=>ch.onclick=()=>{
+  const v=ch.dataset.cc, cur=$('cc').value.trim();
+  $('cc').value = cur ? (cur.includes(v)?cur:cur+', '+v) : v; update();
+});
+document.querySelectorAll('[data-res]').forEach(ch=>ch.onclick=()=>{
+  if(ch.classList.contains('on')){ch.classList.remove('on');ch.classList.add('no')}
+  else if(ch.classList.contains('no')){ch.classList.remove('no')}
+  else ch.classList.add('on'); update();
+});
+document.querySelectorAll('[data-cmd]').forEach(ch=>ch.onclick=async()=>{ await copy(ch.dataset.cmd); toast('تم نسخ: '+ch.dataset.cmd) });
+
+/* ---------- state ---------- */
+const FIELDS=['cc','ccDur','ccSide','age','sex','weight','preg','setting','airway','hr','bp','spo2','rr','temp','hpi','pmh','psh','meds','anticoag','allergy','inv','aiReply','final'];
+let current = newCase();
+function newCase(){ return {id:'c'+Date.now(), created:new Date().toISOString(), signed:null} }
+function collect(){
+  const c = {...current};
+  FIELDS.forEach(f=>c[f]=$(f).value.trim());
+  c.flags = [...document.querySelectorAll('[data-flag]:checked')].map(e=>e.dataset.flag);
+  c.exam = {}; EXAM.forEach(([k])=>c.exam[k]={s:document.querySelector(`[data-ex="${k}"]`).value, n:document.querySelector(`[data-exn="${k}"]`).value.trim()});
+  c.aud = {}; document.querySelectorAll('[data-a]').forEach(i=>{ if(i.value!=='') c.aud[i.dataset.a]=+i.value });
+  c.res = {}; document.querySelectorAll('[data-res]').forEach(ch=>{ if(ch.classList.contains('on')) c.res[ch.dataset.res]='available'; else if(ch.classList.contains('no')) c.res[ch.dataset.res]='not available' });
+  return c;
+}
+function load(c){
+  current = c;
+  FIELDS.forEach(f=>$(f).value=c[f]||'');
+  document.querySelectorAll('[data-flag]').forEach(e=>e.checked=(c.flags||[]).includes(e.dataset.flag));
+  EXAM.forEach(([k])=>{ const x=(c.exam||{})[k]||{}; document.querySelector(`[data-ex="${k}"]`).value=x.s||''; document.querySelector(`[data-exn="${k}"]`).value=x.n||'' });
+  document.querySelectorAll('[data-a]').forEach(i=>i.value=(c.aud||{})[i.dataset.a]??'');
+  document.querySelectorAll('[data-res]').forEach(ch=>{ ch.classList.remove('on','no'); const v=(c.res||{})[ch.dataset.res]; if(v==='available')ch.classList.add('on'); if(v==='not available')ch.classList.add('no') });
+  update();
+}
+
+/* ---------- audiogram ---------- */
+function audio(c){
+  // 4-frequency PTA (500,1k,2k,4k) when all present, else 3-frequency
+  const f=p=>{const v=[0,1,2,3].map(i=>c.aud[p+i]); if(v.every(x=>x!==undefined))return Math.round(v.reduce((a,b)=>a+b)/4); if(v.slice(0,3).every(x=>x!==undefined))return Math.round((v[0]+v[1]+v[2])/3); return null};
+  const r={RA:f('RA'),RB:f('RB'),LA:f('LA'),LB:f('LB')};
+  r.abgR = r.RA!=null&&r.RB!=null ? r.RA-r.RB : null;
+  r.abgL = r.LA!=null&&r.LB!=null ? r.LA-r.LB : null;
+  r.asym = r.RA!=null&&r.LA!=null && (()=>{let n=0;for(let i=0;i<4;i++){const a=c.aud['RB'+i]??c.aud['RA'+i],b=c.aud['LB'+i]??c.aud['LA'+i];if(a!=null&&b!=null&&Math.abs(a-b)>=15)n++}return n>=2})();
+  // possible SNHL: worse ear PTA > 25 with ABG < 10
+  r.snhl = ['R','L'].filter(s=>{const ac=r[s+'A'],abg=r['abg'+s];return ac!=null&&ac>25&&abg!=null&&abg<10});
+  return r;
+}
+function grade(x){ if(x==null)return''; return x<=25?'normal':x<=40?'mild':x<=55?'moderate':x<=70?'mod-severe':x<=90?'severe':'profound' }
+
+/* ---------- rule engine ---------- */
+function rules(c){
+  const u=[], w=[], f=new Set(c.flags), cc=(c.cc+' '+c.hpi).toLowerCase(), a=audio(c);
+  const ageY = parseAge(c.age);
+  if(f.has('stridor')||/^(Stridor|Respiratory distress)$/.test(c.airway)) u.push('Airway compromise: أمّن الـ airway، كلم السنيور والتخدير حالًا، ولا تؤخر بسبب أشعة.');
+  if(f.has('drool')||/drool|muffled/i.test(c.airway)) u.push('Drooling أو muffled voice: اشتباه epiglottitis أو deep neck infection. لا تفحص الحلق بالقوة.');
+  if(+c.spo2 && +c.spo2<92) u.push(`SpO2 ${c.spo2}%: أكسجين وتقييم الـ airway فورًا.`);
+  if(f.has('bleedActive')||/post-tonsillectomy bleed|bleed/i.test(cc) && /tonsil/i.test(cc+c.psh)) u.push('Post-tonsillectomy bleeding: IV access، cross-match، NPO، وكلم السنيور حالًا.');
+  else if(f.has('bleedActive')) u.push('نزيف نشط: hemostasis، IV access، وقيّم الـ circulation.');
+  if(f.has('battery')) u.push('Button battery / magnet / sharp FB: طوارئ قصوى، إزالة عاجلة.');
+  if(f.has('neckSwell')||f.has('deepNeck')) u.push('Neck swelling / deep neck infection: الـ airway أولًا، وكلم السنيور.');
+  if(f.has('orbital')) u.push('Orbital signs: اشتباه orbital complication. كلم السنيور، وفحص عيون عاجل.');
+  if(f.has('intracranial')) u.push('Intracranial signs: طوارئ. فعّل مسار الطوارئ وكلم السنيور.');
+  if(f.has('centralVert')) u.push('Vertigo مع علامات عصبية: اشتباه stroke. فعّل مسار الـ stroke حالًا.');
+  if(f.has('septalHem')) u.push('Septal hematoma: تصريف عاجل لتجنب الـ abscess وانهيار الحاجز.');
+  if(f.has('ssnhl')||/sudden hearing/i.test(cc)) u.push('Sudden hearing loss: تُعتبر SSNHL حتى يثبت العكس. ناقش الكورتيزون مع السنيور اليوم، واعمل audiogram في أقرب وقت.');
+  if(+c.temp>=38.5 && (f.has('deepNeck')||f.has('orbital'))) u.push(`حرارة ${c.temp}°C مع عدوى معقدة: sepsis screen.`);
+  if(+c.hr && ageY!=null && ageY>=12 && +c.hr>120) w.push(`Tachycardia (${c.hr}): راجع الـ circulation والنزيف.`);
+  const sbp = parseInt((c.bp||'').split('/')[0]); if(sbp && sbp<90) u.push(`Hypotension (SBP ${sbp}): resuscitation، وكلم السنيور حالًا.`);
+  if(f.has('csf')) w.push('سائل شفاف: اشتباه CSF leak. لا packing ولا irrigation، وبلّغ السنيور.');
+  if(f.has('facial')) w.push('Facial palsy: حدّد درجتها (House-Brackmann)، وافحص الأذن. لو السبب otitis تكون urgent.');
+  if(f.has('earPen')) w.push('Penetrating ear injury: افحص الـ TM والدوار والـ facial nerve. لا irrigation.');
+  if(f.has('massUni')) w.push('Unilateral nasal mass أو نزيف: لا packing أعمى بالقوة، ولا biopsy في الطوارئ. يحتاج endoscopy وimaging.');
+  if(f.has('neckMass')) w.push('Persistent adult neck mass: اشتباه malignancy حتى يثبت العكس. مسار two-week wait.');
+  if(f.has('hoarse3w')) w.push('Hoarseness > 3 weeks: يلزم laryngoscopy، خصوصًا مع التدخين.');
+  if(f.has('immuno')) w.push('DM أو immunocompromised: عتبة أقل للتصعيد. فكّر في necrotizing otitis externa لو فيه ألم أذن شديد.');
+  if(c.anticoag==='Yes') w.push('Anticoagulants: راجع الـ INR أو الجرعة قبل أي إجراء.');
+  if(a.snhl.length) w.push(`Audiogram: نمط sensorineural في ${a.snhl.join(' و ')}. لو حديث، اعتبره SSNHL.`);
+  if(a.asym) w.push('Asymmetric SNHL (≥15 dB في ترددين): يحتاج MRI IAC حسب الإرشادات.');
+  if(ageY!=null && ageY<16 && !c.weight) w.push('طفل بدون وزن: جرعات الأدوية معلّقة حتى تسجيل الوزن بالـ kg.');
+  if(c.preg==='Pregnant') w.push('حامل: راجع أمان كل دواء قبل وصفه.');
+  return {u,w,a};
+}
+function parseAge(s){ if(!s)return null; const m=s.match(/([\d.]+)\s*(m|mo|month|شهر)?/i); if(!m)return null; return m[2]? +m[1]/12 : +m[1] }
+
+function missing(c){
+  const m=[];
+  if(!c.cc) m.push('Chief complaint (مطلوب)');
+  if(!c.ccDur) m.push('Duration');
+  if(!c.age) m.push('Age');
+  if(parseAge(c.age)!=null && parseAge(c.age)<16 && !c.weight) m.push('Weight (طفل)');
+  if(!c.airway) m.push('Airway status');
+  if(!c.hr && !c.bp && !c.spo2) m.push('Vitals');
+  if(!c.allergy) m.push('Allergies');
+  if(!c.anticoag) m.push('Anticoagulants');
+  if(!Object.values(c.exam).some(x=>x.s)) m.push('Examination');
+  return m;
+}
+
+/* ---------- message ---------- */
+function message(c){
+  const r=rules(c), a=r.a, L=[];
+  const val=(x,d='not available')=>x||d;
+  L.push('NEW CASE (de-identified, entered via Otolarix)');
+  L.push('');
+  L.push(`CHIEF COMPLAINT: ${val(c.cc)}${c.ccDur?' — duration '+c.ccDur:''}${c.ccSide?' — side: '+c.ccSide:''}`);
+  L.push(`Patient: age ${val(c.age)}, sex ${val(c.sex)}, weight ${c.weight?c.weight+' kg':'not available'}${c.preg&&c.preg!=='N/A'?', '+c.preg:''}. Setting: ${c.setting}.`);
+  L.push(`Airway: ${val(c.airway)}. Vitals: HR ${val(c.hr,'—')}, BP ${val(c.bp,'—')}, SpO2 ${val(c.spo2,'—')}%, RR ${val(c.rr,'—')}, T ${val(c.temp,'—')}°C.`);
+  const fl=FLAGS.filter(([k])=>c.flags.includes(k)).map(x=>x[1]);
+  L.push(`Red flags reported: ${fl.length?fl.join('; '):'none reported (not a confirmed absence)'}.`);
+  if(c.hpi) L.push(`HPI: ${c.hpi}`);
+  L.push(`PMH: ${val(c.pmh)}. Prior ENT surgery: ${val(c.psh)}. Medications: ${val(c.meds)}. Anticoagulants: ${val(c.anticoag)}. Allergies: ${val(c.allergy)}.`);
+  const ex=EXAM.map(([k,t])=>{const x=c.exam[k];return `- ${t}: ${x.s||'not assessed'}${x.n?' — '+x.n:''}`});
+  L.push('Examination:'); L.push(...ex);
+  if(Object.keys(c.aud).length){
+    L.push(`Audiogram: R AC PTA ${a.RA??'—'} dB (${grade(a.RA)}), R BC ${a.RB??'—'}, ABG ${a.abgR??'—'}; L AC PTA ${a.LA??'—'} dB (${grade(a.LA)}), L BC ${a.LB??'—'}, ABG ${a.abgL??'—'}.${a.asym?' Asymmetry ≥15 dB at ≥2 frequencies.':''}`);
+  }
+  const rs=Object.entries(c.res);
+  if(rs.length) L.push(`Resources: ${rs.map(([k,v])=>k+' '+v).join('; ')}. Other equipment: not specified.`);
+  else L.push('Resources: not specified (ask only if it changes the next step).');
+  if(c.inv) L.push(`Investigations/results: ${c.inv}`);
+  const miss=missing(c); if(miss.length) L.push(`Missing / not available: ${miss.join(', ')}.`);
+  if(r.u.length||r.w.length) L.push(`Local rule-engine alerts: ${[...r.u,...r.w].length} flagged (please verify and address urgent items first).`);
+  return L.join('\n');
+}
+
+/* ---------- render ---------- */
+function update(){
+  const c=collect(), r=rules(c), a=r.a;
+  // audiogram cells
+  const set=(id,v)=>$(id).textContent = v==null?'—':v;
+  set('ptaR',a.RA); set('ptaRB',a.RB); set('ptaL',a.LA); set('ptaLB',a.LB); set('abgR',a.abgR); set('abgL',a.abgL);
+  $('audNote').textContent = (a.RA!=null||a.LA!=null) ? `Right: ${grade(a.RA)||'—'} · Left: ${grade(a.LA)||'—'}${a.asym?' · ⚠ asymmetric':''}` : 'PTA = متوسط 500 و1000 و2000 و4000 (أو الثلاثة الأولى). ABG = AC − BC.';
+  let h='';
+  if(r.u.length) h+=`<div class="alert red"><b>URGENT 🚨</b><ul>${r.u.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
+  if(r.w.length) h+=`<div class="alert amber"><b>تنبيه</b><ul>${r.w.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
+  if(!h) h='<div class="alert ok">لا توجد تنبيهات من البيانات المُدخلة. هذا لا يعني أن الحالة آمنة.</div>';
+  $('ruleOut').innerHTML=h;
+  const n=r.u.length+r.w.length; $('mAlerts').textContent='🚨 '+n; $('mAlerts').classList.toggle('hot',r.u.length>0);
+  const m=missing(c);
+  $('missing').innerHTML = m.length ? `<ul>${m.map(x=>`<li>${x}</li>`).join('')}</ul>` : '<span class="muted">البيانات الأساسية مكتملة.</span>';
+  $('preview').textContent = message(c);
+  const ok=!!c.cc; ['btnClaude','btnGpt','btnCopy'].forEach(b=>$(b).disabled=!ok);
+  $('status').textContent = current.signed ? 'معتمدة في '+new Date(current.signed).toLocaleString() : '';
+}
+document.addEventListener('input', e=>{ if(e.target.closest('#view-case')) update() });
+document.addEventListener('change', e=>{ if(e.target.closest('#view-case')) update() });
+
+/* ---------- actions ---------- */
+async function send(url){
+  const c=collect(); if(!c.cc){ toast('اكتب الشكوى الأساسية أولًا'); $('cc').focus(); return }
+  await copy(message(c)); saveCase(false);
+  if(url) window.open(url,'_blank','noopener');
+  toast('تم النسخ. الصق الرسالة بـ Ctrl+V داخل الـ Project');
+}
+$('btnClaude').onclick=()=>send('https://claude.ai/projects');
+$('btnGpt').onclick=()=>send('https://chatgpt.com/');
+$('btnCopy').onclick=()=>send(null);
+
+function saveCase(showToast=true){
+  const c=collect(); current=c;
+  const all=store.get('cases',[]); const i=all.findIndex(x=>x.id===c.id);
+  if(i>=0) all[i]=c; else all.unshift(c);
+  store.set('cases',all); if(showToast) toast('تم الحفظ'); renderCases();
+}
+$('btnSave').onclick=()=>saveCase();
+$('btnSign').onclick=()=>{
+  if(!$('final').value.trim()){ toast('اكتب القرار النهائي قبل الاعتماد'); $('final').focus(); return }
+  current.signed=new Date().toISOString(); saveCase(false); update(); toast('تم الاعتماد');
+};
+$('btnPrint').onclick=()=>window.print();
+$('btnNew').onclick=()=>{ if(confirm('بدء حالة جديدة؟ الحالة الحالية ستُحفظ.')){ saveCase(false); load(newCase()); window.scrollTo(0,0) } };
+
+/* ---------- cases list ---------- */
+function renderCases(){
+  const all=store.get('cases',[]);
+  $('caseRows').innerHTML = all.length ? all.map(c=>{
+    const urgent=rules(c).u.length;
+    return `<tr><td>${new Date(c.created).toLocaleString()}</td><td>${esc(c.cc||'—')}</td><td>${esc(c.age||'—')}</td>
+    <td>${c.signed?'<span class="tag signed">معتمدة</span>':'<span class="tag">مسودة</span>'} ${urgent?'<span class="tag urgent">URGENT</span>':''}</td>
+    <td><button class="btn sec" data-open="${c.id}">فتح</button> <button class="btn sec" data-del="${c.id}">حذف</button></td></tr>`}).join('')
+    : '<tr><td colspan="5" class="muted">لا توجد حالات محفوظة.</td></tr>';
+  document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{ load(store.get('cases',[]).find(x=>x.id===b.dataset.open)); show('case') });
+  document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{ if(confirm('حذف هذه الحالة نهائيًا من هذا الجهاز؟')){ store.set('cases',store.get('cases',[]).filter(x=>x.id!==b.dataset.del)); renderCases() } });
+}
+function esc(s){ return String(s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch])) }
+$('btnExport').onclick=()=>{
+  const b=new Blob([JSON.stringify(store.get('cases',[]),null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='otolarix-cases.json'; a.click();
+};
+$('importFile').onchange=e=>{
+  const f=e.target.files[0]; if(!f)return; const r=new FileReader();
+  r.onload=()=>{ try{ const inc=JSON.parse(r.result); const all=store.get('cases',[]); inc.forEach(c=>{ if(!all.some(x=>x.id===c.id)) all.push(c) }); store.set('cases',all); renderCases(); toast('تم الاستيراد') }catch{ toast('ملف غير صالح') } };
+  r.readAsText(f);
+};
+
+/* ---------- prompt ---------- */
+$('promptBox').value = store.get('prompt', DEFAULT_PROMPT);
+$('promptBox').oninput=()=>store.set('prompt',$('promptBox').value);
+$('btnCopyPrompt').onclick=async()=>{ await copy($('promptBox').value); toast('تم نسخ الـ Prompt') };
+$('btnResetPrompt').onclick=()=>{ if(confirm('استرجاع الـ Prompt الأصلي؟')){ $('promptBox').value=DEFAULT_PROMPT; store.set('prompt',DEFAULT_PROMPT) } };
+
+/* ---------- nav ---------- */
+function show(v){
+  ['case','cases','setup'].forEach(x=>$('view-'+x).classList.toggle('hidden',x!==v));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+  if(v==='cases') renderCases();
+}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.view));
+
+// mobile bar
+$('mAlerts').onclick=()=>$('sidePanel').scrollIntoView({behavior:'smooth'});
+$('mClaude').onclick=()=>send('https://claude.ai/projects');
+$('mGpt').onclick=()=>send('https://chatgpt.com/');
+// install (PWA)
+let deferredInstall=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;$('btnInstall').classList.remove('hidden')});
+$('btnInstall').onclick=async()=>{ if(!deferredInstall)return; deferredInstall.prompt(); await deferredInstall.userChoice; deferredInstall=null; $('btnInstall').classList.add('hidden') };
+if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js');
+// autosave draft
+setInterval(()=>{ if($('cc').value.trim()) saveCase(false) }, 30000);
+update();
+</script>
+</body>
+</html>
