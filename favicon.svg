@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1E3A8A"/><stop offset="1" stop-color="#2563EB"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.72" cy="0.28" r="0.6">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.18"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="112" fill="url(#glow)"/>
+  <!-- head profile: forehead -> nose -> lips -> chin -> throat -->
+  <path d="M262 112 C318 112 352 146 356 196 L392 252 C397 260 393 268 384 270 L360 274
+           C366 286 364 296 356 302 C362 312 358 326 346 332 C334 338 322 340 318 352
+           C314 366 316 382 318 404"
+        fill="none" stroke="#ffffff" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- back of head -->
+  <path d="M262 112 C206 112 168 150 164 204" fill="none" stroke="#ffffff" stroke-width="22" stroke-linecap="round" opacity="0.55"/>
+  <!-- ear -->
+  <path d="M236 206 C210 196 188 214 190 240 C192 262 214 266 214 286 C214 300 204 306 196 304"
+        fill="none" stroke="#ffffff" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M222 236 C214 232 208 240 212 248" fill="none" stroke="#BFDBFE" stroke-width="12" stroke-linecap="round"/>
+  <!-- sound waves into the ear (hearing) -->
+  <path d="M146 214 C134 232 134 256 146 274" fill="none" stroke="#BFDBFE" stroke-width="12" stroke-linecap="round"/>
+  <path d="M116 196 C96 226 96 262 116 292" fill="none" stroke="#BFDBFE" stroke-width="12" stroke-linecap="round" opacity="0.6"/>
+  <!-- throat / larynx accent -->
+  <circle cx="318" cy="392" r="11" fill="#BFDBFE"/>
+  <!-- nose accent -->
+  <circle cx="392" cy="252" r="9" fill="#BFDBFE"/>
+  <!-- AI spark -->
+  <path d="M136 120 L144 142 L166 150 L144 158 L136 180 L128 158 L106 150 L128 142 Z" fill="#BFDBFE"/>
+</svg>
